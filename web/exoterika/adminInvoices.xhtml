@@ -1,0 +1,83 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	template="../templates/ui.xhtml">
+    
+    <ui:define name="head">
+        <style type="text/css">
+		.ui-confirm-dialog-severity {
+			margin: 0 7px 7px 0;
+		}
+        </style>
+    </ui:define>
+
+	<ui:define name="content">
+	
+		<!--  <h1 class="title ui-widget-header ui-corner-all">#{bundle.viewContracts}</h1> -->
+		
+		
+		<div class="entry" style="line-height:200%; width: 50% !important;">
+		   <p:panel header="#{bundle.assertionData} " toggleable="true" style="padding:0px ! important; width=80%;" >  
+				 <table style="padding-left: 10px;">
+				  <tr>
+				     <td width="10%">  <h:outputLabel value="#{bundle.period}:" style="font-weight: bolder; font-size: 12px "/>   </td>
+				     <td width="15%">  <h:outputText value="#{sessionBean.users.hospital.dapycode}"/>  </td>
+				  	 
+				  	 <td width="10%">  <h:outputLabel value="#{bundlecontact}:" style="font-weight: bolder; font-size: 12px "/>   </td>
+				     <td width="20%">  <h:outputText value="#{sessionBean.users.hospital.name}"/>  </td>	
+				  </tr>
+				  <!-- <tr>
+				     <td>  <h:outputLabel value="#{bundle.afm}:" style="font-weight: bolder; font-size: 12px "/>   </td>
+				     <td>  <h:outputText value="#{sessionBean.users.hospital.afm}"/>  </td>
+				  	 
+				  	 <td>  <h:outputLabel value="#{bundle.doyCode}:" style="font-weight: bolder; font-size: 12px "/>   </td>
+				     <td>  <h:outputText value="#{sessionBean.users.hospital.doy}"/>  </td>	
+				     
+				     <td>  <h:outputLabel value="#{bundle.eopyyUnit}:" style="font-weight: bolder; font-size: 12x "/>   </td>
+				     <td>  <h:outputText value="#{sessionBean.users.hospital.dapyadmin}"/>  </td>	
+				  </tr> -->
+				
+				</table> 
+		   
+		   </p:panel><br/>
+		   
+		   
+		   
+		   <p:panel header="#{bundle.installationContracts} " style="padding:0px ! important; width=50%;" >  
+		   		<h:form id="form">  
+  
+				    <p:dataTable var="contract" value="#{contractBean.contracts}" rowKey="#{contract.contractnumber}" paginator="true" rows="10" emptyMessage="#{bundle.noRecordsFound}" 
+				                selection="#{contractBean.selectedContract}" selectionMode="single" id="contractsTable">  
+				  
+				        <!-- <p:ajax event="rowSelect" update=":form:display" oncomplete="carDialog.show()" />   -->
+				  
+				       
+				        
+				        <p:column headerText="#{bundle.contractNumber}" sortBy="#{contract.contractnumber}"  id="number">  
+				            #{contract.contractnumber}  
+				        </p:column>  
+				        
+				        <p:column headerText="#{bundle.description}" sortBy="#{contract.name}"  id="name">  
+				            #{contract.name}  
+				        </p:column> 
+				  
+				        <p:column headerText="#{bundle.startDate}" sortBy="#{contract.startdate}"  id="startdate">  
+				           <h:outputLabel value="#{contract.startdate}" converter="DateConverter"  />  
+				        </p:column>
+				        
+				        <p:column headerText="#{bundle.endDate}" sortBy="#{contract.enddate}"  id="enddate">  
+				            <h:outputLabel value="#{contract.enddate}" converter="DateConverter"  /> 
+				        </p:column>  
+				  
+				        
+				  
+				    </p:dataTable> 
+				    
+				</h:form>    		   		
+		   </p:panel>
+			
+		</div>        
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,46 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<f:view>
+	<h:head>
+		<f:facet name="first">
+			<meta http-equiv="X-UA-Compatible" content="EmulateIE8" />
+			<meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+			<title>PrimeFaces - ShowCase</title>
+		</f:facet>
+
+  </h:head>
+
+
+	<h:body>
+
+		
+		<form>
+	       
+	          <p:calendar     value="#{paraBean.newPara.issuedate}" id="tt">				             	                  
+					          <p:ajax event="dateSelect"  listener="#{dapyAction.handleDateSelect}"  update="approvalDatee"   /> 
+		      </p:calendar> 
+		      
+		      <p:calendar  readonlyInput="true"  required="false" navigator="true"  pattern="dd/MM/yyyy" value="#{paraBean.newPara.approvaldate}" id="approvalDatee">   
+		           <p:ajax event="dateSelect"  listener="#{dapyAction.handleDateSelect}"  update="tt"   /> 
+		      </p:calendar>
+	    
+	    
+	    
+
+		</form>
+			
+
+
+
+		
+
+	</h:body>
+
+</f:view>
+</html>
+

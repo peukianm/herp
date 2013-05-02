@@ -1,0 +1,285 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="../templates/ui.xhtml">
+
+
+
+    <ui:define name="head">
+        <style type="text/css">
+            .ui-confirm-dialog-severity {
+                margin: 0 7px 7px 0;
+            }
+        </style>
+
+        <script type="text/javascript">
+            function handleDialogPatientSubmit(xhr, status, args) {
+                if (args.validationFailed) {                                      
+                } else {                    
+                }
+            }
+        </script>
+
+    </ui:define> 
+
+    <ui:define name="content">
+
+       <!-- <h1 class="title ui-widget-header ui-corner-all">#{bundle.searchPara}</h1> -->
+        <div class="entry" style="line-height:100%;" >
+            <h:form id="searchParaForm">
+                <p:messages id="searchParaMsg" autoUpdate="false" severity="error" />		         		   
+                <p:panel id="searchParaPanel" header="#{bundle.searchCriteria} " toggleable="false" style="padding:0px ! important; width:auto;white-space: nowrap;margin-bottom: 10px" > 
+                    <table  cellpadding="5" class="content1" style="margin-bottom: 10px" >  
+                        <tr>
+                            <td style="width: auto;white-space: nowrap;"><h:outputLabel value="#{bundle.assertionPeriod}:" style="font-weight: bold" /></td>
+                            <td style="width: auto;white-space: nowrap;" >                                                            
+                                <p:selectOneMenu value="#{searchParaBean.searchByAssertion}" converter="AssertionConverter" id="selectAssertion" >						 
+                                    <f:selectItem itemLabel="" itemValue=""  />
+                                    <f:selectItems value="#{searchParaBean.assertions}" var="assertion" itemLabel="#{assertion.exPeriod.name}-#{assertion.exAssertionType.name}" itemValue="#{assertion}"   />						                                                                   
+                                </p:selectOneMenu>
+
+                            </td>
+                            <td style="width: auto;white-space: nowrap;"> <h:outputLabel value="#{bundle.dateType}:"  style="font-weight: bold" /></td>
+                            <td style="width: auto;white-space: nowrap;">
+                                <p:selectOneMenu value="#{searchParaBean.searchByType}" converter="TypeConverter" >						 
+                                    <f:selectItem itemLabel="" itemValue=""  />
+                                    <f:selectItems value="#{applicationListBean.types}" var="tp" itemLabel="#{tp.name}" itemValue="#{tp}"   />						     
+                                </p:selectOneMenu>	
+                            </td>
+                            <td style="width: 1px;white-space: nowrap;"> <h:outputLabel value="#{bundle.period}:"  style="font-weight: bold" /></td>
+                            <td style="width: 1px;white-space: nowrap;">
+                                <p:selectOneMenu value="#{searchParaBean.searchByPeriod}" converter="pc" >						 
+                                    <f:selectItem itemLabel="" itemValue=""  />
+                                    <f:selectItems value="#{searchParaBean.periods}" var="period" itemLabel="#{period.name}" itemValue="#{period}"   />						     
+                                </p:selectOneMenu>	
+                            </td>
+                        </tr>
+                         <tr>
+                            <td><h:outputLabel value="#{bundle.patient}:"  style="font-weight: bold"  /></td>
+                            <td colspan="4">   
+                                <p:autoComplete queryDelay="500" scrollHeight="350"   id="searchPatient" value="#{searchParaBean.selectedSurnamePatient}" completeMethod="#{paraAction.completeSurnamePatient}" size="70"    
+                                                 var="patient" itemLabel="#{patient.surname} #{patient.name} #{patient.fathername} #{patient.amka}" itemValue="#{patient}" converter="PatientConverter" forceSelection="true">  
+                                    <p:ajax event="itemSelect" listener="#{paraAction.autocompleteSurnameSelectPatient}" />  
+                                </p:autoComplete><br/>
+                                <h:outputText rendered="#{searchParaBean.searchByPatient != null}"  
+                                              value="#{bundle.patient}: #{searchParaBean.searchByPatient.surname} #{searchParaBean.searchByPatient.name} "  />
+
+                            </td>                            
+                        </tr>    
+
+                        <tr>
+                            <td><h:outputLabel value="#{bundle.issueDate} #{bundle.from}:"  style="font-weight: bold"  /></td>
+                            <td> 
+                                <p:calendar locale="el" size="12"  readonlyInput="true"  navigator="true" showOn="button" 
+                                            pattern="dd/MM/yyyy" value="#{searchParaBean.searchFromIssueDate}" id="searchFromIssueDate"/> 
+
+                            </td>
+                            <td><h:outputLabel value="#{bundle.exeDate} #{bundle.from}:" style="font-weight: bold"  /></td>
+                            <td> 
+                                <p:calendar locale="el" size="12"  readonlyInput="true"  navigator="true" showOn="button" 
+                                            pattern="dd/MM/yyyy" value="#{searchParaBean.searchFromExecutionDate}" id="searchFromExecutionDate" /> 
+
+                            </td>
+                            <td><h:outputLabel value="#{bundle.number}:"  style="font-weight: bold" /></td>
+                            <td><p:inputText value="#{searchParaBean.serachByParaCode}" size="15"/> </td>
+
+                        </tr>
+                        <tr>
+                            <td><h:outputLabel value="#{bundle.issueDate} #{bundle.to}:"  style="font-weight: bold"  /></td>
+                            <td> 
+                                <p:calendar locale="el" size="12"  readonlyInput="true"  navigator="true" showOn="button" 
+                                            pattern="dd/MM/yyyy" value="#{searchParaBean.searchToIssueDate}" id="searchToIssueDate"/> 
+
+                            </td>
+                            <td><h:outputLabel value="#{bundle.exeDate} #{bundle.to}:"  style="font-weight: bold"  /></td>
+                            <td> 
+                                <p:calendar locale="el" size="12"  readonlyInput="true"  navigator="true" showOn="button" 
+                                            pattern="dd/MM/yyyy" value="#{searchParaBean.searchToExecutionDate}" id="searchToExecutionDate"/> 
+
+                            </td>                            
+                        </tr>
+                                           
+                    </table>
+                    <p:commandButton value="#{bundle.search}" action="#{paraAction.searchParaAction()}" update="searchParaForm"  />
+                    <p:commandButton  value="#{bundle.reset}" action="#{paraAction.resetSearchPara}"  ajax="false" />
+                </p:panel>  
+
+               
+
+                <p:panel id="exams" header="#{bundle.searchResults}"  toggleable="false" style="padding:0px ! important; width:100%; margin-bottom: 10px" > 
+
+
+                    <p:dataTable id="paraResults" var="para" value="#{searchParaBean.paraModel}" selection="#{searchParaBean.selectedPara}" widgetVar="paraResultss"
+                                 paginator="true" rows="10" emptyMessage="#{bundle.noRecordsFound}" rowIndexVar="tt"  rowKey="#{para}" 
+                                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                                 rowsPerPageTemplate="10,20,50,100,1000" lazy="true" >  
+                          
+                        <!--<p:column headerText="A/A" style="width:3%">  
+                            <h:outputText value="#{tt+1}" />  
+                        </p:column>-->  
+
+                       <!-- <p:column headerText="#{bundle.number}" sortBy="#{para.paranumber}" style="width:2%">  
+                            <h:outputText value="#{para.paranumber}" />  
+                        </p:column> -->
+
+                        <p:column headerText="#{bundle.code}" sortBy="#{para.paracode}" style="width:4%">                                                            
+                            <h:outputText value="#{para.paracode}" />                                                           
+                        </p:column>  
+
+                        <p:column headerText="#{bundle.assertion}" sortBy="#{para.exAssertion}" style="width:4%">  
+                            <p:commandLink  action="#{paraAction.viewAssertionData(para)}" immediate="true" oncomplete="assertionDataDialog.show();"
+                                            style="color:blue;text-decoration: underline;font-weight:bold;" update=":assertionDataPanel" >  
+                                <h:outputText value="#{para.exAssertion.code}" />
+                                <f:setPropertyActionListener value="#{para}" target="#{searchParaBean.selectedPara}" />    
+                            </p:commandLink>
+
+                        </p:column>  
+
+                       <!-- <p:column headerText="#{bundle.period}" sortBy="#{para.exAssertion.exPeriod}" style="width:4%">  
+                            <h:outputText value="#{para.exAssertion.exPeriod.name}"  />  
+                        </p:column>  -->
+
+                        <p:column headerText="#{bundle.issueDate}" style="width: 1px; white-space: normal;" sortBy="#{para.issuedate}">  
+                            <h:outputText value="#{para.issuedate}" converter="DateConverter" />  
+                        </p:column>
+
+                        <p:column headerText="#{bundle.exeDate}" sortBy="#{para.executiondate}" style="width: 1px; white-space: normal;">  
+                            <h:outputText value="#{para.executiondate}" converter="DateConverter" />  
+                        </p:column>
+
+                        <p:column headerText="#{bundle.patient}"  sortBy="#{para.patients}" style="width:20%">  
+                            <h:outputText value="#{para.patients.surname} #{para.patients.name}" />    
+                        </p:column>
+                        
+                        <p:column headerText="#{bundle.amka}"  sortBy="#{para.patients.amka}" style="width:4%">  
+                            <h:outputText value="#{para.patients.amka}" />   
+                        </p:column>
+                        
+                        <!--<p:column headerText="#{bundle.type}"  sortBy="#{para.exType}" style="width:4%">  
+                            <h:outputText value="#{para.exType.name}" />    
+                        </p:column> -->
+
+                        <!-- <p:column exportable="false" headerText="#{bundle.user}" sortBy="#{para.users.surname}" style="width:5%">  
+                            <h:outputText value="#{para.users.surname}" />    
+                        </p:column> -->
+
+                        <p:column exportable="false" headerText="#{bundle.exams}" style="width: 1px; white-space: normal;">  
+                            <p:commandLink   immediate="true" oncomplete="paraExamsDlg.show()" update=":paraExamsPanel"
+                                             style="color:blue;text-decoration: underline;font-weight:bold;" >  
+                                <h:outputText value="#{bundle.exams}" />
+                                <f:setPropertyActionListener value="#{para}" target="#{searchParaBean.selectedPara}" />  <!--action="{paraAction.viewAssertionExams(para)}"  --> 
+                            </p:commandLink>
+                        </p:column>
+
+                        <p:column headerText="#{bundle.valid}" sortBy="#{para.valid}"  style="width:4%">  
+                            <h:graphicImage rendered="#{para.valid}" url="../images/success.jpg" width="14px" height="14px" />
+                            <h:graphicImage rendered="#{!para.valid}" url="../images/close.gif" width="14px" height="14px" />
+                        </p:column>
+                        
+                        <p:column exportable="false" headerText="" style="width:12%">  
+                            <p:commandButton id="editButton" icon="ui-icon-arrowrefresh-1-w"  title="Αλλαγή" rendered="#{para.exAssertion.opened==1}"
+                                             immediate="true" action="#{paraAction.editPara(para)}" />
+                            <p:spacer width="10" />
+                            <p:commandButton id="deleteButton" icon="ui-icon-closethick" title="Διαγραφή" rendered="#{para.exAssertion.opened==1}"
+                                             onclick="confDeleteParaDlg.show()" >
+                                <f:setPropertyActionListener value="#{para}" target="#{searchParaBean.currentPara}" />
+                            </p:commandButton>
+                        </p:column>
+
+                    </p:dataTable>
+
+
+                    <p:confirmDialog id="confDeleteParaDlgID" message="#{bundle.confDeletePara}" header="#{bundle.warning}" severity="alert" widgetVar="confDeleteParaDlg" >                                            
+                        <p:commandButton action="#{paraAction.removePara()}" value="#{bundle.yes}" update="searchParaForm" 
+                                         onclick="confDeleteParaDlg.hide()"/>                                                       
+                        <p:commandButton value="#{bundle.no}"  onclick="confDeleteParaDlg.hide()" type="button" />                             
+                    </p:confirmDialog> 
+
+
+
+                    <h:commandLink rendered="#{searchParaBean.paraModel.rowCount >0}">  
+                        <p:graphicImage value="/images/excel.png" /> <h:outputText  style="color:blue;text-decoration: underline;font-weight:bold;" value="#{bundle.excelExport}" /> 
+                        <p:dataExporter    type="xls" target="paraResults" fileName="para"/>  
+                    </h:commandLink>  
+
+                    <!-- <h:commandLink>  
+                         <p:graphicImage value="/images/pdf.png" />  
+                         <p:dataExporter    type="pdf" target="paraResults" fileName="para"/>  
+                     </h:commandLink>  -->
+
+                </p:panel>
+
+            </h:form> 
+
+
+
+
+            <!-- ASSERTION DATA !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+            <p:dialog id="assertionDataDialogID" header="#{bundle.assertionData}" widgetVar="assertionDataDialog" modal="true" resizable="false" >  
+                <p:panel style="padding:0px ! important;" id="assertionDataPanel" >  
+                    <table style="font-family: sans-serif;">		   		   
+                        <tr><td><h:outputLabel value="#{bundle.code}:" style="font-weight: bold" /></td><td><h:outputLabel value="#{searchParaBean.selectedPara.exAssertion.code}"/></td></tr>
+                        <tr><td><h:outputLabel value="#{bundle.contractData}:" style="font-weight: bold" /></td><td><h:outputLabel   value="#{searchParaBean.selectedPara.exAssertion.exContract.contractnumber} #{searchParaBean.selectedPara.exAssertion.exContract.name}" /></td></tr>
+                        <tr><td><h:outputLabel value="#{bundle.assertionType}:" style="font-weight: bold" /></td><td><h:outputLabel  value="#{searchParaBean.selectedPara.exAssertion.exAssertionType.name}" /></td></tr>
+                        <tr><td><h:outputLabel value="#{bundle.period}:" style="font-weight: bold"/><br/></td><td><h:outputLabel value="#{searchParaBean.selectedPara.exAssertion.exPeriod.name}"/></td></tr>
+                        <tr><td><h:outputLabel value="#{bundle.status}:" style="font-weight: bold" /><br/></td><td><h:outputLabel value="#{searchParaBean.selectedPara.exAssertion.opened==1?bundle.opened : bundle.closed}" /> </td></tr>           
+                    </table> 
+                    <p:commandButton value="#{bundle.return}"  oncomplete="assertionDataDialog.hide()"/>	 
+                </p:panel>
+            </p:dialog>
+
+
+            <!-- ParaExams DATA !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+            <p:dialog id="paraExamsDlgID" header="#{bundle.paraExamsData}" widgetVar="paraExamsDlg" modal="true" resizable="false" >  
+                <p:panel style="padding:0px ! important;" id="paraExamsPanel" >  
+
+                    <p:dataTable id="paraExams" var="paraExam" value="#{searchParaBean.selectedPara.exParaExamses}" rowIndexVar="tt">
+                        <p:column headerText="A/A" style="width:4%">  
+                            <h:outputText value="#{tt+1}" />  
+                        </p:column>  
+
+                        <p:column headerText="#{bundle.code}" style="width:5%">  
+                            <h:outputText value="#{paraExam.exExam.code}" />  
+                        </p:column>  
+
+                        <p:column headerText="#{bundle.name}" style="width:40%">  
+                            <h:outputText value="#{paraExam.exExam.name}" />  
+                        </p:column>  
+
+                        <p:column headerText="#{bundle.price}" style="width:8%">  
+                            <h:outputText value="#{paraExam.cost}" converter="DoubleConverter" />  
+                        </p:column>  
+
+                        <p:column headerText="#{bundle.quantity}" style="width:4%">  
+                            <h:outputText value="#{paraExam.quantity}" converter="IntegerConverter" />  
+                        </p:column>
+
+                        <p:column headerText="#{bundle.participation}" style="width:5%">  
+                            <h:outputText value="#{paraExam.participation}" converter="DoubleConverter" />                                
+                        </p:column>
+
+                        <p:column headerText="#{bundle.participationPrice}" style="width:6%">  
+                            <h:outputText id="participationPrice" value="#{paraExam.participationPrice}" converter="DoubleConverter" />  
+                        </p:column>
+                    </p:dataTable>
+
+
+
+                    <table style="font-family: sans-serif;">		   		                                                 
+                        <tr><td><h:outputLabel value="#{bundle.para}:" style="font-weight: bold" /></td><td><h:outputLabel value="#{searchParaBean.selectedPara.paracode}"/></td></tr>
+                        <tr><td><h:outputLabel value="#{bundle.exams}:" style="font-weight: bold" /></td><td><h:outputLabel   value="#{searchParaBean.selectedPara.exParaExamses.size()}" /></td></tr>
+                        <tr><td><h:outputLabel value="#{bundle.totalAmountWithoutCalcPart}:" style="font-weight: bold" /></td><td><h:outputLabel  value="#{searchParaBean.selectedPara.totalAmount}" converter="DoubleConverter" /></td></tr>
+                        <tr><td><h:outputLabel value="#{bundle.totalAmountCalcPart}:" style="font-weight: bold"/><br/></td><td><h:outputLabel value="#{searchParaBean.selectedPara.totalParticipationAmount}" converter="DoubleConverter"/></td></tr> 
+
+                    </table> 
+                    <p:commandButton value="#{bundle.return}"  oncomplete="paraExamsDlg.hide()"/>	 
+                </p:panel>
+            </p:dialog>
+
+
+
+        </div>        
+    </ui:define>
+</ui:composition>

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.0" xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence     http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
+  <persistence-unit name="HERP" transaction-type="JTA">
+    <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+    <jta-data-source>jdbc/Oracle</jta-data-source>
+    <class>com.hosp.entities.Speciality</class>
+    <class>com.hosp.entities.ExExamCat</class>
+    <class>com.hosp.entities.ExTameioCounter</class>
+    <class>com.hosp.entities.FinKae</class>
+    <class>com.hosp.entities.FinDesm</class>
+    <class>com.hosp.entities.OrderDrugs</class>
+    <class>com.hosp.entities.Auditing</class>
+    <class>com.hosp.entities.Prefecture</class>
+    <class>com.hosp.entities.Relegion</class>
+    <class>com.hosp.entities.Maritalstatus</class>
+    <class>com.hosp.entities.ExYear</class>
+    <class>com.hosp.entities.Materialcategory</class>
+    <class>com.hosp.entities.Proffesion</class>
+    <class>com.hosp.entities.FinEidosPist</class>
+    <class>com.hosp.entities.ExTameio</class>
+    <class>com.hosp.entities.Drugs</class>
+    <class>com.hosp.entities.Admission</class>
+    <class>com.hosp.entities.ExContractType</class>
+    <class>com.hosp.entities.ExExam</class>
+    <class>com.hosp.entities.Drugbalance</class>
+    <class>com.hosp.entities.Surgeon</class>
+    <class>com.hosp.entities.Patients</class>
+    <class>com.hosp.entities.Surgery</class>
+    <class>com.hosp.entities.Sex</class>
+    <class>com.hosp.entities.ExContractExams</class>
+    <class>com.hosp.entities.Country</class>
+    <class>com.hosp.entities.KenMedicalActs</class>
+    <class>com.hosp.entities.FinYear</class>
+    <class>com.hosp.entities.Doy</class>
+    <class>com.hosp.entities.FinProtocol</class>
+    <class>com.hosp.entities.FinTimol</class>
+    <class>com.hosp.entities.Race</class>
+    <class>com.hosp.entities.Doctorrank</class>
+    <class>com.hosp.entities.Ken</class>
+    <class>com.hosp.entities.City</class>
+    <class>com.hosp.entities.Hospital</class>
+    <class>com.hosp.entities.Foreas</class>
+    <class>com.hosp.entities.ExContract</class>
+    <class>com.hosp.entities.FinBudget</class>
+    <class>com.hosp.entities.Insurance</class>
+    <class>com.hosp.entities.ExParaExams</class>
+    <class>com.hosp.entities.FinEntal</class>
+    <class>com.hosp.entities.Users</class>
+    <class>com.hosp.entities.ScheduledTaskType</class>
+    <class>com.hosp.entities.Examcategory</class>
+    <class>com.hosp.entities.Exam</class>
+    <class>com.hosp.entities.ExPara</class>
+    <class>com.hosp.entities.Labratory</class>
+    <class>com.hosp.entities.RecipeDrugs</class>
+    <class>com.hosp.entities.ExParaType</class>
+    <class>com.hosp.entities.Action</class>
+    <class>com.hosp.entities.Actionscategory</class>
+    <class>com.hosp.entities.Recipe</class>
+    <class>com.hosp.entities.Nationality</class>
+    <class>com.hosp.entities.Orders</class>
+    <class>com.hosp.entities.FinEidosEntal</class>
+    <class>com.hosp.entities.Bloodtype</class>
+    <class>com.hosp.entities.Lab</class>
+    <class>com.hosp.entities.Sample</class>
+    <class>com.hosp.entities.Department</class>
+    <class>com.hosp.entities.ExPeriod</class>
+    <class>com.hosp.entities.Role</class>
+    <class>com.hosp.entities.Packaging</class>
+    <class>com.hosp.entities.Dype</class>
+    <class>com.hosp.entities.Familystatus</class>
+    <class>com.hosp.entities.Icdiagnosis</class>
+    <class>com.hosp.entities.MaterialAdmission</class>
+    <class>com.hosp.entities.Outcome</class>
+    <class>com.hosp.entities.Materials</class>
+    <class>com.hosp.entities.KenCategories</class>
+    <class>com.hosp.entities.LabExams</class>
+    <class>com.hosp.entities.MaterialAdmissionId</class>
+    <class>com.hosp.entities.ExMonth</class>
+    <class>com.hosp.entities.ExAssertion</class>
+    <class>com.hosp.entities.ExTimol</class>
+    <class>com.hosp.entities.ExAssertionType</class>
+    <class>com.hosp.entities.ExAssertionTimol</class>
+    <class>com.hosp.entities.ExType</class>
+    <class>com.hosp.entities.ExParaCounter</class>
+    <shared-cache-mode>DISABLE_SELECTIVE</shared-cache-mode>
+    <properties>
+      <property name="eclipselink.jdbc.native-sql" value="true"/>
+      <property name="eclipselink.target-database" value="Oracle"/>
+     <property name="eclipselink.logging.level" value="FINE"/>
+      <property name="eclipselink.logging.parameters" value="true"/>
+    </properties>
+  </persistence-unit>
+</persistence>

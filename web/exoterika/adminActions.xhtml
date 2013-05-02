@@ -1,0 +1,530 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="../templates/ui.xhtml">
+
+    <ui:define name="head">
+        <style type="text/css">
+            .ui-confirm-dialog-severity {
+                margin: 0 7px 7px 0;
+            }
+        </style>
+        <script>
+            function confirmEOPYY()
+            {
+                var r=confirm("Press a button");
+                if (r==true) {
+                  x="You pressed OK!";
+                }
+                else {
+                  x="You pressed Cancel!";
+                }
+                return r;
+            }
+        </script>
+    </ui:define>
+
+    <ui:define name="content">
+
+        <!--  <h1 class="title ui-widget-header ui-corner-all">#{bundle.viewContracts}</h1> -->
+
+
+        <div class="entry" style="line-height:100%; ">
+            <p:panel header="#{bundle.installationData}" toggleable="true" style="padding:0px ! important;" >  
+                <table  style="padding-left: 5px;">
+                    <tr>
+                        <td width="20%">  <h:outputLabel value="#{bundle.installationCode}:" style="font-weight: bolder; font-size: 12px "/>   </td>
+                        <td width="10%">  <h:outputText value="#{sessionBean.users.hospital.dapycode}"/>  </td>
+
+                        <td width="10%">  <h:outputLabel value="#{bundle.naming}:" style="font-weight: bolder; font-size: 12px "/>   </td>
+                        <td width="15%">  <h:outputText value="#{sessionBean.users.hospital.name}"/>  </td>	
+                        
+                        <td width="20%">  <h:outputLabel value="#{bundle.healthUnitCode}:" style="font-weight: bolder; font-size: 12px "/>   </td>
+                        <td width="25%">  <h:outputText value="#{sessionBean.users.hospital.hunitcode}"/>  </td>
+                    </tr>
+                    <tr>
+                        <td>  <h:outputLabel value="#{bundle.afm}:" style="font-weight: bolder; font-size: 12px "/>   </td>
+                        <td>  <h:outputText value="#{sessionBean.users.hospital.afm}"/>  </td>
+
+                        <td>  <h:outputLabel value="#{bundle.doyCode}:" style="font-weight: bolder; font-size: 12px "/>   </td>
+                        <td>  <h:outputText value="#{sessionBean.users.hospital.doy}"/>  </td>	
+
+                        <td>  <h:outputLabel value="#{bundle.eopyyUnit}:" style="font-weight: bolder; font-size: 12px "/>   </td>
+                        <td>  <h:outputText value="#{sessionBean.users.hospital.dapyadmin}"/>  </td>	
+                    </tr>
+
+                </table> 
+
+            </p:panel>
+
+            <br/>
+
+            <h:form id="assertionSearchForm">
+
+                <p:fieldset legend="#{bundle.assertionAdmin}" toggleable="false" toggleSpeed="500" styleClass="" style="padding:14px;"  >			
+
+                    
+                     <p:selectOneMenu value="#{assertionBean.searchByOpen}"  >						 
+                          <f:selectItem itemLabel="#{bundle.all}" itemValue=""  />
+                          <f:selectItem itemLabel="#{bundle.open}" itemValue="1"  />
+                          <f:selectItem itemLabel="#{bundle.close}" itemValue="0"  />
+                     </p:selectOneMenu>
+
+                        <!-- <p:dataTable var="result" value="#{assertionBean.lazyModel}" paginator="true" rows="5"  rowKey="#{result.assertion}"
+                        paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}" emptyMessage="#{bundle.noRecordsFound}"  
+                        rowsPerPageTemplate="5,10,15" selection="#{assertionBean.selectedResult}" id="assertionTable" lazy="true" selectionMode="single"> 
+                        --> 
+                    
+                                       
+                   <p:dataTable var="result" value="#{assertionBean.assertionSearchResultBeanList}" paginator="true" rows="15"  rowKey="#{result.assertion}"                 
+                                 emptyMessage="#{bundle.noRecordsFound}"   selection="#{assertionBean.selectedResult}" id="assertionTable"  > 
+                        <p:ajax event="rowSelectRadio" update=":assertionSearchForm"  />			 
+
+                        <p:column   selectionMode="single" style="width:1px"   /> 
+
+                        <p:column headerText="#{bundle.code}" style="width: 10px; white-space: normal;" >  
+                            <p:commandLink update=":assertionDataPanel" action="#{dapyAction.viewAssertionData}" value="#{result.assertion.code}" style="color:blue;text-decoration: underline;font-weight:bold; ">			            
+                                <f:setPropertyActionListener value="#{result}" target="#{assertionBean.selectedResult}" />    
+                            </p:commandLink>  
+                        </p:column> 
+
+                        <p:column headerText="#{bundle.period}"  sortBy="#{result.assertion.exPeriod}" sortFunction="#{dapyAction.sortPeriod}" style="width: 10px; white-space: normal;"  >  
+                            <h:outputText value="#{result.assertion.exPeriod.name}" />  
+                        </p:column>  
+
+                        <p:column headerText="#{bundle.assertionType}"  sortBy="#{result.assertion.exAssertionType.name}" style="width: 1px; white-space: normal;" >  
+                            <h:outputText value="#{result.assertion.exAssertionType.name}" />  
+                        </p:column>	
+
+                        <!--<p:column headerText="#{bundle.totalAmountWithoutCalcPart}" sortBy="#{result.amount}"  style="width: 10px; white-space: normal;">  
+                            <h:outputText value="#{result.amount}" converter="DoubleConverter"/>  
+                        </p:column> -->
+                        
+                        <p:column headerText="#{bundle.totalAmountCalcPart}" sortBy="#{result.netAmount}" style="width: 10px; white-space: normal;">  
+                            <h:outputText value="#{result.netAmount}" converter="DoubleConverter"/>  
+                        </p:column> 
+                        
+                        <p:column headerText="#{bundle.countParas}" sortBy="#{result.countPara}" style="width: 5px; white-space: normal;" >  
+                            <h:outputText value="#{result.countPara}" />  
+                        </p:column>  
+
+                        <!--<p:column headerText="#{bundle.countExams}" sortBy="#{result.countExams}" style="width: 5px; white-space: normal;">  
+                            <h:outputText value="#{result.countExams}" />  
+                        </p:column> -->
+                        
+                        <p:column headerText="#{bundle.status}" sortBy="#{result.assertion.opened}" style="width: 10px; white-space: normal;">  
+                            <h:outputText value="#{result.assertion.opened==1?bundle.opened : bundle.closed}"  />  
+                        </p:column> 
+                        
+
+                        <p:column headerText="#{bundle.actions}">  			          	          
+                            <p:commandLink immediate="true"  action="#{dapyAction.viewAssertionInvoices}" 
+                                           update=":invoiceForm" style="color:blue;text-decoration: underline;font-weight:bold;" >  
+                                <h:outputText value="#{bundle.invoices}" />(##{result.assertion.exTimols.size()}-<h:outputText value="#{result.assertion.totlaTimolAMount}" converter="DoubleConverter" />€)
+                                <f:setPropertyActionListener value="#{result}" target="#{assertionBean.currentResult}" />    
+                            </p:commandLink> <p:spacer width="5" height="10" /> 
+                            
+                            <p:commandLink value="#{bundle.eopyyFile}"  onclick="confCreateEopyyFileDlg.show()"
+                                             style="color:blue;text-decoration: underline;font-weight:bold;"   >
+                                <f:setPropertyActionListener value="#{result}" target="#{assertionBean.currentResult}" />    
+                            </p:commandLink>                            
+                        </p:column> 
+                        
+                       
+                    </p:dataTable>
+                    
+                    <p:confirmDialog id="confCreateEopyyFileDlgID" message="#{bundle.confCreateEopyyFileDlg}" header="#{bundle.warning}" severity="alert" widgetVar="confCreateEopyyFileDlg" >                                            
+                         <p:commandButton action="#{dapyAction.createEopyyFile}" value="#{bundle.yes}" 
+                                          onclick="confCreateEopyyFileDlg.hide()" ajax="false" />                                                       
+                         <p:commandButton value="#{bundle.no}"  onclick="confCreateEopyyFileDlg.hide()" type="button" />                             
+                    </p:confirmDialog> 
+                     
+                                        
+                    <br/>								
+                    <p:commandButton value="#{bundle.createAssertion}"  update=":contractForm:contractMsg"  oncomplete="contractDialog.show()" icon="ui-icon-disk"/> 
+                    <p:commandButton value="#{bundle.updateAssertion}" disabled="#{assertionBean.selectedResult eq null}"  oncomplete="updateAssertionDialog.show()" action="#{dapyAction.updateAssertion}" 
+                                     icon="ui-icon-arrowrefresh-1-w" update=":updateAssertiondPanel" />
+                    <p:commandButton value="#{bundle.deleteAssertion}" disabled="#{assertionBean.selectedResult eq null}" onclick="confDeleteAssertionDlg.show()"  icon="ui-icon-close"/>							                   
+                </p:fieldset>
+            </h:form>
+
+            <p:confirmDialog message="#{bundle.confDeletesAssertionDlg}" header="#{bundle.warning}" severity="alert" widgetVar="confDeleteAssertionDlg">                    
+                <p:commandButton value="#{bundle.yes}" action="#{dapyAction.deleteAssertionAction}" oncomplete="confDeleteAssertionDlg.hide()"  />  
+                <p:commandButton value="#{bundle.no}"  onclick="confDeleteAssertionDlg.hide()" type="button" />                     
+            </p:confirmDialog>	
+
+
+        </div>  
+
+
+        <!-- UPDATE ASSERTION DIALOG DIALOG!!!!!!!!!!!!!!!!!! -->
+        <p:dialog id="updateAssertionDialogID" header="#{bundle.updateAssertion}" widgetVar="updateAssertionDialog"  
+                  modal="true" resizable="false">  
+
+            <p:panel id="updateAssertiondPanel" style="padding:0px ! important;" >  
+                <h:form id="updateAssertionForm">  
+                    <p:messages id="updateAssertionMsg" severity="error" />
+                    <table>
+
+                        <tr>
+                            <td><h:outputLabel value="#{bundle.contract}:*"/></td>
+                            <td>    
+                                <p:selectOneMenu value="#{assertionBean.updateAssertion.exContract}" converter="ContractConverter" >									 
+                                    <f:selectItems value="#{contractBean.contracts}" var="contract" itemLabel="#{contract.name}" itemValue="#{contract}"   /> 
+                                </p:selectOneMenu>		   		     	
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><h:outputLabel value="#{bundle.assertionType}:*"/></td>
+                            <td>    
+                                <p:selectOneMenu value="#{assertionBean.updateAssertion.exAssertionType}" converter="AssertionTypeConverter" >									 
+                                    <f:selectItems value="#{applicationListBean.assertionTypes}" var="asstype" itemLabel="#{asstype.name}" itemValue="#{asstype}"   /> 
+                                </p:selectOneMenu>		   		     	
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><h:outputLabel value="#{bundle.submissionType}:*"/></td>
+                            <td>
+                                <p:selectOneMenu value="#{assertionBean.updateAssertion.submission}" >									 
+                                    <f:selectItems value="#{assertionBean.submissions}"   /> 
+                                </p:selectOneMenu>		   		     	
+                            </td>
+                        </tr>  
+                        <tr>
+                            <td><h:outputLabel value="#{bundle.assertionPeriod}:"/>  </td>
+                            <td>
+                                <p:selectOneMenu value="#{assertionBean.updateAssertion.exPeriod}" converter="pc" >									 
+                                    <f:selectItems value="#{assertionBean.periods}" var="per" itemLabel="#{per.name}" itemValue="#{per}"   /> 
+                                </p:selectOneMenu>	<br/>	   		     			   		     	    		   		     	    
+                            </td>   
+                        </tr>
+                        <tr>
+                            <td><h:outputLabel value="#{bundle.status}:"/>  </td>
+                            <td>
+                                <p:selectOneRadio id="options" value="#{assertionBean.updateAssertion.opened}">  
+                                    <f:selectItem itemLabel="#{bundle.opened}" itemValue="1" />  
+                                    <f:selectItem itemLabel="#{bundle.closed}" itemValue="0" /> 
+                                </p:selectOneRadio>                                
+                            </td>
+                            
+                        </tr>
+                        
+                        
+                    </table> 
+
+                    <p:commandButton value="#{bundle.updateAssertion}" onclick="confUpdateAssertionDlg.show()" update=":updateAssertionForm"  />
+                    <p:commandButton value="#{bundle.close}" onclick="leavePageDlgg.show()"  />
+
+                </h:form>
+            </p:panel>
+        </p:dialog>
+
+        <p:confirmDialog message="#{bundle.confUpdateAssertionDlg}" header="#{bundle.warning}" severity="alert" widgetVar="confUpdateAssertionDlg">                    
+            <p:commandButton value="Yes" action="#{dapyAction.updateAssertionAction}" oncomplete="confUpdateAssertionDlg.hide()" />  
+            <p:commandButton value="No"  onclick="confUpdateAssertionDlg.hide()" type="button" />                     
+        </p:confirmDialog>	
+
+
+        <p:confirmDialog message="#{bundle.loseChangesAlert}" header="#{bundle.warning}" severity="alert" widgetVar="leavePageDlgg">                    
+            <p:commandButton value="Yes" onclick="leavePageDlgg.hide()" oncomplete="updateAssertionDialog.hide()" />  
+            <p:commandButton value="No"  onclick="leavePageDlgg.hide()"  type="button" />                     
+        </p:confirmDialog>    
+
+
+
+
+
+
+        <!-- ASSERTION DATA !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+        <p:dialog id="assertionDataDialogID" header="#{bundle.assertionData}" widgetVar="assertionDataDialog" modal="true" resizable="false" >  
+            <p:panel style="padding:0px ! important;" id="assertionDataPanel" >  
+                <table style="font-family: sans-serif;">		   		   
+                    <tr><td><h:outputLabel value="#{bundle.code}:" style="font-weight: bold" /></td><td><h:outputLabel id="codeIn" value="#{assertionBean.selectedResult.assertion.code}"/></td></tr>
+                    <tr><td><h:outputLabel value="#{bundle.contractData}:" style="font-weight: bold" /></td><td><h:outputLabel size="50"  value="#{assertionBean.selectedResult.assertion.exContract.contractnumber} #{assertionBean.selectedResult.assertion.exContract.name}" /></td></tr>
+                    <tr><td><h:outputLabel value="#{bundle.assertionType}:" style="font-weight: bold" /></td><td><h:outputLabel id="assertionTypeIn" value="#{assertionBean.selectedResult.assertion.exAssertionType.name}" /></td></tr>
+                    <tr><td><h:outputLabel value="#{bundle.period}:" style="font-weight: bold"/><br/></td><td><h:outputLabel value="#{assertionBean.selectedResult.assertion.exPeriod.name}"/></td></tr>
+                    <tr><td><h:outputLabel value="#{bundle.status}:" style="font-weight: bold" /><br/></td><td><h:outputLabel value="#{assertionBean.selectedResult.assertion.opened==1?bundle.opened : bundle.closed}" /> </td></tr>           
+                     
+                    <tr><td></td></tr>
+                    <!--<tr><td><h:outputLabel value="#{bundle.totalView}" style="font-weight:bold"/>  </td></tr> -->
+                    <tr><td><h:outputLabel value="#{bundle.totalAmountCalcPart}:" style="font-weight: bold"/></td><td><h:outputLabel id="totalAmountInII" value="#{assertionBean.selectedResult.netAmount}"  converter="DoubleConverter" /></td></tr>
+                    <tr><td><h:outputLabel value="#{bundle.totalAmountWithoutCalcPart}:" style="font-weight: bold"/></td><td><h:outputLabel id="totalAmountIn" value="#{assertionBean.selectedResult.amount}"  converter="DoubleConverter" /></td></tr>
+                    <tr><td><h:outputLabel value="#{bundle.totalParas}:" style="font-weight: bold"/></td><td><h:outputLabel id="totalParasIn" value="#{assertionBean.selectedResult.countPara}"  converter="DoubleConverter" /></td></tr>
+                    <tr><td><h:outputLabel value="#{bundle.totalExams}:" style="font-weight: bold"/></td><td><h:outputLabel id="totalExamsIn" value="#{assertionBean.selectedResult.countExams}"   converter="DoubleConverter"/></td></tr>
+                </table> 
+                <p:commandButton value="#{bundle.return}"  oncomplete="assertionDataDialog.hide()"/>	 
+            </p:panel>
+        </p:dialog>
+
+
+
+
+
+        <!-- SELECT INVOICE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+        <h:form id="invoiceForm">              
+            <p:dialog id="invoiceDialogID" header="#{bundle.selectTaxInvoice}" widgetVar="invoiceDialog"  modal="true" resizable="false" closable="false" >  
+
+                <p:panel id="viewInvoicePanel" header="#{bundle.invoiceList}- #{assertionBean.currentResult.assertion.code}" style="padding:0px ! important;" >  		   		  
+
+
+                    <p:dataTable var="invoice" value="#{assertionBean.invoiceList}"  paginator="true" rows="10" emptyMessage="#{bundle.noRecordsFound}" 
+                                 selection="#{assertionBean.selectedInvoice}" rowKey="#{invoice.timolid}" id="invoiceTable" >  
+
+       <p:ajax event="rowSelectRadio" update=":invoiceForm:viewInvoicePanel, :invoiceForm:insertInvoicePanel" />  <!-- listener="{dapyAction.invoiceRowSelect}"  -->
+
+                        <p:column  selectionMode="single" style="width:18px" /> 
+
+                        <p:column headerText="#{bundle.invoiceNumber}" id="invoiceCode">  
+                            #{invoice.code}  
+                        </p:column>  
+
+                        <p:column headerText="#{bundle.amount}"  id="invoiceAmount">  
+
+                            <h:outputLabel value="#{invoice.amount}" converter="DoubleConverter" />
+
+                        </p:column> 
+
+                        <p:column headerText="#{bundle.invoiceDate}"  id="invoiceStartdate">  
+                            <h:outputLabel value="#{invoice.timoldate}" converter="DateConverter"  />  
+                        </p:column>
+
+                    </p:dataTable> 
+                    <br/>   
+                    <p:commandButton process="@this,invoiceAmount"  disabled="#{assertionBean.selectedInvoice eq null}"  value="#{bundle.updateTax}" action="#{dapyAction.updateTax}"
+                                     update=":invoiceForm:insertInvoicePanel,:invoiceForm:viewInvoicePanel" />
+
+                    <p:commandButton disabled="#{assertionBean.selectedInvoice eq null}" type="button" value="#{bundle.deleteTax}" 
+                                     onclick="confDeleteInvoiceDlg.show()"   />   
+                    <br/>
+                </p:panel>     
+                
+                <br/><br/>
+                
+                <p:panel id="insertInvoicePanel" header="#{bundle.invoiceData}" style="padding:0px ! important;" > 
+                    <p:messages id="invoiceMsg"   autoUpdate="true" severity="error,fatal"   />  	        			       
+                    <table>
+                        <tr><td> <h:outputLabel value="#{bundle.invoiceNumber}:*"/></td>
+                            <td><p:inputText id="invoiceNumber"  label="#{bundle.invoiceNumber}" requiredMessage="#{bundle.invoiceNumber}: #{bundle.mandatoryField}" required="true" value="#{assertionBean.newInvoice.code}"/></td>						        
+                            <td align="left"><p:message for="invoiceNumber" display="icon"/></td> 
+                        </tr>
+                        <tr><td> <h:outputLabel value="#{bundle.amount}:*"/></td>
+                            <td><p:inputText id="invoiceAmount" requiredMessage="#{bundle.amount}: #{bundle.mandatoryField}" 
+                                             required="true" value="#{assertionBean.newInvoice.amount}" converter="DoubleConverter" >
+
+                                </p:inputText>
+
+                            </td>						        
+                            <td align="left"><p:message for="invoiceAmount" display="icon"/></td> 
+                        </tr>
+                        <tr><td> <h:outputLabel value="#{bundle.invoiceDate}:*"/></td> 
+                            <td><p:calendar  readonlyInput="true"  requiredMessage="#{bundle.invoiceDate}: #{bundle.mandatoryField}" required="true" navigator="true"  
+                                             pattern="dd/MM/yyyy" value="#{assertionBean.newInvoice.timoldate}" id="invoiceDate"/> 
+
+                            </td>
+                            <td align="left"><p:message for="invoiceDate" display="icon"/></td>
+                        </tr> 						
+
+                    </table>
+                    <p:commandButton value="#{bundle.save}"  onclick="confCreateInvoiceDlg.show()" type="button"  >
+                        <f:actionListener type="com.hosp.util.CleanForms" />
+                    </p:commandButton>			        			    
+                </p:panel>
+                <br/>
+                <p:commandButton value="#{bundle.return}" action="#{dapyAction.closeInvoiceDlg()}" process="@this" ajax="true" styleClass="centered" />
+                
+
+
+            </p:dialog> 
+
+            <p:confirmDialog  message="#{bundle.confCreateInvoiceDlg}" header="#{bundle.warning}" severity="alert" widgetVar="confCreateInvoiceDlg">                    
+                <p:commandButton value="Yes" action="#{dapyAction.createInvoiceAction}" oncomplete="confCreateInvoiceDlg.hide()" 
+                                 update=":invoiceForm:insertInvoicePanel,:invoiceForm:viewInvoicePanel" />  
+                <p:commandButton value="No"  onclick="confCreateInvoiceDlg.hide()" type="button" />                     
+            </p:confirmDialog>	
+
+            <p:confirmDialog message="#{bundle.confDeleteInvoiceDlg}" header="#{bundle.warning}" severity="alert" widgetVar="confDeleteInvoiceDlg">                    
+                <p:commandButton value="Yes" action="#{dapyAction.deleteInvoiceAction}" oncomplete="confDeleteInvoiceDlg.hide()"
+                                 update=":invoiceForm:insertInvoicePanel,:invoiceForm:viewInvoicePanel" immediate="true" />  
+                <p:commandButton value="No"  onclick="confDeleteInvoiceDlg.hide()" type="button" />                     
+            </p:confirmDialog>	
+        </h:form>  
+
+
+
+        <script>
+        $( "#contractDialogID" ).position({ 
+            my: "left",
+            at: "left"
+            
+        });
+        
+        
+        $(function() {  
+            $('#contractDialogID').puidialog({  
+                showEffect: 'fade',  
+                hideEffect: 'fade',  
+                minimizable: true,  
+                maximizable: true,  
+                modal: true   
+            });  
+
+            $('#btn-show').puibutton({  
+                icon: 'ui-icon-arrow-4-diag',  
+                click: function() {  
+                    $('#dlg').puidialog('show');  
+                }  
+            });  
+        });  
+        
+        
+      </script>
+
+
+
+
+        <!-- SELECT CONTRACT !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+        <p:dialog id="contractDialogID" header="#{bundle.selectContract}" widgetVar="contractDialog" modal="true" resizable="false"  >  
+            <h:form id="contractForm">          	  
+                <p:panel header="#{bundle.installationContracts} " style="padding:0px ! important;" >  		   		  
+                    <p:messages id="contractMsg" redisplay="false" severity="error,fatal"  />
+
+                    <p:dataTable var="contract" value="#{contractBean.contracts}"  paginator="true" rows="10" emptyMessage="#{bundle.noRecordsFound}" 
+                                 selection="#{contractBean.selectedContract}" rowKey="#{contract.contractnumber}" id="contractsTable" >  
+
+                        <!--<p:ajax event="rowSelect" update=":contractForm"  /> -->
+                        <p:ajax event="rowSelectRadio" update=":contractForm"  />
+                        
+
+                        <p:column selectionMode="single" style="width:18px" />  
+                        <p:column headerText="#{bundle.contractNumber}" sortBy="#{contract.contractnumber}"  id="number">  
+                            #{contract.contractnumber}  
+                        </p:column>  
+
+                        <p:column headerText="#{bundle.description}" sortBy="#{contract.name}"  id="name">  
+                            #{contract.name}  
+                        </p:column> 
+
+                        <p:column headerText="#{bundle.startDate}" sortBy="#{contract.startdate}"  id="startdate">  
+                            <h:outputLabel value="#{contract.startdate}" converter="DateConverter"  />  
+                        </p:column>
+
+                        <p:column headerText="#{bundle.endDate}" sortBy="#{contract.enddate}"  id="enddate">  
+                            <h:outputLabel value="#{contract.enddate}" converter="DateConverter"  /> 
+                        </p:column>  				  
+                    </p:dataTable> 
+                    <br/>
+                    <p:commandButton disabled="#{contractBean.selectedContract eq null}"  value="#{bundle.selectContract}" update="contractMsg"  action="#{dapyAction.openSelectContractDialog}"  />   <!--    -->  
+                    <p:commandButton value="#{bundle.return}"  oncomplete="contractDialog.hide()"/>				  		   		
+                </p:panel>
+            </h:form>    
+        </p:dialog> 
+
+
+
+
+        <!-- NEW ASSERTION DIALOG DIALOG!!!!!!!!!!!!!!!!!! -->
+        <p:dialog id="newAssertionDialogID" header="#{bundle.openPeriodAssertion}" widgetVar="newAssertionDialog"  
+                  modal="true" resizable="false">  
+
+            <p:panel id="periodPanel" style="padding:0px ! important;" >  
+                <h:form id="assertionForm">  
+                    <p:messages id="assertionMsg" severity="error" />
+                    <table>
+                        <tr>
+                            <td><h:outputLabel value="#{bundle.assertionType}*"/></td>
+                            <td>    
+                                <p:selectOneMenu value="#{assertionBean.selectedAssertionType}" effect="fade" converter="AssertionTypeConverter" >									 
+                                    <f:selectItems value="#{applicationListBean.assertionTypes}" var="asstype" itemLabel="#{asstype.name}" itemValue="#{asstype}"   /> 
+                                </p:selectOneMenu>		   		     	
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><h:outputLabel value="#{bundle.submissionType}*"/></td>
+                            <td>
+                                <p:selectOneMenu value="#{assertionBean.selectedSubmissionType}" effect="fade"  >									 
+                                    <f:selectItems value="#{assertionBean.submissions}"   /> 
+                                </p:selectOneMenu>		   		     	
+                            </td>
+                        </tr>  
+                        <tr>
+                            <td><h:outputLabel value="#{bundle.assertionPeriod}"/>  </td>
+                            <td>
+                                <p:selectOneMenu value="#{assertionBean.period}" effect="fade" converter="pc" >									 
+                                    <f:selectItems value="#{assertionBean.periods}" var="per" itemLabel="#{per.name}" itemValue="#{per}"   /> 
+                                </p:selectOneMenu>	<br/>	   		     	
+                                <p:commandButton value="#{bundle.newPeriod}" oncomplete="newPeriodDialog.show()"/>		   		     	    
+                            </td>   
+                        </tr> 			   		  
+                    </table> 
+
+                    <p:commandButton value="#{bundle.saveAssertion}" onclick="confInsAssertionDlg.show()" update="assertionForm"  immediate="false" /> <!-- oncomplete="newAssertionDialog.hide()" --> 
+                    <p:commandButton value="#{bundle.close}" onclick="newAssertionDialog.hide()" type="button" />
+
+                </h:form>
+            </p:panel>
+        </p:dialog>
+
+        <p:confirmDialog message="#{bundle.confInsAssertionDlg}" header="#{bundle.warning}" severity="alert" widgetVar="confInsAssertionDlg">                    
+            <p:commandButton value="Yes" action="#{dapyAction.createAssertionAction}" oncomplete="confInsAssertionDlg.hide()" />  
+            <p:commandButton value="No"  onclick="confInsAssertionDlg.hide().hide()" type="button" />                     
+        </p:confirmDialog>	
+
+
+        <p:confirmDialog message="#{bundle.loseChangesAlert}" header="#{bundle.warning}" severity="alert" widgetVar="leavePageDlg">                    
+            <p:commandButton value="Yes" onclick="leavePageDlg.hide()" oncomplete="newAssertionDialog.hide()" />  
+            <p:commandButton value="No"  onclick="leavePageDlg.hide()"  type="button" />                     
+        </p:confirmDialog>   
+
+
+
+        <!--NEW PERIOD DIALOG!!!!!!!!!!!!!!!!!! -->
+        <p:dialog id="newPeriodDialogID" header="#{bundle.openNewPeriod}" widgetVar="newPeriodDialog" showEffect="fade" hideEffect="explode" modal="true" resizable="false">  
+
+            <p:panel id="peridoPanel" style="padding:0px ! important; " >  
+                <h:form id="periodForm">
+                    <p:messages id="periodMsg" severity="error" />  
+                    <table>
+                        <tr>
+                            <td><h:outputLabel value="#{bundle.selectMonth}*"/></td>
+                            <td>    
+                                <p:selectOneMenu id="monthsss" value="#{assertionBean.selectedMonth}" converter="MonthConverter" >									 
+                                    <f:selectItems value="#{applicationListBean.months}" var="month" itemLabel="#{month.name}" itemValue="#{month}"   />
+                                </p:selectOneMenu>	 	   		     	
+                            </td>
+                        </tr>
+                        <tr>    
+                            <td><h:outputLabel value="#{bundle.selectYear}*"/></td>
+                            <td>
+                                <p:selectOneMenu value="#{assertionBean.selectedYear}" converter="YearConverter"  >									 
+                                    <f:selectItems value="#{applicationListBean.years}" var="year" itemLabel="#{year.name}" itemValue="#{year}"   /> 
+                                </p:selectOneMenu>								     	
+                            </td>
+                        </tr>		   		      			   		     
+                    </table>
+
+                    <p:commandButton value="#{bundle.save}" onclick="confInsPeriodDlg.show()" update="periodForm,:assertionForm"  /> 
+                                                   <!--  onclick="confInsPeriodDlg.show()"    if (!confirm('#{bundle.msgDisconnect}')) return false;   oncomplete="newPeriodDialog.hide()"<br/> --> 
+                    <p:commandButton value="#{bundle.close}" onclick="leavePageDlg1.show()" type="button" />		   		   
+
+                </h:form>
+            </p:panel>
+        </p:dialog>	
+
+        <!--  INSERT DATA CONFIRMATION-->
+        <p:confirmDialog message="#{bundle.confInsPeriodDlg}" header="#{bundle.warning}" severity="alert" widgetVar="confInsPeriodDlg" >                    
+            <p:commandButton value="Yes" action="#{dapyAction.createPeriodAction}"  oncomplete="confInsPeriodDlg.hide()" update=":periodForm,:assertionForm"/>  
+            <p:commandButton value="No"  onclick="confInsPeriodDlg.hide()"  type="button" />                     
+        </p:confirmDialog>	
+
+        <!--  LEAVE PAGE CONFIRMATION-->  
+        <p:confirmDialog message="#{bundle.loseChangesAlert}" header="#{bundle.warning}" severity="alert" widgetVar="leavePageDlg1">                    
+            <p:commandButton value="Yes" onclick="leavePageDlg1.hide()" oncomplete="newPeriodDialog.hide()" />  
+            <p:commandButton value="No"  onclick="leavePageDlg1.hide()" type="button" />                     
+        </p:confirmDialog>
+
+
+
+    </ui:define>
+</ui:composition>

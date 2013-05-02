@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<faces-config version="2.0" xmlns="http://java.sun.com/xml/ns/javaee"
+ xmlns:xi="http://www.w3.org/2001/XInclude"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_0.xsd">
+ 
+ <converter>
+  <converter-id>IntegerConverter</converter-id>
+  <converter-class>com.hosp.converter.IntegerConverter</converter-class>
+ </converter>
+ 
+ <converter>
+  <converter-id>ParaExamConverter</converter-id>
+  <converter-class>com.hosp.converter.ParaExamConverter</converter-class>
+ </converter>
+ 
+ <converter>
+  <converter-id>CityConverter</converter-id>
+  <converter-class>com.hosp.converter.CityConverter</converter-class>
+ </converter>
+ 
+ 
+ <converter>
+  <converter-id>DepartmentConverter</converter-id>
+  <converter-class>com.hosp.converter.DepartmentConverter</converter-class>
+ </converter>
+ 
+ <converter>
+  <converter-id>ExamConverter</converter-id>
+  <converter-class>com.hosp.converter.ExamConverter</converter-class>
+ </converter>
+ 
+ 
+ <converter>
+  <converter-id>BloodtypeConverter</converter-id>
+  <converter-class>com.hosp.converter.BloodtypeConverter</converter-class>
+ </converter>
+ 
+ <converter>
+  <converter-id>MaritalstatusConverter</converter-id>
+  <converter-class>com.hosp.converter.MaritalstatusConverter</converter-class>
+ </converter>
+ 
+ 
+ <converter>
+  <converter-id>DoctorrankConverter</converter-id>
+  <converter-class>com.hosp.converter.DoctorrankConverter</converter-class>
+ </converter>
+ 
+ <converter>
+  <converter-id>DoyConverter</converter-id>
+  <converter-class>com.hosp.converter.DoyConverter</converter-class>
+ </converter>
+ 
+  <converter>
+  <converter-id>HospitalConverter</converter-id>
+  <converter-class>com.hosp.converter.HospitalConverter</converter-class>
+ </converter>
+ 
+ 
+ <converter>
+  <converter-id>NationalityConverter</converter-id>
+  <converter-class>com.hosp.converter.NationalityConverter</converter-class>
+ </converter>
+ 
+ <converter>
+  <converter-id>PackagingConverter</converter-id>
+  <converter-class>com.hosp.converter.PackagingConverter</converter-class>
+ </converter>
+ 
+ <converter>
+  <converter-id>PrefectureConverter</converter-id>
+  <converter-class>com.hosp.converter.PrefectureConverter</converter-class>
+ </converter>
+ 
+ <converter>
+  <converter-id>ProffesionConverter</converter-id>
+  <converter-class>com.hosp.converter.ProffesionConverter</converter-class>
+ </converter>
+ 
+ <converter>
+  <converter-id>RaceConverter</converter-id>
+  <converter-class>com.hosp.converter.RaceConverter</converter-class>
+ </converter>
+ 
+ 
+ <converter>
+  <converter-id>RelegionConverter</converter-id>
+  <converter-class>com.hosp.converter.RelegionConverter</converter-class>
+ </converter>
+ 
+ 
+ <converter>
+  <converter-id>RoleConverter</converter-id>
+  <converter-class>com.hosp.converter.RoleConverter</converter-class>
+ </converter>
+ 
+ <converter>
+  <converter-id>SexConverter</converter-id>
+  <converter-class>com.hosp.converter.SexConverter</converter-class>
+ </converter>
+ 
+ <converter>
+  <converter-id>SpecialityConverter</converter-id>
+  <converter-class>com.hosp.converter.SpecialityConverter</converter-class>
+ </converter>
+ 
+ <converter>
+  <converter-id>FamilystatusConverter</converter-id>
+  <converter-class>com.hosp.converter.FamilystatusConverter</converter-class>
+ </converter>   
+ 
+ 
+ <converter>
+  <converter-id>PatientConverter</converter-id>
+  <converter-class>com.hosp.converter.PatientConverter</converter-class>
+ </converter>
+ 
+ <converter>
+  <converter-id>AssertionConverter</converter-id>
+  <converter-class>com.hosp.converter.AssertionConverter</converter-class>
+ </converter>
+ 
+ <converter>
+  <converter-id>TypeConverter</converter-id>
+  <converter-class>com.hosp.converter.TypeConverter</converter-class>
+ </converter>
+ 
+  <converter>
+   <converter-id>InsuranceConverter</converter-id>
+   <converter-class>com.hosp.converter.InsuranceConverter</converter-class>
+  </converter>
+ 
+  <converter>
+   <converter-id>CountryConverter</converter-id>
+   <converter-class>com.hosp.converter.CountryConverter</converter-class>
+  </converter>
+ 
+ <converter>
+  <converter-id>ParaTypeConverter</converter-id>
+  <converter-class>com.hosp.converter.ParaTYpeConverter</converter-class>
+ </converter>
+ <converter>
+  <converter-id>DateConverter</converter-id>
+  <converter-class>com.hosp.converter.DateConverter</converter-class>
+ </converter>
+ 
+ <converter>
+  <converter-id>TameioConverter</converter-id>
+  <converter-class>com.hosp.converter.TameioConverter</converter-class>
+ </converter>
+ 
+ <converter>
+  <converter-id>AssertionTypeConverter</converter-id>
+  <converter-class>com.hosp.converter.AssertionTypeConverter</converter-class>
+ </converter>
+ 
+ <converter>
+  <converter-id>YearConverter</converter-id>
+  <converter-class>com.hosp.converter.YearConverter</converter-class>
+ </converter>
+ 
+  <converter>
+  <converter-id>ContractConverter</converter-id>
+  <converter-class>com.hosp.converter.ContractConverter</converter-class>
+ </converter>
+ 
+ <converter>
+  <converter-id>pc</converter-id>
+  <converter-class>com.hosp.converter.PeriodConverter</converter-class>
+ </converter>
+ 
+ <converter>
+  <converter-id>MonthConverter</converter-id>
+  <converter-class>com.hosp.converter.MonthConverter</converter-class>
+ </converter>
+ 
+ <converter>
+  <converter-id>DoubleConverter</converter-id>
+  <converter-class>com.hosp.converter.DoubleConverter</converter-class>
+ </converter>
+ 
+ <managed-bean>
+  <managed-bean-name>guestPreferences</managed-bean-name>
+  <managed-bean-class>com.hosp.bean.GuestPreferences</managed-bean-class>
+  <managed-bean-scope>session</managed-bean-scope>
+ </managed-bean>
+ 
+ <managed-bean>
+  <managed-bean-name>themeSwitcherBean</managed-bean-name>
+  <managed-bean-class>com.hosp.bean.ThemeSwitcherBean</managed-bean-class>
+  <managed-bean-scope>request</managed-bean-scope>
+  <managed-property>
+   <property-name>gp</property-name>
+   <value>#{guestPreferences}</value>
+  </managed-property>
+ </managed-bean>
+ 
+ <!--<managed-bean>
+  <managed-bean-name>sessionBean</managed-bean-name>
+  <managed-bean-class>com.hosp.bean.SessionBean</managed-bean-class>
+  <managed-bean-scope>session</managed-bean-scope>
+ </managed-bean>
+ 
+  <managed-bean>
+  <managed-bean-name>assertionBean</managed-bean-name>
+  <managed-bean-class>com.hosp.bean.AssertionBean</managed-bean-class>
+  <managed-bean-scope>view</managed-bean-scope>
+ </managed-bean> 
+ 
+
+ 
+ -->
+ 
+ <managed-bean>
+  <managed-bean-name>userBean</managed-bean-name>
+  <managed-bean-class>com.hosp.bean.UserBean</managed-bean-class>
+  <managed-bean-scope>request</managed-bean-scope>
+ </managed-bean>
+ 
+ 
+ <managed-bean>
+  <managed-bean-name>administrationAction</managed-bean-name>
+  <managed-bean-class>com.hosp.action.AdministrationAction</managed-bean-class>
+  <managed-bean-scope>request</managed-bean-scope>
+ </managed-bean>
+ 
+ <managed-bean>
+  <managed-bean-name>dapyAction</managed-bean-name>
+  <managed-bean-class>com.hosp.action.DapyAction</managed-bean-class>
+  <managed-bean-scope>request</managed-bean-scope>
+ </managed-bean>
+ <managed-bean>
+  <managed-bean-name>paraAction</managed-bean-name>
+  <managed-bean-class>com.hosp.action.ParaAction</managed-bean-class>
+  <managed-bean-scope>request</managed-bean-scope>
+ </managed-bean>
+ <managed-bean>
+  <managed-bean-name>patientAction</managed-bean-name>
+  <managed-bean-class>com.hosp.action.PatientAction</managed-bean-class>
+  <managed-bean-scope>request</managed-bean-scope>
+ </managed-bean>
+ 
+ <!-- 
+ <navigation-rule>
+  <navigation-case>
+   <from-outcome>insIatreio</from-outcome>
+   <to-view-id>/gui/insertIatreio.jsf</to-view-id>   
+  </navigation-case>
+ </navigation-rule> -->
+ 
+ <application>
+  <!--  <view-handler>com.sun.facelets.FaceletViewHandler</view-handler> -->
+  <locale-config>
+   <default-locale>gr</default-locale>
+  </locale-config>
+  
+  <resource-bundle>
+   <base-name>com.hosp.bundle.MessageBundle</base-name>
+   <var>bundle</var>
+  </resource-bundle>
+ </application>
+ 
+ <lifecycle>
+   <phase-listener>org.omnifaces.eventlistener.ResetInputAjaxActionListener</phase-listener>
+ </lifecycle>
+ 
+   <!-- <factory>
+     <exception-handler-factory>com.hosp.exception.ShowcaseExceptionHandlerFactory</exception-handler-factory>
+  </factory> --> 
+    
+     
+<!--  <lifecycle>
+  <phase-listener>com.hosp.listener.PhaseTracker</phase-listener>
+ </lifecycle> -->
+ 
+ <!--  <validator>
+  <validator-id>ListSizeValidator</validator-id>
+  <validator-class>com.validator.ListSizeValidator</validator-class>
+ </validator> -->
+
+</faces-config>

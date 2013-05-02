@@ -1,0 +1,152 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="../templates/ui.xhtml">
+
+
+
+    <ui:define name="head">
+        <style type="text/css">
+            .ui-confirm-dialog-severity {
+                margin: 0 7px 7px 0;
+            }
+        </style>
+
+        <script type="text/javascript">
+            function handleDialogPatientSubmit(xhr, status, args) {
+                if (args.validationFailed) {                                      
+                } else {                    
+                }
+            }
+        </script>
+
+    </ui:define> 
+
+    <ui:define name="content">
+
+        <h1 class="title ui-widget-header ui-corner-all">#{bundle.searchPatient}</h1>
+        <div class="entry" style="line-height:200%;" >
+            <h:form id="searchPatientForm">
+                <p:messages id="searchPatientMsg" autoUpdate="false" severity="error" />		         		   
+                <p:panel id="searchPatientPanel" header="#{bundle.searchCriteria} " toggleable="false" style="padding:0px ! important; width:auto;white-space: nowrap;margin-bottom: 10px" > 
+                    <table  cellpadding="5" class="content1" style="margin-bottom: 10px" >  
+                        <tr>
+                            <td style="width: auto;white-space: nowrap;"><h:outputLabel value="#{bundle.name}:" style="font-weight: bold" /></td>
+                            <td style="width: auto;white-space: nowrap;" >                                                            
+                                <p:inputText value="#{patientBean.searchByName}" id="searchByName" />
+                            </td>
+                            <td style="width: auto;white-space: nowrap;"><h:outputLabel value="#{bundle.surname}:" style="font-weight: bold" /></td>
+                            <td style="width: auto;white-space: nowrap;" >                                                            
+                                <p:inputText value="#{patientBean.searchBySurname}" id="searchBySurname" />
+                            </td>
+                            <td style="width: auto;white-space: nowrap;"><h:outputLabel value="#{bundle.amka}:" style="font-weight: bold" /></td>
+                            <td style="width: auto;white-space: nowrap;" >                                                            
+                                <p:inputText value="#{patientBean.searchByAmka}" id="searchByAmka" />
+                            </td>                            
+                        </tr>
+
+
+                        <tr>
+                            <td><h:outputLabel value="#{bundle.birthDate} #{bundle.from}:"  style="font-weight: bold"  /></td>
+                            <td> 
+                                <p:calendar locale="el" size="12"  readonlyInput="true"  navigator="true" showOn="button" 
+                                            pattern="dd/MM/yyyy" value="#{patientBean.searchFromBirth}" id="searchFromBirth"/> 
+
+                            </td>
+                            <td><h:outputLabel value="#{bundle.birthDate} #{bundle.to}:" style="font-weight: bold"  /></td>
+                            <td> 
+                                <p:calendar locale="el" size="12"  readonlyInput="true"  navigator="true" showOn="button" 
+                                            pattern="dd/MM/yyyy" value="#{patientBean.searchToBirth}" id="searchToBirth" /> 
+
+                            </td>
+                            <td style="width: 1px;white-space: nowrap;"> <h:outputLabel value="#{bundle.insurance}:"  style="font-weight: bold" /></td>
+                            <td style="width: 1px;white-space: nowrap;">
+                                <p:selectOneMenu value="#{patientBean.searchByInsurance}" converter="InsuranceConverter" >						 
+                                    <f:selectItem itemLabel="" itemValue=""  />
+                                    <f:selectItems value="#{applicationListBean.insurances}" var="insurance" itemLabel="#{insurance.name}" itemValue="#{insurance}"   />						     
+                                </p:selectOneMenu>	
+                            </td>
+
+                        </tr>
+                                                                        
+                    </table>
+                    <p:commandButton value="#{bundle.search}" action="#{patientAction.searchPatientAction()}" update="searchPatientForm:patientResults"  />
+                    <p:commandButton value="#{bundle.reset}" action="#{patientAction.resetSearchPatient}"  ajax="false" />
+                </p:panel>  
+
+
+
+                <p:panel id="patients" header="#{bundle.searchResults}"  toggleable="false" style="padding:0px ! important; width:100%; margin-bottom: 10px" > 
+
+
+                    <p:dataTable id="patientResults" var="patient" value="#{patientBean.patientModel}" selection="#{patientBean.selectedPatient}" widgetVar="patientResultss"
+                                 paginator="true" rows="10" emptyMessage="#{bundle.noRecordsFound}" rowIndexVar="tt"  rowKey="#{patient}" 
+                                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                                 rowsPerPageTemplate="10,20,50" lazy="true" >  
+
+
+                         
+                        <p:column headerText="A/A" style="width:3%">  
+                            <h:outputText value="#{tt+1}" />  
+                        </p:column>  
+
+                        <p:column headerText="#{bundle.nameSurname}" sortBy="#{patient.surname}" style="width:25%">                                                                                         
+                                 <h:outputText value="#{patient.surname} " /> <h:outputText value=" #{patient.name}"  />                                                            
+                        </p:column>
+                        <!--<p:column headerText="#{bundle.name}" sortBy="#{patient.name}" style="width:20%">                              
+                             <h:outputText value="#{patient.name}"  />
+                        </p:column> --> 
+                        <p:column headerText="#{bundle.fatherName}" sortBy="#{patient.fathername}" style="width:10%">                              
+                             <h:outputText value="#{patient.fathername}"  />
+                        </p:column>
+                        <p:column headerText="#{bundle.amka}" sortBy="#{patient.amka}" style="width:8%">                              
+                             <h:outputText value="#{patient.amka}"  />
+                        </p:column>
+                        <p:column headerText="#{bundle.insurance}" sortBy="#{patient.insurance}" style="width:12%">                              
+                             <h:outputText value="#{patient.insurance.name}"  />
+                        </p:column>
+                        <p:column headerText="#{bundle.ama}" sortBy="#{patient.insurancenumber}" style="width:8%">                              
+                             <h:outputText value="#{patient.insurancenumber}"  />
+                        </p:column>
+                        
+                        <p:column headerText="#{bundle.birthDate}" style="width:10%" sortBy="#{patient.dateofbirth}">  
+                            <h:outputText value="#{patient.dateofbirth}" converter="DateConverter" />  
+                        </p:column>
+                        
+                        
+                          
+                        <p:column exportable="false" headerText="" style="width:12%">
+                            <p:commandButton id="editButton" icon="ui-icon-arrowrefresh-1-w" title="Αλλαγή" 
+                                         immediate="true" action="#{patientAction.editPatient(patient)}" />
+                            
+                            <p:commandButton id="deleteButton" icon="ui-icon-closethick" title="Διαγραφή" 
+                                             onclick="confDeletePatientDlg.show()" >
+                                <f:setPropertyActionListener value="#{patient}" target="#{patientBean.currentPatient}" />
+                            </p:commandButton>
+                        </p:column>
+                        
+                        
+                    </p:dataTable>
+                    
+                    
+                    <p:confirmDialog id="confDeletePatientDlgID" message="#{bundle.confDeletePatient}" header="#{bundle.warning}" severity="alert" widgetVar="confDeletePatientDlg" >                                            
+                         <p:commandButton action="#{patientAction.removePatient}" value="#{bundle.yes}" update="searchPatientForm"
+                                          onclick="confDeletePatientDlg.hide()"/>                                                       
+                         <p:commandButton value="#{bundle.no}"  onclick="confDeletePatientDlg.hide()" type="button" />                             
+                    </p:confirmDialog> 
+                                        
+
+                    <h:commandLink>  
+                        <p:graphicImage value="/images/excel.png" />  
+                        <p:dataExporter    type="xls" target="patientResults" fileName="patients"/>  
+                    </h:commandLink>  
+
+                </p:panel>
+
+            </h:form> 
+
+        </div>        
+    </ui:define>
+</ui:composition>

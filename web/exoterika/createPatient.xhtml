@@ -1,0 +1,212 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="../templates/ui.xhtml">
+
+
+
+    <ui:define name="head">
+        <style type="text/css">
+            .ui-confirm-dialog-severity {
+                margin: 0 7px 7px 0;
+            }
+        </style>
+
+
+
+    </ui:define> 
+
+    <ui:define name="content">
+
+
+        <h1 class="title ui-widget-header ui-corner-all">#{patientBean.newPatient.patientid!=null ? bundle.updatePatient : bundle.insertPatient }</h1>
+        
+        <div class="entry" style="line-height:200%;" >
+            <h:form id="createPatientForm">
+                <p:messages id="createPatientMsg" autoUpdate="true" severity="error,info" />	
+
+                <p:accordionPanel multiple="true">  
+                    <p:tab title="#{bundle.demographicData}">    
+                        <table  cellpadding="2" class="content1" >  
+                            <tr>
+                                <td><h:outputLabel value="#{bundle.name}:*" /></td>
+                                <td>
+                                    <p:inputText required="true" requiredMessage="-#{bundle.name}: #{bundle.mandatoryField}" value="#{patientBean.newPatient.name}" id="patientName"/>			 	                                                    
+                                    <p:message for="patientName" display="icon"/>
+                                </td>
+
+                                <td><h:outputLabel value="#{bundle.surname}:*" /></td>
+                                <td>
+                                    <p:inputText required="true" requiredMessage="-#{bundle.surname}: #{bundle.mandatoryField}" value="#{patientBean.newPatient.surname}" id="patientSurname"/>			 	                                                    
+                                    <p:message for="patientSurname" display="icon"/>
+                                </td>    
+                                <td><h:outputLabel value="#{bundle.fatherName}:*" /></td>
+                                <td>
+                                    <p:inputText required="true" requiredMessage="-#{bundle.fatherName}: #{bundle.mandatoryField}" value="#{patientBean.newPatient.fathername}" id="patientFathername"/>			 	                                                    
+                                    <p:message for="patientFathername" display="icon"/>
+                                </td>                                                                             
+                            </tr>   
+
+                            <tr>
+                                <td><h:outputLabel value="#{bundle.amka}:*" /></td>
+                                <td>
+                                    <p:inputText required="true" requiredMessage="-#{bundle.amka}: #{bundle.mandatoryField}" value="#{patientBean.tempAmka}" id="patientAmka"/>			 	                                                    
+                                    <p:message for="patientAmka" display="icon"/>
+                                </td>
+
+                                <td><h:outputLabel value="#{bundle.insurance}:*" /></td>
+                                <td>
+                                    <p:selectOneMenu value="#{patientBean.newPatient.insurance}" converter="InsuranceConverter" id="patientInsurance" >						 
+                                        <f:selectItems value="#{applicationListBean.insurances}" var="insurance" itemLabel="#{insurance.name}" itemValue="#{insurance}"   />						     
+                                    </p:selectOneMenu>	
+                                    <p:message for="patientInsurance" display="icon"/>
+                                </td>    
+                                <td><h:outputLabel value="#{bundle.ama}:*" /></td>
+                                <td>
+                                    <p:inputText required="true" requiredMessage="-#{bundle.ama}: #{bundle.mandatoryField}" value="#{patientBean.newPatient.insurancenumber}" id="patientAma"/>			 	                                                    
+                                    <p:message for="patientAma" display="icon"/>
+                                </td>
+                                                             
+                            </tr>
+
+                            <tr>			 	       
+                                <td><h:outputLabel value="#{bundle.birthDate}:" /></td>
+                                <td>                                  
+                                    <p:calendar locale="el" navigator="true" showOn="button"  readonlyInput="true" value="#{patientBean.newPatient.dateofbirth}" id="birthDate" pattern="dd/MM/yyyy" />			             	                                                                                      	             
+                                </td>
+                                <td><h:outputLabel value="#{bundle.idNumber}:" /></td>
+                                <td>
+                                    <p:inputText value="#{patientBean.newPatient.idnumber}" id="patientIdnumber"/>			 	                                                                                        
+                                </td>
+                                <td><h:outputLabel value="#{bundle.insuranceType}:*" /></td>
+                                <td>                                    
+                                    <p:selectOneMenu required="true" requiredMessage="-#{bundle.insuranceType}: #{bundle.mandatoryField}" 
+                                                     value="#{patientBean.newPatient.direct}"  id="patientDirect" >						                                         						     
+                                        <f:selectItem itemLabel="" itemValue=""/>
+                                        <f:selectItem itemLabel="#{bundle.direct}" itemValue="1"/>
+                                        <f:selectItem itemLabel="#{bundle.indirect}" itemValue="0"/>                                        
+                                    </p:selectOneMenu>	
+                                    <p:message for="patientDirect" display="icon"/>
+                                </td>   
+                                
+                            </tr>
+                            <tr>
+                                <td><h:outputLabel value="#{bundle.address}:" /></td>
+                                <td>
+                                    <p:inputText value="#{patientBean.newPatient.address}" size="30" id="patientAddress"/>			 	                                                                                        
+                                </td>
+                                <td><h:outputLabel value="#{bundle.prefecture}:" /></td>
+                                <td>
+                                    <p:selectOneMenu value="#{patientBean.newPatient.prefecture}" converter="PrefectureConverter" id="patientprefecture" >						 
+                                        <f:selectItem itemLabel="" itemValue=""/>
+                                        <f:selectItems value="#{applicationListBean.prefectures}" var="prefecture" itemLabel="#{prefecture.name}" itemValue="#{prfecture}"   />						     
+                                    </p:selectOneMenu>	                                   
+                                </td>
+                                <td><h:outputLabel value="#{bundle.city}:" /></td>
+                                <td>
+                                    <p:selectOneMenu value="#{patientBean.newPatient.city}" converter="CityConverter" id="patientCity" >						 
+                                        <f:selectItem itemLabel="" itemValue=""/>
+                                        <f:selectItems value="#{applicationListBean.cities}" var="city" itemLabel="#{city.name}" itemValue="#{city}"   />						     
+                                    </p:selectOneMenu>	                                   
+                                </td>
+                                                                                                                             
+                            </tr>
+                            
+                            <tr>
+                               
+                                <td><h:outputLabel value="#{bundle.phone}:" /></td>
+                                <td>
+                                    <p:inputText value="#{patientBean.newPatient.phone}" id="patientPhone"/>			 	                                                                                        
+                                </td>
+                                <td><h:outputLabel value="#{bundle.mobile}:" /></td>
+                                <td>
+                                    <p:inputText value="#{patientBean.newPatient.mobile}" id="patientMobile"/>			 	                                                                                        
+                                </td>
+                                
+                               <td><h:outputLabel value="#{bundle.country}:" /></td>
+                               <td colspan="3">
+                                    <p:selectOneMenu value="#{patientBean.newPatient.country}" converter="CountryConverter" id="patientCountry" >						 
+                                        <f:selectItem itemLabel="" itemValue=""/>
+                                        <f:selectItems value="#{applicationListBean.countries}" var="country" itemLabel="#{country.name}" itemValue="#{country}"   />						     
+                                    </p:selectOneMenu>	                                   
+                                </td>   
+                                
+                            </tr>
+                            
+                            
+                            <tr>
+                                <td><h:outputLabel value="#{bundle.sex}:" /></td>
+                                <td>
+                                    <p:selectOneMenu value="#{patientBean.newPatient.sex}" converter="SexConverter" id="patientSex" >						 
+                                        <f:selectItem itemLabel="" itemValue=""/>
+                                        <f:selectItems value="#{applicationListBean.sexes}" var="sex" itemLabel="#{sex.name}" itemValue="#{sex}"   />						     
+                                    </p:selectOneMenu>	                                   
+                                </td>
+                                <td><h:outputLabel value="#{bundle.familyStatus}:" /></td>
+                                <td>
+                                    <p:selectOneMenu value="#{patientBean.newPatient.maritalstatus}" converter="MaritalstatusConverter" id="patientFamily" >						 
+                                        <f:selectItem itemLabel="" itemValue=""/>
+                                        <f:selectItems value="#{applicationListBean.maritalStatuses}" var="marital" itemLabel="#{marital.name}" itemValue="#{marital}"   />						     
+                                    </p:selectOneMenu>	                                   
+                                </td>
+                                <td><h:outputLabel value="#{bundle.proffesion}:" /></td>
+                                <td>
+                                    <p:selectOneMenu value="#{patientBean.newPatient.proffesion}" converter="ProffesionConverter" id="patientProffesion" >						 
+                                        <f:selectItem itemLabel="" itemValue=""/>
+                                        <f:selectItems value="#{applicationListBean.proffesions}" var="proffesion" itemLabel="#{proffesion.name}" itemValue="#{proffesion}"   />						     
+                                    </p:selectOneMenu>	                                   
+                                </td>                                                                
+                            </tr>
+                            
+                            <tr>
+                                <td><h:outputLabel value="#{bundle.relegion}:" /></td>
+                                <td>
+                                    <p:selectOneMenu value="#{patientBean.newPatient.relegion}" converter="RelegionConverter" id="patientRelegion" >						 
+                                        <f:selectItem itemLabel="" itemValue=""/>
+                                        <f:selectItems value="#{applicationListBean.relegions}" var="relegion" itemLabel="#{relegion.name}" itemValue="#{relegion}"   />						     
+                                    </p:selectOneMenu>	                                   
+                                </td>
+                                <td><h:outputLabel value="#{bundle.nationality}:" /></td>
+                                <td>
+                                    <p:selectOneMenu value="#{patientBean.newPatient.nationality}" converter="NationalityConverter" id="patientNationality" >						 
+                                        <f:selectItem itemLabel="" itemValue=""/>
+                                        <f:selectItems value="#{applicationListBean.nationalities}" var="nationality" itemLabel="#{nationality.name}" itemValue="#{nationality}"   />						     
+                                    </p:selectOneMenu>	                                   
+                                </td>
+                                <td><h:outputLabel value="#{bundle.bloodType}:" /></td>
+                                <td>
+                                    <p:selectOneMenu value="#{patientBean.newPatient.bloodtype}" converter="BloodtypeConverter" id="patientBloodtype" >						 
+                                        <f:selectItem itemLabel="" itemValue=""/>
+                                        <f:selectItems value="#{applicationListBean.bloodTypes}" var="bloodtype" itemLabel="#{bloodtype.name}" itemValue="#{bloodtype}"   />						     
+                                    </p:selectOneMenu>	                                   
+                                </td>                                                                
+                            </tr>
+
+                        </table>
+                    </p:tab>
+                    <p:tab title="#{bundle.medicalData}">  
+
+                    </p:tab>
+                </p:accordionPanel>  
+                <br/>
+
+                <p:commandButton id="createButton" rendered="#{patientBean.newPatient.patientid==null}" value="#{bundle.createPatient}"  type="button" onclick="confCreatePatientDlg.show()" />
+                <p:commandButton id="updateButton" rendered="#{patientBean.newPatient.patientid!=null}" value="#{bundle.updatePatient}"  type="button" onclick="confUpdatePatientDlg.show()"/>
+                            
+                <p:confirmDialog   message="#{bundle.confCreatePatient}" header="#{bundle.warning}" severity="alert" widgetVar="confCreatePatientDlg" >                                                                   
+                    <p:commandButton value="#{bundle.yes}"  action="#{patientAction.createPatientAction()}" onclick="confCreatePatientlg.hide();"  update="@form" />                                            
+                    <p:commandButton value="#{bundle.no}"  onclick="confCreatePatientlg.hide()" type="button" />                                            
+                </p:confirmDialog>
+
+                <p:confirmDialog   message="#{bundle.confUpdatePatient}" header="#{bundle.warning}" severity="alert" widgetVar="confUpdatePatientDlg" >                                                                   
+                    <p:commandButton value="#{bundle.yes}" action="#{patientAction.updatePatientAction()}" onclick="confUpdatePatientDlg.hide();" update="@form" />                    
+                    <p:commandButton value="#{bundle.no}"  onclick="confUpdatePatientDlg.hide()" type="button" />                                            
+                </p:confirmDialog>
+
+            </h:form> 
+
+        </div>        
+    </ui:define>
+</ui:composition>

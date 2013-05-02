@@ -1,0 +1,484 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="../templates/ui.xhtml">
+
+
+
+    <ui:define name="head">
+        <style type="text/css">
+            .ui-confirm-dialog-severity {
+                margin: 0 7px 7px 0;
+            }
+        </style>
+
+        <script type="text/javascript">
+            function handleDialogPatientSubmit(xhr, status, args) {
+                if (args.validationFailed) {                   
+                    //selectPatient.show();
+                } else {                    
+                    //selectPatient.hide();
+                }
+            }
+        </script>
+
+    </ui:define> 
+
+    <ui:define name="content">
+
+
+        <!--<h1 class="title ui-widget-header ui-corner-all">#{paraBean.newPara.parpapemptikoid!=null ? bundle.updatePara : bundle.insertPara } 
+        #{paraBean.newPara.parpapemptikoid!=null ?   '-' : ''}     #{paraBean.newPara.parpapemptikoid!=null ?   paraBean.newPara.paracode : ''}  </h1> -->
+
+        <div class="entry" style="line-height:100%;" >
+
+            <h:form id="createParaForm">
+
+                <!--<p:growl id="growlMsg" life="5000"   />  -->
+                <p:messages id="updateAssertionMsg" autoUpdate="true" severity="error,info"  />	         		   
+                <p:panel id="createParaPanel" header="#{paraBean.newPara.parpapemptikoid!=null ? bundle.updateParaData  : bundle.insertParaData } #{paraBean.newPara.parpapemptikoid!=null ?   paraBean.newPara.paracode : ''}" 
+                         toggleable="false" style="padding:0px ! important; width:100%;margin-bottom: 10px;" > 
+                    <table  cellpadding="2" class="content1" >  
+
+
+                        <tr>
+                            <td><h:outputLabel value="#{bundle.assertionPeriod}:*" /></td>
+                            <td colspan="2"> 
+                                <!--<p:remoteCommand name="updateAssertionSelect"  process="@none"  update="test1" onstart="alert('xeeeee');"   />  -->                              
+                                <p:selectOneMenu value="#{paraBean.newPara.exAssertion}" converter="AssertionConverter" id="selectAssertion"
+                                                 styleClass="#{paraBean.newPara.exAssertion!=sessionBean.currentNormalAssertion ? 'redBorderAssertion':''}" >						 
+                                    <f:selectItems value="#{paraBean.assertions}" var="assertion" itemLabel="#{assertion.exPeriod.name}-#{assertion.exAssertionType.name}" itemValue="#{assertion}"   />						     
+                                    <f:ajax render="selectAssertion" />                                     
+                                </p:selectOneMenu>
+
+                            </td>
+                            <td>
+                                <h:outputLabel value="#{bundle.dateType}:*" />
+                            </td>
+                            <td>
+                                <p:selectOneMenu value="#{paraBean.newPara.exType}" converter="TypeConverter" >						 
+                                    <f:selectItems value="#{applicationListBean.types}" var="tp" itemLabel="#{tp.name}" itemValue="#{tp}"   />						     
+                                </p:selectOneMenu>	
+
+                            </td>
+
+                        </tr>   
+
+
+                        <tr>
+                            <td><h:outputLabel value="#{bundle.dapyCode}:*" /></td><td>  <p:inputText size="6"  readonly="true" value="#{paraBean.newPara.codehealthunit}"  />   </td>			 		
+                            <td><h:outputLabel value="#{bundle.type}:*" /></td>   
+                            <td colspan="3"> 
+                                <p:selectOneMenu  value="#{paraBean.newPara.exParaType}" converter="ParaTypeConverter" id="selectType" >						 
+                                    <f:selectItems value="#{applicationListBean.paraTypes}" var="type" itemLabel="#{type.name}" itemValue="#{type}"   />						     
+                                </p:selectOneMenu>			 		 			 		 
+                            </td>
+                        </tr>
+
+
+                        <tr>			 	       
+                            <td><h:outputLabel value="#{bundle.issueDate}:*" /></td>
+                            <td>  
+                                <!--  valueChangeListener="{dapyAction.handleDateSelectListener}"  --> 
+                                <p:calendar locale="el" size="12"   requiredMessage="-#{bundle.issueDate}: #{bundle.mandatoryField}"  required="true" navigator="true" showOn="button"  readonlyInput="true" 
+                                            value="#{paraBean.newPara.issuedate}" id="issueDate" pattern="dd/MM/yyyy">			             	                  
+                                    <p:ajax event="dateSelect"  listener="#{dapyAction.handleDateSelect}"  update="approvalDate"   /> 
+                                </p:calendar><p:message for="issueDate" display="icon"/>	             
+                            </td>
+
+                            <td><h:outputLabel value="#{bundle.approvalDate}:" /></td>
+                            <td> 
+                                <p:calendar locale="el" size="12"  readonlyInput="true"  required="false" navigator="true" showOn="button" 
+                                            pattern="dd/MM/yyyy" value="#{paraBean.newPara.approvaldate}" id="approvalDate"/> 
+
+                            </td>
+
+                            <td><h:outputLabel value="#{bundle.exeDate}:*" /></td>
+                            <td> <p:calendar locale="el" size="12" readonlyInput="true"  requiredMessage="-#{bundle.exeDate}: #{bundle.mandatoryField}" required="true" navigator="true"  
+                                             showOn="button"  pattern="dd/MM/yyyy" value="#{paraBean.newPara.executiondate}" id="exeDateDate"/>
+                                <p:message for="exeDateDate" display="icon"/>	 
+                            </td>
+                        </tr>
+
+
+
+
+                        <tr>
+                            <td><h:outputLabel value="#{bundle.tsayRecipeCodeDoctor}:*" /></td>
+                            <td><p:inputText required="true" size="17" requiredMessage="-#{bundle.tsayRecipeCodeDoctor}: #{bundle.mandatoryField}" value="#{paraBean.newPara.doctorcode}" id="tsayRecipeCodeDoctor"/>			 	               
+                                <!--   <p:commandButton icon="plus-icon"/> --> 
+                                <p:message for="tsayRecipeCodeDoctor" display="icon"/>
+                            </td>
+                            <td> <h:outputLabel value="#{bundle.doctorName}:*" /></td><td><p:inputText required="true"  requiredMessage="-#{bundle.doctorName}: #{bundle.mandatoryField}"  value="#{paraBean.newPara.doctorname}" id="doctorName"/><p:message for="doctorName" display="icon"/></td>
+                            <td> <h:outputLabel value="#{bundle.doctorSurname}:*" /></td><td> <p:inputText required="true" requiredMessage="-#{bundle.doctorSurname}: #{bundle.mandatoryField}" value="#{paraBean.newPara.doctorsurname}" id="doctorSurname"/> <p:message for="doctorSurname" display="icon"/></td>
+
+                        </tr>
+
+
+
+                        <tr>
+                            <td><h:outputLabel value="#{bundle.tsayAprovalCodeDoctor}:" /></td><td><p:inputText size="17" value="#{paraBean.newPara.codctorcode}" />
+                                <!--  <p:commandButton icon="plus-icon"/> -->  
+                            </td>
+                            <td> <h:outputLabel value="#{bundle.doctorName}:" /></td><td><p:inputText  readonly="false" value="#{paraBean.newPara.cdoctorname}" /></td>
+                            <td> <h:outputLabel value="#{bundle.doctorSurname}:" /></td><td><p:inputText  readonly="false" value="#{paraBean.newPara.cdoctorsurname}" /></td>			 	    
+                        </tr>
+
+
+
+                        <tr>
+                            <td><h:outputLabel value="#{bundle.amkaPara}:*" /></td>
+                            <td><p:inputText required="true" readonly="true" size="12"  requiredMessage="-#{bundle.amkaPara}: #{bundle.mandatoryField}" value="#{paraBean.patientAmka}" id="patientAmka" />			 	           
+                                <p:commandButton  process="@this" icon="plus-icon" onsuccess="selectPatient.show()" 
+                                                  update=":selectPatientForm:patientDataPanel"  action="#{dapyAction.showPatientDialog}"  >
+                                    <!--<f:actionListener type="org.omnifaces.eventlistener.ResetInputAjaxActionListener" />-->
+                                </p:commandButton>
+                                <p:message for="patientAmka" display="icon"/>
+                            </td>
+
+                            <td> <h:outputLabel value="#{bundle.name}:*" /></td><td><p:inputText  required="true" requiredMessage="-#{bundle.name}: #{bundle.mandatoryField}" readonly="true" value="#{paraBean.patientName}" id="patientName" /><p:message for="patientName" display="icon"/></td>
+                            <td> <h:outputLabel value="#{bundle.surname}:*" /></td><td><p:inputText required="true" requiredMessage="-#{bundle.surname}: #{bundle.mandatoryField}"  readonly="true" value="#{paraBean.patientSurname}" id="patientSurname"/><p:message for="patientSurname" display="icon"/></td>			 	    
+                        </tr>
+
+
+
+                        <tr>
+                            <td><h:outputLabel value="#{bundle.ikaCode}:*" /></td>
+                            <td><p:inputText required="true" readonly="true" size="17" requiredMessage="-#{bundle.ikaCode}: #{bundle.mandatoryField}"  value="#{paraBean.ikaCode}" id="ikaCode" /><p:message for="ikaCode" display="icon"/></td>
+
+                            <td><h:outputLabel value="#{bundle.insuranceCountryCode}:*" /></td>   			 		 
+                            <td colspan="1"> 
+                                <p:selectOneMenu value="#{paraBean.newPara.country}" converter="CountryConverter"  id="selectCountry">						 
+                                    <f:selectItems value="#{applicationListBean.countries}" var="country" itemLabel="#{country.abbrevation}-#{country.name}  " itemValue="#{country}"   />						     
+                                </p:selectOneMenu>			 		 			 		 
+                            </td>
+                            <td style="text-align: right"><h:outputLabel value="#{bundle.receiptNumber}:" /></td>
+                            <td><p:inputText value="#{paraBean.newPara.receiptnumber}"/></td>
+
+                        </tr>
+                    </table>
+                </p:panel>  
+
+                <p:panel id="exams" header="#{bundle.insertParaExams} " toggleable="false" style="padding:0px ! important; width:100%;;margin-bottom: 10px" > 
+                    <table>
+                        <tr>
+                            <td><h:outputLabel value="#{bundle.searchByCode}:"/></td>
+                            <td>   
+                                <p:focus  for="codeComplete" />
+                                <p:autoComplete   queryDelay="400" id="codeComplete" value="#{paraBean.selectedParaExamByCode}" completeMethod="#{dapyAction.completeCodeParaExam}" size="90"  
+                                                  var="paraExam" itemLabel="#{paraExam.exExam.name} #{paraExam.exExam.code}" itemValue="#{paraExam}" 
+                                                  converter="ParaExamConverter" forceSelection="true">  
+                                    <p:ajax event="itemSelect" listener="#{dapyAction.autocompleteCodeSelectParaExam}"    update="createParaForm:exams, createParaForm:createButton, createParaForm:updateButton"  />  
+                                </p:autoComplete> 
+                            </td>
+                        </tr>   
+                        <tr>    
+                            <td><h:outputLabel value="#{bundle.searchByName}:"/></td>
+                            <td>   
+                                <p:autoComplete   queryDelay="400" id="nameComplete" value="#{paraBean.selectedParaExamByName}" completeMethod="#{dapyAction.completeNameParaExam}" size="90"  
+                                                  var="paraExam" itemLabel="#{paraExam.exExam.name} #{paraExam.exExam.code}" itemValue="#{paraExam}" 
+                                                  converter="ParaExamConverter" forceSelection="true">  
+                                    <p:ajax event="itemSelect" listener="#{dapyAction.autocompleteNameSelectParaExam}" update="createParaForm:exams, createParaForm:createButton, createParaForm:updateButton"  />  
+                                </p:autoComplete> 
+                            </td>   
+
+                        </tr>
+
+                        
+                        <p:commandLink update=":selectBIOPanel" value="#{bundle.bio}" process="@this" onclick="selectBIODialog.show()"
+                                       style="color:blue;font-weight:bold; " /> <p:spacer width="10" />
+                        
+                        <p:commandLink update=":selectMicroHormonPanel" value="#{bundle.microHormon}" process="@this" onclick="selectMicroHormonDialog.show()"
+                                       style="color:blue;font-weight:bold; " /> <p:spacer width="10" />
+                        
+                        <p:commandLink update=":selectBLOODPanel" value="#{bundle.bloodAnoso}" process="@this" onclick="selectBLOODDialog.show()"
+                                       style="color:blue;font-weight:bold; " /><p:spacer width="10" />
+                        
+                        <p:commandLink update=":selectCTXrayPanel" value="#{bundle.xrayct}" process="@this" onclick="selectCTXrayDialog.show()"
+                                       style="color:blue;font-weight:bold; " /><p:spacer width="10" />
+                        <p:commandLink update=":selectMTPanel" value="#{bundle.MT}" process="@this" onclick="selectMTDialog.show()"
+                                       style="color:blue;font-weight:bold; " /><p:spacer width="10" />
+                        <p:commandLink update=":selectUSPanel" value="#{bundle.US}" process="@this" onclick="selectUSDialog.show()"
+                                       style="color:blue;font-weight:bold; " />
+
+
+                    </table>  
+
+                    <p:dataTable id="paraExams" var="paraExam" value="#{paraBean.paraExamsModel}" emptyMessage="#{bundle.noRecordsFound}" styleClass="small">  
+
+                        <p:column headerText="A/A" style="width:2%; font-size: 9px !important">  
+                            <h:outputText value="#{paraBean.paraExamsModel.rowIndex + 1}" style="font-size: 8px !important"  />  
+                        </p:column>  
+
+                        <p:column headerText="#{bundle.code}" style="width:2%; font-size: 9px !important">  
+                            <h:outputText value="#{paraExam.exExam.code}" />  
+                        </p:column>  
+
+                        <p:column headerText="#{bundle.name}" style="width:75%; font-size: 9px !important;" >  
+                            <h:outputText value="#{paraExam.exExam.name}" />  
+                        </p:column>  
+
+                        <p:column headerText="#{bundle.price}" style="width:4%; font-size: 9px !important">  
+                            <h:outputText value="#{paraExam.cost}" converter="DoubleConverter" />  
+                        </p:column>  
+
+                        <p:column headerText="#{bundle.quantity}" style="width:3%; font-size: 10px !important">  
+                            <h:inputText maxlength="1" value="#{paraExam.quantity}" size="2"  converter="IntegerConverter" required="true" requiredMessage="-#{bundle.quantity}: #{bundle.mandatoryField}" >
+                                <p:ajax event="blur"  listener="#{dapyAction.test1(paraExam)}" />
+                            </h:inputText>    
+                        </p:column>
+
+                        <p:column headerText="#{bundle.participation}" style="width:4%; font-size: 10px !important">  
+                            <h:inputText value="#{paraExam.participation}" size="3" converter="DoubleConverter" required="true" 
+                                         requiredMessage="-#{bundle.participation}: #{bundle.mandatoryField}" validatorMessage="-#{bundle.participation}: #{bundle.invalidInteger}" >
+                                <p:ajax event="blur"  update="@form" />
+                                <f:validateDoubleRange minimum="0.00" maximum="1.00" />
+                            </h:inputText>   
+                        </p:column>
+
+                       <!-- <p:column headerText="#{bundle.participationPrice}" style="width:5%">  
+                            <h:outputText id="participationPrice" value="#{paraExam.participationPrice}" converter="DoubleConverter" />  
+                        </p:column> -->
+
+
+                        <p:column headerText="" style="width:4%">  
+                            <p:commandButton id="deleteButton" update="paraExams" process="@this" action="#{dapyAction.removeExam(paraExam)}" icon="ui-icon-closethick" title="Διαγραφή" />                                 
+                        </p:column>
+
+
+                    </p:dataTable>  
+
+
+                </p:panel>
+
+
+
+               <!-- <p:panel header="#{bundle.insertInsuranceData}" collapsed="true" toggleable="true" style="padding:0px ! important; width:100%;;margin-bottom: 10px"  > 
+                    <table style="width: 80%">
+                        <tr>
+                            <td style="text-align: right"><h:outputLabel value="#{bundle.receiptNumber}:" /></td><td><p:inputText value="{paraBean.newPara.receiptnumber}"/></td>
+
+                            <td style="text-align: right"><h:outputLabel value="#{bundle.receiptDate}:" /></td>
+                            <td><p:calendar locale="el"  navigator="true" showOn="button"  pattern="dd/MM/yyyy" value="{paraBean.newPara.receiptdate}" /></td>
+                        </tr>                                                
+                    </table>
+
+                </p:panel> -->
+                <br/>
+
+                <p:commandButton id="createButton" rendered="#{paraBean.newPara.parpapemptikoid==null}" disabled="#{paraBean.paraExams.size()==0}"   value="#{bundle.createPara}"  
+                                 action="#{dapyAction.createParaAction()}"  update="@form" />               <!--type="button" onclick="confCreateParaDlg.show();;confUpdateParaDlg.initPosition();" /> -->
+                <p:commandButton id="updateButton" rendered="#{paraBean.newPara.parpapemptikoid!=null}" disabled="#{paraBean.paraExams.size()==0}"   value="#{bundle.updatePara}"  
+                                 action="#{dapyAction.updateParaAction}" />                  <!--type="button" onclick="confUpdateParaDlg.initPosition(); confUpdateParaDlg.show();" /> -->
+
+
+                <p:confirmDialog   message="#{bundle.confCreatePara}" header="#{bundle.warning}" severity="alert" widgetVar="confCreateParaDlg" >                                                                   
+                    <p:commandButton value="Yes"  action="#{dapyAction.createParaAction()}" onclick="confCreateParaDlg.hide();" update="@form" >
+                        <!--<f:actionListener type="org.omnifaces.eventlistener.ResetInputAjaxActionListener" />-->
+                    </p:commandButton>
+                    <p:commandButton value="No"  onclick="confCreateParaDlg.hide()" type="button" />                                            
+                </p:confirmDialog>
+
+                <p:confirmDialog   message="#{bundle.confUpdatePara}" header="#{bundle.warning}--" severity="alert" widgetVar="confUpdateParaDlg" >                                                                   
+                    <p:commandButton value="Yes"  action="#{dapyAction.updateParaAction}" 
+                                     onclick="confUpdatePara.hide();">
+                        <!--<f:actionListener type="org.omnifaces.eventlistener.ResetInputAjaxActionListener" />-->
+                    </p:commandButton>
+                    <p:commandButton value="No"  onclick="confUpdateParaDlg.hide()" type="button" />                                            
+                </p:confirmDialog>
+
+
+
+            </h:form> 
+
+
+
+
+            <h:form id="selectPatientForm" >  
+                <p:dialog id="selectPatientDialog" header="#{bundle.selectPatient}" widgetVar="selectPatient"  
+                          modal="true" resizable="false" position="top">  
+
+                    <h:panelGroup id="dummy" layout="block">
+
+                        <p:messages id="selectPatientMsg" autoUpdate="true" severity="error" />
+                        <table class="content1">
+                            <tr>
+                                <td><h:outputLabel value="#{bundle.searchBySurname}:"/></td>
+                                <td>   
+                                    <p:autoComplete queryDelay="400" scrollHeight="550" id="surnameComplete" value="#{paraBean.selectedPatientBySurname}" completeMethod="#{dapyAction.completeSurnamePatient}" size="70" required="false"  
+                                                    var="patient" itemLabel="#{patient.surname} #{patient.name} #{patient.fathername} #{patient.amka}" itemValue="#{patient}" converter="PatientConverter" forceSelection="true">  
+                                        <p:ajax event="itemSelect" listener="#{dapyAction.autocompleteSurnameSelectPatient}"    update="selectPatientForm:dummy, surnameComplete"  />  
+                                    </p:autoComplete> 
+
+                                </td>
+                            </tr>	
+
+                            <tr>
+                                <td><h:outputLabel value="#{bundle.searchByAMKA}:"/></td>
+                                <td>   
+                                    <p:autoComplete queryDelay="400" scrollHeight="510" id="amkaComplete" value="#{paraBean.selectedPatientByAmka}" completeMethod="#{dapyAction.completeAmkaPatient}"   size="70" required="false"
+                                                    var="patient" itemLabel="#{patient.surname} #{patient.name} #{patient.fathername} #{patient.amka}" itemValue="#{patient}" converter="PatientConverter" forceSelection="true">  
+                                        <p:ajax event="itemSelect" listener="#{dapyAction.autocompleteAmkaSelectPatient}" update="selectPatientForm:dummy, amkaComplete" />  
+                                    </p:autoComplete> 
+
+                                </td>
+                            </tr>			  		    
+                        </table>
+
+
+                        <p:panel header="#{bundle.patientData}" id="patientDataPanel" style="padding:0px ! important; width:100%;" >                         
+                            <table  class="content1">
+                                <tr>
+                                    <td><h:outputLabel value="#{bundle.name}:*"/></td>
+                                    <td>
+                                        <p:inputText  required="true" requiredMessage="-#{bundle.name}: #{bundle.mandatoryField}" readonly="false" value="#{paraBean.selectedPatient.name}" id="selectedPatientName" /><p:message for="selectedPatientName" display="icon"/>		  		               
+                                    </td>
+
+                                    <td><h:outputLabel value="#{bundle.surname}:*"/></td>
+                                    <td>
+                                        <p:inputText  required="true" requiredMessage="-#{bundle.surname}: #{bundle.mandatoryField}" readonly="false" value="#{paraBean.selectedPatient.surname}" id="selectedPatientSurname" /><p:message for="selectedPatientSurname" display="icon"/>		  		               
+                                    </td>
+
+                                    <td><h:outputLabel value="#{bundle.fatherName}:*"/></td>
+                                    <td>
+                                        <p:inputText  required="true" requiredMessage="-#{bundle.fatherName}: #{bundle.mandatoryField}" readonly="false" value="#{paraBean.selectedPatient.fathername}" id="selectedPatientFatherName" /><p:message for="selectedPatientFatherName" display="icon"/>		  		               
+                                    </td>
+
+                                </tr> 
+
+                                <tr>
+                                    <td><h:outputLabel value="#{bundle.amka}:*"/></td>
+                                    <td>
+                                        <p:inputText  required="true" requiredMessage="-#{bundle.amka}: #{bundle.mandatoryField}" readonly="false" value="#{paraBean.tempAmka}" id="selectedPatientAmka" /><p:message for="selectedPatientAmka" display="icon"/>		  		               
+                                    </td> 
+
+                                    <td><h:outputLabel value="#{bundle.insurance}:*"/></td>
+                                    <td>		  		                   
+                                        <p:selectOneMenu value="#{paraBean.selectedPatient.insurance}" converter="InsuranceConverter" id="insertInsurance">						 
+                                            <f:selectItems value="#{applicationListBean.insurances}" var="ins" itemLabel="#{ins.name}" itemValue="#{ins}"   />						     
+                                        </p:selectOneMenu> 		  		               
+                                    </td>
+
+                                    <td><h:outputLabel value="#{bundle.insuranceNumber}:*"/></td>
+                                    <td>
+                                        <p:inputText  required="true" requiredMessage="-#{bundle.insuranceNumber}: #{bundle.mandatoryField}" readonly="false" value="#{paraBean.selectedPatient.insurancenumber}" id="selectedPatientInsuranceNumber" />
+                                        <p:message for="selectedPatientInsuranceNumber" display="icon"/>		  		               
+                                    </td>
+
+                                </tr>
+                                <tr>    
+                                    <td><h:outputLabel value="#{bundle.phone}:*"/> </td>
+                                    <td> 
+                                        <p:inputText  required="true" requiredMessage="-#{bundle.phone}: #{bundle.mandatoryField}"   value="#{paraBean.selectedPatient.phone}" id="selectedPatientPhone" />
+                                        <p:message for="selectedPatientPhone" display="icon"/>
+                                    </td>
+                                </tr>
+                                    
+
+                            </table>		  		    
+                        </p:panel>
+
+                        <p:commandButton   value="#{bundle.insertPatient}" action="#{dapyAction.insertPatientsAction()}"
+                                           update=":createParaForm:patientAmka,:createParaForm:patientName, :createParaForm:patientSurname, :createParaForm:ikaCode, selectPatientForm:dummy"  />  <!--type="button" onclick="confInsertPatientDlg.show()" /> -->
+                        <p:commandButton type="button" value="#{bundle.close}" onclick="selectPatient.hide()"  />
+
+                    </h:panelGroup>
+
+                </p:dialog>
+
+
+                <p:confirmDialog   message="#{bundle.confInsertPatient}" header="#{bundle.warning}" severity="alert" widgetVar="confInsertPatientDlg" >                                                                   
+                    <p:commandButton value="Yes"  action="#{dapyAction.insertPatientsAction()}"
+                                     onclick="confInsertPatientDlg.hide();"                                      
+                                     update=":createParaForm:patientAmka,:createParaForm:patientName, :createParaForm:patientSurname, :createParaForm:ikaCode, selectPatientForm:dummy" />                       
+
+                    <!--<f:actionListener type="org.omnifaces.eventlistener.ResetInputAjaxActionListener" />
+                </p:commandButton> -->
+                    <p:commandButton value="No"  onclick="confInsertPatientDlg.hide()" type="button" />                                            
+                </p:confirmDialog>
+                <!--oncomplete="handleDialogPatientSubmit(xhr, status, args)" -->
+            </h:form>
+
+
+
+
+
+            <p:dialog dynamic="true" id="selectCTXrayDialogID" header="#{bundle.selectXrayct}" widgetVar="selectCTXrayDialog" modal="true" resizable="false" position="top">                    
+                <p:panel id="selectCTXrayPanel" style="padding:0px ! important;" > 
+                    <h:form id="selectCTXray" >
+                        <p:dataGrid  var="exam" value="#{applicationListBean.ctxrays}" columns="3" paginator="false">  
+                            <h:selectBooleanCheckbox style="font-size: 9px" value="#{paraBean.selectedExams[exam]}"  />  #{exam.code} <h:outputText style="font-weight: bold" value="#{exam.abbrevation}" />                               
+                        </p:dataGrid>
+                        <p:commandButton value="#{bundle.insert}" onclick="selectCTXrayDialog.hide()" action="#{dapyAction.massInsertExams}" update=":createParaForm:exams, :createParaForm:createButton, :createParaForm:updateButton"  />
+                        <p:commandButton value="#{bundle.close}" onclick="selectCTXrayDialog.hide()" type="button"  />   
+                    </h:form>
+                </p:panel>
+            </p:dialog>
+            
+            <p:dialog dynamic="true" id="selectMTDialogID" header="#{bundle.selectMT}" widgetVar="selectMTDialog" modal="true" resizable="false" position="top">                    
+                <p:panel id="selectMTPanel" style="padding:0px ! important;" > 
+                    <h:form id="selectMT" >
+                        <p:dataGrid  var="exam" value="#{applicationListBean.mt}" columns="3" paginator="false">  
+                            <h:selectBooleanCheckbox style="font-size: 9px" value="#{paraBean.selectedExams[exam]}"  />  #{exam.code} #{exam.abbrevation}                            
+                        </p:dataGrid>
+                        <p:commandButton value="#{bundle.insert}" onclick="selectMTDialog.hide()" action="#{dapyAction.massInsertExams}" update=":createParaForm:exams, :createParaForm:createButton, :createParaForm:updateButton"  />
+                        <p:commandButton value="#{bundle.close}" onclick="selectMTDialog.hide()" type="button"  />   
+                    </h:form>
+                </p:panel>
+            </p:dialog>
+            
+             <p:dialog dynamic="true" id="selectUSDialogID" header="#{bundle.selectUS}" widgetVar="selectUSDialog" modal="true" resizable="false" position="top">                    
+                <p:panel id="selectUSPanel" style="padding:0px ! important;" > 
+                    <h:form id="selectΜΤ" >
+                        <p:dataGrid  var="exam" value="#{applicationListBean.us}" columns="3" paginator="false">  
+                            <h:selectBooleanCheckbox style="font-size: 9px" value="#{paraBean.selectedExams[exam]}"  />  #{exam.code} #{exam.abbrevation}                            
+                        </p:dataGrid>
+                        <p:commandButton value="#{bundle.insert}" onclick="selectUSDialog.hide()" action="#{dapyAction.massInsertExams}" update=":createParaForm:exams, :createParaForm:createButton, :createParaForm:updateButton"  />
+                        <p:commandButton value="#{bundle.close}" onclick="selectUSDialog.hide()" type="button"  />   
+                    </h:form>
+                </p:panel>
+            </p:dialog>
+            
+            <p:dialog dynamic="true" id="selectBIODialogID" header="#{bundle.selectBio}" widgetVar="selectBIODialog" modal="true" resizable="false" position="top">                    
+                <p:panel id="selectBIOPanel" style="padding:0px ! important;" > 
+                    <h:form id="selectBIO" >
+                        <p:dataGrid  var="exam" value="#{applicationListBean.bio}" columns="3" paginator="false">  
+                            <h:selectBooleanCheckbox style="font-size: 9px" value="#{paraBean.selectedExams[exam]}"  />  #{exam.code} #{exam.abbrevation}                            
+                        </p:dataGrid>
+                        <p:commandButton value="#{bundle.insert}" onclick="selectBIODialog.hide()" action="#{dapyAction.massInsertExams}" update=":createParaForm:exams, :createParaForm:createButton, :createParaForm:updateButton"  />
+                        <p:commandButton value="#{bundle.close}" onclick="selectBIODialog.hide()" type="button"  />   
+                    </h:form>
+                </p:panel>
+            </p:dialog>
+            
+            <p:dialog dynamic="true" id="selectMicroHormonDialogID" header="#{bundle.selectMicroHormon}" widgetVar="selectMicroHormonDialog" modal="true" resizable="false" position="top">                    
+                <p:panel id="selectMicroHormonPanel" style="padding:0px ! important;" > 
+                    <h:form id="selectMicroHormon" >
+                        <p:dataGrid  var="exam" value="#{applicationListBean.microHormon}" columns="3" paginator="false">  
+                            <h:selectBooleanCheckbox style="font-size: 9px" value="#{paraBean.selectedExams[exam]}"  />  #{exam.code} #{exam.abbrevation}                            
+                        </p:dataGrid>
+                        <p:commandButton value="#{bundle.insert}" onclick="selectMicroHormonDialog.hide()" action="#{dapyAction.massInsertExams}" update=":createParaForm:exams, :createParaForm:createButton, :createParaForm:updateButton"  />
+                        <p:commandButton value="#{bundle.close}" onclick="selectMicroHormonDialog.hide()" type="button"  />   
+                    </h:form>
+                </p:panel>
+            </p:dialog>
+            
+            <p:dialog dynamic="true" id="selectBLOODDialogID" header="#{bundle.bloodAnoso}" widgetVar="selectBLOODDialog" modal="true" resizable="false" position="top">                    
+                <p:panel id="selectBLOODPanel" style="padding:0px ! important;" > 
+                    <h:form id="selectBLOOD" >
+                        <p:dataGrid  var="exam" value="#{applicationListBean.bloodAnoso}" columns="3" paginator="false">  
+                            <h:selectBooleanCheckbox style="font-size: 9px" value="#{paraBean.selectedExams[exam]}"  />  #{exam.code} #{exam.abbrevation}                            
+                        </p:dataGrid>
+                        <p:commandButton value="#{bundle.insert}" onclick="selectBLOODDialog.hide()" action="#{dapyAction.massInsertExams}" update=":createParaForm:exams, :createParaForm:createButton, :createParaForm:updateButton"  />
+                        <p:commandButton value="#{bundle.close}" onclick="selectBLOODDialog.hide()" type="button"  />   
+                    </h:form>
+                </p:panel>
+            </p:dialog>
+
+
+
+        </div>        
+    </ui:define>
+</ui:composition>

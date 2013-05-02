@@ -1,0 +1,73 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<f:view contentType="text/html">
+
+	<h:head>
+		<f:facet name="first">
+			<meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+			<title>#{bundle.loginPage}</title>
+		</f:facet>
+
+		<link type="text/css" rel="stylesheet" href="#{request.contextPath}/css/default.css" />
+		
+		<!--<ui:insert name="head"></ui:insert> -->
+
+		<script type="text/javascript">
+            $(function() {$('.sidebar a').hover(function() {$(this).toggleClass('ui-state-hover');})});
+        </script>
+
+		<script type="text/javascript">
+            var _gaq = _gaq || [];
+            _gaq.push(['_setAccount', 'UA-12200033-3']);
+            _gaq.push(['_trackPageview']);
+
+            (function() {
+              var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+              ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+              var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+            })();
+
+          </script>
+	</h:head>
+
+	<h:body>
+
+		<DIV style="margin-left: 25% !important;margin-right: 25% !important;" >
+			<div id="header" class="ui-widget ui-widget-header" >
+				<ui:include src="../templates/headLogin.xhtml" />	
+			</div>
+		<h:form>		
+			<div id="page" class="ui-widget">											
+			 <p:panel id="panel" header="#{bundle.userLogin}">  
+			 		<p:messages id="msgs"/>  
+
+			        <h:panelGrid columns="3">  
+			            <h:outputLabel for="username" value="#{bundle.username}: *" />  
+			            <p:inputText id="username" value="#{userBean.username}" required="true" label="username" requiredMessage="#{bundle.username}:#{bundle.mandatoryField}" />  			              
+			            <p:message for="username" display="icon"/>  
+			  
+			            <h:outputLabel for="password" value="#{bundle.password}: *" />  
+			            <p:password id="password" value="#{userBean.password}" label="password" required="true" requiredMessage="#{bundle.password}:#{bundle.mandatoryField}" />  			              
+			            <p:message for="password" id="msgPassword" display="icon"/>  
+			  
+			        </h:panelGrid>  
+			  
+			        <p:commandButton id="btn" value="#{bundle.entrance}" update="panel" action="#{administrationAction.loginAction}" /> 
+			 </p:panel>					
+			
+			</div>
+	     </h:form>
+			<div id="footer" class="ui-widget ui-widget-header ui-corner-all">
+			 	<ui:include src="../templates/footerPara.xhtml" />				
+			</div>
+		</DIV>
+
+		 
+	</h:body>
+</f:view>
+</html>
