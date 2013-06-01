@@ -61,12 +61,31 @@
                         </p:panel>					
 
                     </div>
+                    
+                    <p:dialog id="selectRoleDialogID" header="#{bundle.selectRole}" widgetVar="selectRoleDialog"  
+                              modal="true" resizable="false">  
+
+                        <p:panel id="selectRoledPanel" style="padding:0px ! important;" > 
+                            <h:form id="selectRoleForm">  
+                                <table>
+                                    <tr>
+                                        <td>
+                                            <p:selectOneMenu value="#{assertionBean.updateAssertion.exContract}" converter="ContractConverter" >									 
+                                                <f:selectItems value="#{contractBean.contracts}" var="contract" itemLabel="#{contract.name}" itemValue="#{contract}"   /> 
+                                            </p:selectOneMenu>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </h:form>
+                        </p:panel>
+                    </p:dialog> 
+                
                 </h:form>
+
                 <div id="footer" class="ui-widget ui-widget-header ui-corner-all">
                     <ui:include src="templates/footerPara.xhtml" />				
                 </div>
             </DIV>
-
 
         </h:body>
     </f:view>

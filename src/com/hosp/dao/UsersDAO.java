@@ -14,6 +14,7 @@ import com.hosp.bean.AssertionSearchResultBean;
 import com.hosp.entities.Department;
 import com.hosp.entities.Hospital;
 import com.hosp.entities.Role;
+import com.hosp.entities.Userroles;
 import com.hosp.entities.Users;
 import com.hosp.util.EJBUtil;
 import com.hosp.util.PersistenceHelper;
@@ -46,7 +47,7 @@ public class UsersDAO {
     /**
      * Perform an initial save of a previously unsaved Users entity. All subsequent persist actions of this entity should use the #update() method. This
      * operation must be performed within the a database transaction context for the entity's data to be permanently saved to the persistence store, i.e.,
-     * database. This method uses the null     {@link javax.persistence.EntityManager#persist(Object)
+     * database. This method uses the null null     {@link javax.persistence.EntityManager#persist(Object)
 	 * EntityManager#persist} operation.
      *
      * <pre>
@@ -249,8 +250,8 @@ public class UsersDAO {
 
         }
     }
-    
-        public Users findUser(String username, String password) {
+
+    public Users findUser(String username, String password) {
         try {
             //EntityManager em = EntityManagerHelper.getEntityManager();
 //			String sql = "Select NEW com.hosp.bean.UserBean(u.username,u.password,u.department)" +
@@ -259,7 +260,7 @@ public class UsersDAO {
             String sql = "Select u from Users u where "
                     + " u.username like '" + username + "'  "
                     + " AND u.password like '" + password + "' ";
-                    
+
             Query query = getEntityManager().createQuery(sql);
             return (Users) query.getSingleResult();
 
@@ -272,7 +273,6 @@ public class UsersDAO {
 
         }
     }
-    
 
     public List<AssertionSearchResultBean> testQuery(Hospital hospital, int... rowStartIdxAndCount) {
         try {
@@ -326,36 +326,60 @@ public class UsersDAO {
             throw re;
         }
     }
-    
-    
+
     public List<Users> searchUser(Hospital hospital, Department department, String surname,
-										String name, String username, Role role){
-		try {
-			EntityManager em = getEntityManager();
-			String queryString = "Select u from Users u" +
-					" where u.userid IS NOT NULL " +
-					(hospital!=null ? " and u.hospital=:hospital " : " ") +
-					(department!=null ? " and u.department=:department " : " ") +
-					(role!=null ? " and u.role=:role " : " ") +
-					(name!=null ? " AND (LOWER(u.name) like '" + name.toLowerCase() +"%'" +
-					" OR UPPER(u.name)  like '" + name.toUpperCase() +"%') " : " " ) +
-					(surname!=null ? " AND (LOWER(u.surname) like '" + surname.toLowerCase() +"%'" +
-							" OR UPPER(u.surname)  like '" + surname.toUpperCase() +"%') " : " " ) +
-					(username!=null ? " AND (LOWER(u.username) like '" + username.toLowerCase() +"%'" +
-							" OR UPPER(u.username)  like '" + username.toUpperCase() +"%') " : " " ) +
-							" order by u.username ";
+            String name, String username, Role role) {
+        try {
+            EntityManager em = getEntityManager();
+            String queryString = "Select u from Users u"
+                    + " where u.userid IS NOT NULL "
+                    + (hospital != null ? " and u.hospital=:hospital " : " ")
+                    + (department != null ? " and u.department=:department " : " ")
+                    + (role != null ? " and u.role=:role " : " ")
+                    + (name != null ? " AND (LOWER(u.name) like '" + name.toLowerCase() + "%'"
+                    + " OR UPPER(u.name)  like '" + name.toUpperCase() + "%') " : " ")
+                    + (surname != null ? " AND (LOWER(u.surname) like '" + surname.toLowerCase() + "%'"
+                    + " OR UPPER(u.surname)  like '" + surname.toUpperCase() + "%') " : " ")
+                    + (username != null ? " AND (LOWER(u.username) like '" + username.toLowerCase() + "%'"
+                    + " OR UPPER(u.username)  like '" + username.toUpperCase() + "%') " : " ")
+                    + " order by u.username ";
 
-			
 
-			Query query = em.createQuery(queryString);
-			if(hospital!=null) query.setParameter("hospital", hospital);
-			if(department!=null) query.setParameter("department", department);
-			if(role!=null) query.setParameter("role", role);
-			return query.getResultList();
-		} catch (RuntimeException re) {
-			throw re;
-		}
-	}
+
+            Query query = em.createQuery(queryString);
+            if (hospital != null) {
+                query.setParameter("hospital", hospital);
+            }
+            if (department != null) {
+                query.setParameter("department", department);
+            }
+            if (role != null) {
+                query.setParameter("role", role);
+            }
+            return query.getResultList();
+        } catch (RuntimeException re) {
+            throw re;
+        }
+    }
+    
+    
+    
+    
+     public List<Userroles> getUserRoles(Users user) {
+        try {
+            EntityManager em = getEntityManager();
+            String queryString = "Select ur from Userroles ur"
+                    + " where ur.users=:user "                    
+                    + " order by ur.role.roleid ";
+
+            Query query = em.createQuery(queryString);          
+            query.setParameter("user", user);                      
+            return query.getResultList();
+        } catch (RuntimeException re) {
+            throw re;
+        }
+    }
+    
 
     private PersistenceHelper lookupPersistenceHelperBean() {
         try {

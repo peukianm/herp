@@ -8,6 +8,7 @@ import com.hosp.dao.*;
 import com.hosp.entities.Admission;
 import com.hosp.entities.ExTameio;
 import com.hosp.entities.RecipeDrugs;
+import com.hosp.entities.Userroles;
 import com.hosp.entities.Users;
 import com.hosp.util.FacesUtils;
 import com.hosp.util.FormatUtils;
@@ -38,7 +39,7 @@ public class AdministrationAction implements Serializable {
         try {
 //            ExAssertionDAO dao = new ExAssertionDAO();
 //            dao.test();  
-//                        
+            
             UserBean userBean = (UserBean) FacesUtils.getManagedBean("userBean");
             Users temp = userDAO.findUser(userBean.getUsername(), userBean.getPassword());
             if (temp == null) {
@@ -48,14 +49,19 @@ public class AdministrationAction implements Serializable {
                 return "loginPage";
             }    
 
-
+            
+            List<Userroles> userroles = userDAO.getUserRoles(temp);
+            temp.setUserroles(userroles);
+            sessionBean.setUsers(temp);
+            
+            
+            
+            
+            
+            // EXOTERIKA IATREIA APPLICATION
             if (temp.getRole().getRoleid().intValue() == 6 || temp.getRole().getRoleid().intValue() == 7 || temp.getRole().getRoleid().intValue() == 8) {			
-                sessionBean.setUsers(temp);
+                
                 persistenceUtil.audit(temp, new BigDecimal(SystemParameters.getInstance().getProperty("ACT_LOGINUSER")), null, null);
-
-//                ExTameioDAO exTameioDAO = new ExTameioDAO();
-//                List<ExTameio> listTameia = exTameioDAO.fetchListTameio(temp.getHospital());
-//                sessionBean.setTameia(listTameia);
 
                 int year = Calendar.getInstance().get(Calendar.YEAR);
                 int month = Calendar.getInstance().get(Calendar.MONTH) + 1;
@@ -65,8 +71,11 @@ public class AdministrationAction implements Serializable {
                 sessionBean.setPageCode(SystemParameters.getInstance().getProperty("PAGE_EXOTERIKA_HOME"));
                 sessionBean.setPageName(MessageBundleLoader.getMessage("homePage"));
                 return "exoterika/home?faces-redirect=true";
-            } else if (temp.getRole().getRoleid().intValue() == 1 || temp.getRole().getRoleid().intValue() == 2 || temp.getRole().getRoleid().intValue() == 3 || temp.getRole().getRoleid().intValue() == 4) {
-                sessionBean.setUsers(temp);
+            } 
+            
+            //CLINIC APPLICATION
+            else if (temp.getRole().getRoleid().intValue() == 1 || temp.getRole().getRoleid().intValue() == 2 || temp.getRole().getRoleid().intValue() == 3 || temp.getRole().getRoleid().intValue() == 4) {
+                
                 persistenceUtil.audit(temp, new BigDecimal(SystemParameters.getInstance().getProperty("ACT_LOGINUSER")), null, null);
 
                 PatientsDAO patientsDAO = new PatientsDAO();
@@ -87,6 +96,55 @@ public class AdministrationAction implements Serializable {
         }
     }
 
+    
+    
+    public String selectRole() {
+        try {
+           
+               UserBean userBean = (UserBean) FacesUtils.getManagedBean("userBean");
+               
+            
+            
+            // EXOTERIKA IATREIA APPLICATION
+            if (temp.getRole().getRoleid().intValue() == 6 || temp.getRole().getRoleid().intValue() == 7 || temp.getRole().getRoleid().intValue() == 8) {			
+                
+                persistenceUtil.audit(temp, new BigDecimal(SystemParameters.getInstance().getProperty("ACT_LOGINUSER")), null, null);
+
+                int year = Calendar.getInstance().get(Calendar.YEAR);
+                int month = Calendar.getInstance().get(Calendar.MONTH) + 1;
+
+                ExAssertionDAO assertionDAO = new ExAssertionDAO();
+                sessionBean.setCurrentNormalAssertion(assertionDAO.getCurrentNormalAssertion(temp.getHospital(), Integer.toString(year), new BigDecimal(month)));
+                sessionBean.setPageCode(SystemParameters.getInstance().getProperty("PAGE_EXOTERIKA_HOME"));
+                sessionBean.setPageName(MessageBundleLoader.getMessage("homePage"));
+                return "exoterika/home?faces-redirect=true";
+            } 
+            
+            //CLINIC APPLICATION
+            else if (temp.getRole().getRoleid().intValue() == 1 || temp.getRole().getRoleid().intValue() == 2 || temp.getRole().getRoleid().intValue() == 3 || temp.getRole().getRoleid().intValue() == 4) {
+                
+                persistenceUtil.audit(temp, new BigDecimal(SystemParameters.getInstance().getProperty("ACT_LOGINUSER")), null, null);
+
+                PatientsDAO patientsDAO = new PatientsDAO();
+                List<Admission> admissions = patientsDAO.fetchAdmittedPatients(temp.getDepartment(), temp.getHospital(), FacesUtils.INSIDE);
+                sessionBean.setActiveAdmissions(admissions);
+                sessionBean.setPageCode(SystemParameters.getInstance().getProperty("PAGE_CLINIC_PLAN"));
+                sessionBean.setPageName(MessageBundleLoader.getMessage("clinicPlan"));
+                calculateUnProccessedRecipes(null);
+                return "iatriko/clinicPlan?faces-redirect=true";
+            }
+            
+            return "";
+        } catch (Exception e) {
+            e.printStackTrace();
+            sessionBean.setErrorMsgKey("errMsg_GeneralError");
+            goError(e);
+            return "";
+        }
+    }
+
+    
+    
     private void calculateUnProccessedRecipes(java.util.Date date) {
         try {
             if (date == null) {

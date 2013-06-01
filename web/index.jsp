@@ -1,1 +1,1 @@
-<% response.sendRedirect("loginPage.jsf"); %> 
+<% response.sendRedirect("loginPage.jsf"); %>   

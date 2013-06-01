@@ -1,7 +1,9 @@
 package com.hosp.entities;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import javax.persistence.Cacheable;
 import javax.persistence.CascadeType;
@@ -36,6 +38,7 @@ public class Users implements java.io.Serializable {
     private BigDecimal exotep;    
     private Set<ExPara> exParas = new HashSet<ExPara>(0);
     private Set<Auditing> auditings = new HashSet<Auditing>(0);
+    private List<Userroles> userroles = new ArrayList<Userroles>(0);
 
     // Constructors
     /**
@@ -59,7 +62,7 @@ public class Users implements java.io.Serializable {
      * full constructor
      */
     public Users(BigDecimal userid, Hospital hospital, Department department, Role role, String username, String password, String description, String name,
-            String surname, Set<ExPara> exParas, Set<Auditing> auditings, BigDecimal exotep) {
+            String surname, Set<ExPara> exParas, Set<Auditing> auditings, BigDecimal exotep, List<Userroles> userroles ) {
         this.userid = userid;
         this.hospital = hospital;
         this.department = department;
@@ -72,6 +75,7 @@ public class Users implements java.io.Serializable {
         this.exParas = exParas;
         this.auditings = auditings;
         this.exotep = exotep;
+        this.userroles = userroles;
     }
 
     // Property accessors
@@ -176,6 +180,15 @@ public class Users implements java.io.Serializable {
 
     public void setAuditings(Set<Auditing> auditings) {
         this.auditings = auditings;
+    }
+    
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "userroles")
+    public List<Userroles> getUserroles() {
+        return this.userroles;
+    }
+
+    public void setUserroles(List<Userroles> userroles) {
+        this.userroles = userroles;
     }
     
     

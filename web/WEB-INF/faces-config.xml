@@ -179,6 +179,13 @@
   <converter-class>com.hosp.converter.DoubleConverter</converter-class>
  </converter>
  
+ 
+ <converter>
+  <converter-id>UserrolesConverter</converter-id>
+  <converter-class>com.hosp.converter.UserrolesConverter</converter-class>
+ </converter>
+ 
+ 
  <managed-bean>
   <managed-bean-name>guestPreferences</managed-bean-name>
   <managed-bean-class>com.hosp.bean.GuestPreferences</managed-bean-class>
