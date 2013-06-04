@@ -4,6 +4,7 @@
 package com.hosp.bean;
 
 import com.hosp.entities.ExTameio;
+import com.hosp.entities.Role;
 import com.hosp.entities.Userroles;
 import java.util.List;
 
@@ -17,7 +18,9 @@ public class UserBean {
     private java.lang.String password;
     private ExTameio tameio;   
     private List<Userroles> Userroles;
-    
+    private Role selectedRole; 
+
+       
 
     public UserBean() {
     }
@@ -26,8 +29,20 @@ public class UserBean {
         username = null;
         password = null;
         Userroles = null;
+        selectedRole = null;
     }
 
+    
+    public Role getSelectedRole() {
+        return selectedRole;
+    }
+
+    public void setSelectedRole(Role selectedRole) {
+        this.selectedRole = selectedRole;
+    }
+    
+    
+    
     public java.lang.String getUsername() {
         return username;
     }

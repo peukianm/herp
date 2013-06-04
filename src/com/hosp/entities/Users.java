@@ -182,7 +182,7 @@ public class Users implements java.io.Serializable {
         this.auditings = auditings;
     }
     
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "userroles")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "users")
     public List<Userroles> getUserroles() {
         return this.userroles;
     }

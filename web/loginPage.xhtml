@@ -70,8 +70,8 @@
                                 <table>
                                     <tr>
                                         <td>
-                                            <p:selectOneMenu value="#{assertionBean.updateAssertion.exContract}" converter="ContractConverter" >									 
-                                                <f:selectItems value="#{contractBean.contracts}" var="contract" itemLabel="#{contract.name}" itemValue="#{contract}"   /> 
+                                            <p:selectOneMenu value="#{userBean.selectedRole}" converter="UserrolesConverter" >									 
+                                                <f:selectItems value="#{sessionBean.users.userroles}" var="role" itemLabel="#{role.description}" itemValue="#{role}"   /> 
                                             </p:selectOneMenu>
                                         </td>
                                     </tr>
