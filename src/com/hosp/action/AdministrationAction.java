@@ -57,7 +57,7 @@ public class AdministrationAction implements Serializable {
             sessionBean.setUsers(temp);
             
             
-            
+            ddddd
             
             FacesUtils.callRequestContext("selectRoleDialog.show()");
                         
