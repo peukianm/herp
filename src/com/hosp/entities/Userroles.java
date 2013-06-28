@@ -101,7 +101,7 @@ public class Userroles implements java.io.Serializable {
             return false;
         }
 
-        if (!(obj instanceof Users)) {
+        if (!(obj instanceof Userroles)) {
             return false;
         }
 

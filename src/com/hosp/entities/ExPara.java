@@ -140,7 +140,7 @@ public class ExPara implements java.io.Serializable {
         this.parpapemptikoid = parpapemptikoid;
     }
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)   //UPDATED!!!!!!!!!!!!!!
     @JoinColumn(name = "CONTRACTID", nullable = false)
     public ExContract getExContract() {
         return this.exContract;
@@ -150,7 +150,7 @@ public class ExPara implements java.io.Serializable {
         this.exContract = exContract;
     }
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)  //UPDATED!!!!!!!!!!!!!!
     @JoinColumn(name = "HOSPITALID", nullable = false)
     public Hospital getHospital() {
         return this.hospital;
@@ -170,7 +170,7 @@ public class ExPara implements java.io.Serializable {
         this.exTameio = exTameio;
     }
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)  //UPDATED!!!!!!!!!!!!!!
     @JoinColumn(name = "COUNTRYID")
     public Country getCountry() {
         return this.country;
@@ -180,7 +180,7 @@ public class ExPara implements java.io.Serializable {
         this.country = country;
     }
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)  //UPDATED!!!!!!!!!!!!!!
     @JoinColumn(name = "INSURANCEID")
     public Insurance getInsurance() {
         return this.insurance;
@@ -190,7 +190,7 @@ public class ExPara implements java.io.Serializable {
         this.insurance = insurance;
     }
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY) //UPDATED!!!!!!!!!!!
     @JoinColumn(name = "PATIENTID", nullable = false)
     public Patients getPatients() {
         return this.patients;
@@ -200,7 +200,7 @@ public class ExPara implements java.io.Serializable {
         this.patients = patients;
     }
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)   //UPDATED!!!!!!!!!!!!!!
     @JoinColumn(name = "ASSERTIONID")
     public ExAssertion getExAssertion() {
         return this.exAssertion;
@@ -210,7 +210,7 @@ public class ExPara implements java.io.Serializable {
         this.exAssertion = exAssertion;
     }
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)  //UPDATED!!!!!!!!!!!!!!
     @JoinColumn(name = "EXOTERIKATYPEID")
     public ExType getExType() {
         return this.exType;
@@ -220,7 +220,7 @@ public class ExPara implements java.io.Serializable {
         this.exType = exType;
     }
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY) //UPDATED!!!!!!!!!!!!!!!!!!!!
     @JoinColumn(name = "PERIODID", nullable = false)
     public ExPeriod getExPeriod() {
         return this.exPeriod;
@@ -230,7 +230,7 @@ public class ExPara implements java.io.Serializable {
         this.exPeriod = exPeriod;
     }
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)  //UPDATED!!!!!!!!!!!!!!!!!!!
     @JoinColumn(name = "USERID")
     public Users getUsers() {
         return this.users;
@@ -240,7 +240,7 @@ public class ExPara implements java.io.Serializable {
         this.users = users;
     }
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY) //UPDATED!!!!!!!!!!!!!!!!!!!
     @JoinColumn(name = "PARATYPEID")
     public ExParaType getExParaType() {
         return this.exParaType;

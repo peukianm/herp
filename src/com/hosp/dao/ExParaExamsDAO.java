@@ -231,7 +231,6 @@ public class ExParaExamsDAO {
                     //+ " order by ce.exExam.code");
             query.setMaxResults(20);
             query.setParameter("contract", para.getExAssertion().getExContract());
-
             List<ExContractExams> contractExams = query.getResultList();
             List<ExParaExams> paraExams = new ArrayList<ExParaExams>(contractExams.size());
             for (ExContractExams contractExam : contractExams) {

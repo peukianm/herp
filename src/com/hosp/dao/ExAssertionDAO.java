@@ -214,7 +214,7 @@ public class ExAssertionDAO {
         }
     }
 
-    public List<AssertionSearchResultBean> assertionSearchResults(Hospital hospital, int... rowStartIdxAndCount) {
+    public List<AssertionSearchResultBean> assertionSearchResults(Hospital hospital, String open, String showDeleted, int... rowStartIdxAndCount) {
         try {
             //NEW com.hosp.bean.AssertionSearchResultBean	
 //			String sql = " select NEW com.hosp.bean.AssertionSearchResultBean(sum(pe.cost*pe.quantity), count(pe), count(p), a)  " +
@@ -226,17 +226,18 @@ public class ExAssertionDAO {
 //					     " group by a"	;	
 //			
 
+            
             String sql = " select NEW com.hosp.bean.AssertionSearchResultBean( COALESCE(sum(pe.cost*pe.quantity),0), count(distinct p), sum(pe.quantity), a, COALESCE(sum((pe.cost-pe.cost*pe.participation)*pe.quantity),0)  )"
                     + " from ExAssertion a LEFT OUTER JOIN a.exParas p LEFT OUTER JOIN p.exParaExamses pe  "
                     + " where "
                     + " a.hospital= :hospital "
-                    + " and a.enabled=1 "
+                    + ((showDeleted!=null && showDeleted.equals("0")) ?  " and a.enabled=1 ": " ")
+                    + (open!=null ? " and a.opened="+open : " ") 
                     + //					     " and p.enabled<>0 " +
                     //					     " and pe.enabled<>0 " +
                     " group by a "
                     + " order by a.assertionid DESC";
             //" order by a.exPeriod.exYear.yearid DESC,a.exPeriod.exMonth.monthid DESC";	
-
 
 
 

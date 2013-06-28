@@ -33,21 +33,15 @@
                 <p:panel id="searchParaPanel" header="#{bundle.searchCriteria} " toggleable="false" style="padding:0px ! important; width:auto;white-space: nowrap;margin-bottom: 10px" > 
                     <table  cellpadding="5" class="content1" style="margin-bottom: 10px" >  
                         <tr>
-                            <td style="width: auto;white-space: nowrap;"><h:outputLabel value="#{bundle.assertionPeriod}:" style="font-weight: bold" /></td>
+                            <!--<td style="width: auto;white-space: nowrap;"><h:outputLabel value="#{bundle.assertionPeriod}:" style="font-weight: bold" /></td>
                             <td style="width: auto;white-space: nowrap;" >                                                            
                                 <p:selectOneMenu value="#{searchParaBean.searchByAssertion}" converter="AssertionConverter" id="selectAssertion" >						 
                                     <f:selectItem itemLabel="" itemValue=""  />
                                     <f:selectItems value="#{searchParaBean.assertions}" var="assertion" itemLabel="#{assertion.exPeriod.name}-#{assertion.exAssertionType.name}" itemValue="#{assertion}"   />						                                                                   
                                 </p:selectOneMenu>
 
-                            </td>
-                            <td style="width: auto;white-space: nowrap;"> <h:outputLabel value="#{bundle.dateType}:"  style="font-weight: bold" /></td>
-                            <td style="width: auto;white-space: nowrap;">
-                                <p:selectOneMenu value="#{searchParaBean.searchByType}" converter="TypeConverter" >						 
-                                    <f:selectItem itemLabel="" itemValue=""  />
-                                    <f:selectItems value="#{applicationListBean.types}" var="tp" itemLabel="#{tp.name}" itemValue="#{tp}"   />						     
-                                </p:selectOneMenu>	
-                            </td>
+                            </td> -->
+                            
                             <td style="width: 1px;white-space: nowrap;"> <h:outputLabel value="#{bundle.period}:"  style="font-weight: bold" /></td>
                             <td style="width: 1px;white-space: nowrap;">
                                 <p:selectOneMenu value="#{searchParaBean.searchByPeriod}" converter="pc" >						 
@@ -55,6 +49,22 @@
                                     <f:selectItems value="#{searchParaBean.periods}" var="period" itemLabel="#{period.name}" itemValue="#{period}"   />						     
                                 </p:selectOneMenu>	
                             </td>
+                            <td style="width: auto;white-space: nowrap;"><h:outputLabel value="#{bundle.assertionType}:" style="font-weight: bold" /></td>
+                            <td style="width: auto;white-space: nowrap;" >                                                            
+                                <p:selectOneMenu value="#{searchParaBean.searchByAssertionType}" converter="AssertionTypeConverter" id="selectAssertion" >						 
+                                    <f:selectItem itemLabel="" itemValue=""  />                                    
+                                    <f:selectItems value="#{applicationListBean.assertionTypes}" var="asstype" itemLabel="#{asstype.name}" itemValue="#{asstype}"   /> 
+                                </p:selectOneMenu>
+
+                            </td>
+                            
+                            <td style="width: auto;white-space: nowrap;"> <h:outputLabel value="#{bundle.dateType}:"  style="font-weight: bold" /></td>
+                            <td style="width: auto;white-space: nowrap;">
+                                <p:selectOneMenu value="#{searchParaBean.searchByType}" converter="TypeConverter" >						 
+                                    <f:selectItem itemLabel="" itemValue=""  />
+                                    <f:selectItems value="#{applicationListBean.types}" var="tp" itemLabel="#{tp.name}" itemValue="#{tp}"   />						     
+                                </p:selectOneMenu>	
+                            </td>                            
                         </tr>
                          <tr>
                             <td><h:outputLabel value="#{bundle.patient}:"  style="font-weight: bold"  /></td>
@@ -70,8 +80,8 @@
                         </tr>    
 
                         <tr>
-                            <td><h:outputLabel value="#{bundle.issueDate} #{bundle.from}:"  style="font-weight: bold"  /></td>
-                            <td> 
+                            <td style="width: auto;white-space: nowrap;"><h:outputLabel value="#{bundle.issueDate} #{bundle.from}:"  style="font-weight: bold"  /></td>
+                            <td style="width: auto;white-space: nowrap;"> 
                                 <p:calendar locale="el" size="12"  readonlyInput="true"  navigator="true" showOn="button" 
                                             pattern="dd/MM/yyyy" value="#{searchParaBean.searchFromIssueDate}" id="searchFromIssueDate"/> 
 
@@ -114,7 +124,7 @@
                     <p:dataTable id="paraResults" var="para" value="#{searchParaBean.paraModel}" selection="#{searchParaBean.selectedPara}" widgetVar="paraResultss"
                                  paginator="true" rows="10" emptyMessage="#{bundle.noRecordsFound}" rowIndexVar="tt"  rowKey="#{para}" 
                                  paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
-                                 rowsPerPageTemplate="10,20,50,100,1000" lazy="true" >  
+                                 rowsPerPageTemplate="10,20,50,100,300" lazy="true" >  
                           
                         <!--<p:column headerText="A/A" style="width:3%">  
                             <h:outputText value="#{tt+1}" />  

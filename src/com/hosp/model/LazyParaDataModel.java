@@ -6,6 +6,7 @@ package com.hosp.model;
 
 import com.hosp.dao.ExParaDAO;
 import com.hosp.entities.ExAssertion;
+import com.hosp.entities.ExAssertionType;
 import com.hosp.entities.ExPara;
 import com.hosp.entities.ExPeriod;
 import com.hosp.entities.ExType;
@@ -32,6 +33,7 @@ import org.primefaces.model.SortOrder;
 public class LazyParaDataModel extends LazyDataModel<ExPara> {
 
     private ExAssertion searchByAssertion;
+    private ExAssertionType searchByAssertionType;
     private ExType searchByType;
     private ExPeriod searchByPeriod;
     private Patients searchByPatient;
@@ -47,10 +49,11 @@ public class LazyParaDataModel extends LazyDataModel<ExPara> {
     private int start;
     private int end;
 
-    public void loadParams(ExAssertion searchByAssertion, ExType searchByType, ExPeriod searchByPeriod,
+    public void loadParams(ExAssertion searchByAssertion, ExAssertionType searchByAssertionType, ExType searchByType, ExPeriod searchByPeriod,
             Patients searchByPatient, Date searchFromExecutionDate, Date searchToExecutionDate, Date searchFromIssueDate,
             Date searchToIssueDate, Users searchByUser, String serachByParaCode, Hospital hospital, boolean proceedFetch) {
         this.searchByAssertion = searchByAssertion;
+        this.searchByAssertionType = searchByAssertionType;
         this.searchByType = searchByType;
         this.searchByPeriod = searchByPeriod;
         this.searchByPatient = searchByPatient;
@@ -102,11 +105,11 @@ public class LazyParaDataModel extends LazyDataModel<ExPara> {
                 }
 
                 ExParaDAO dao = new ExParaDAO();
-                List<ExPara> data = dao.getSearchParaResultSet(hospital, searchByAssertion, searchByPeriod, searchByType, searchFromExecutionDate,
+                List<ExPara> data = dao.getSearchParaResultSet(hospital, searchByAssertion, searchByAssertionType, searchByPeriod, searchByType, searchFromExecutionDate,
                         searchToExecutionDate, searchFromIssueDate, searchToIssueDate, serachByParaCode, searchByPatient, orderBy, querydata);
 
 
-                this.setRowCount(new Integer(dao.getSearchParaResultSet(hospital, searchByAssertion, searchByPeriod, searchByType, searchFromExecutionDate,
+                this.setRowCount(new Integer(dao.getSearchParaResultSet(hospital, searchByAssertion, searchByAssertionType, searchByPeriod, searchByType, searchFromExecutionDate,
                         searchToExecutionDate, searchFromIssueDate, searchToIssueDate, serachByParaCode, searchByPatient).toString()));
 
                

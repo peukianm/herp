@@ -111,7 +111,7 @@ public class ExAssertion implements java.io.Serializable {
         this.assertionid = assertionid;
     }
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY) //UPDATED!!!!!!!!!!!!!!!!!!!!!!
     @JoinColumn(name = "CONTRACTID")
     public ExContract getExContract() {
         return this.exContract;
@@ -121,7 +121,7 @@ public class ExAssertion implements java.io.Serializable {
         this.exContract = exContract;
     }
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)    //UPDATED!!!!!!!!!!!!!!!!!!!
     @JoinColumn(name = "HOSPITALID", nullable = false)
     public Hospital getHospital() {
         return this.hospital;
@@ -131,7 +131,7 @@ public class ExAssertion implements java.io.Serializable {
         this.hospital = hospital;
     }
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)   //UPDATED!!!!!!!!!!!!!!!!!!!
     @JoinColumn(name = "YEARID")
     public ExYear getExYear() {
         return this.exYear;
@@ -141,7 +141,7 @@ public class ExAssertion implements java.io.Serializable {
         this.exYear = exYear;
     }
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)   //UPDATED!!!!!!!!!!!!!!!!!!!
     @JoinColumn(name = "PERIODID")
     public ExPeriod getExPeriod() {
         return this.exPeriod;
@@ -151,7 +151,7 @@ public class ExAssertion implements java.io.Serializable {
         this.exPeriod = exPeriod;
     }
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)    //UPDATED!!!!!!!!!!!!!!!!!!!
     @JoinColumn(name = "ASSERIONTYPEID")
     public ExAssertionType getExAssertionType() {
         return this.exAssertionType;
@@ -161,7 +161,7 @@ public class ExAssertion implements java.io.Serializable {
         this.exAssertionType = exAssertionType;
     }
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)   //UPDATED!!!!!!!!!!!!!!!!!!!
     @JoinColumn(name = "MONTHID")
     public ExMonth getExMonth() {
         return this.exMonth;
@@ -244,7 +244,7 @@ public class ExAssertion implements java.io.Serializable {
         this.exParaCounters = exParaCounters;
     }
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "exAssertion")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "exAssertion")    //UPDATED !!!!!!!!!!!!!!!!!
     public List<ExTimol> getExTimols() {
         //exTimols.size();
         return this.exTimols;

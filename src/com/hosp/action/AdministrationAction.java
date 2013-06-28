@@ -8,6 +8,7 @@ import com.hosp.dao.*;
 import com.hosp.entities.Admission;
 import com.hosp.entities.ExTameio;
 import com.hosp.entities.RecipeDrugs;
+import com.hosp.entities.Role;
 import com.hosp.entities.Userroles;
 import com.hosp.entities.Users;
 import com.hosp.util.FacesUtils;
@@ -39,7 +40,7 @@ public class AdministrationAction implements Serializable {
         try {
 //            ExAssertionDAO dao = new ExAssertionDAO();
 //            dao.test();  
-            
+
             UserBean userBean = (UserBean) FacesUtils.getManagedBean("userBean");
             Users temp = userDAO.findUser(userBean.getUsername(), userBean.getPassword());
             if (temp == null) {
@@ -47,53 +48,22 @@ public class AdministrationAction implements Serializable {
                 sessionBean.setErrorMsgKey("errMsg_InvalidCredentials");
                 FacesUtils.addErrorMessage(MessageBundleLoader.getMessage("errMsg_InvalidCredentials"));
                 return "loginPage";
-            }    
+            }
 
-            
             List<Userroles> userroles = userDAO.getUserRoles(temp);
-            
-            System.out.println("userroles="+userroles);
+            RoleSelectionBean roleSelectionBean = (RoleSelectionBean) FacesUtils.getManagedBean("roleSelectionBean");
+            roleSelectionBean.setUserroles(userroles);
             temp.setUserroles(userroles);
             sessionBean.setUsers(temp);
+
             
-            
-            ddddd1111
-            
-            FacesUtils.callRequestContext("selectRoleDialog.show()");
-                        
-            
-            
-            
-//            // EXOTERIKA IATREIA APPLICATION
-//            if (temp.getRole().getRoleid().intValue() == 6 || temp.getRole().getRoleid().intValue() == 7 || temp.getRole().getRoleid().intValue() == 8) {			
-//                
-//                persistenceUtil.audit(temp, new BigDecimal(SystemParameters.getInstance().getProperty("ACT_LOGINUSER")), null, null);
-//
-//                int year = Calendar.getInstance().get(Calendar.YEAR);
-//                int month = Calendar.getInstance().get(Calendar.MONTH) + 1;
-//
-//                ExAssertionDAO assertionDAO = new ExAssertionDAO();
-//                sessionBean.setCurrentNormalAssertion(assertionDAO.getCurrentNormalAssertion(temp.getHospital(), Integer.toString(year), new BigDecimal(month)));
-//                sessionBean.setPageCode(SystemParameters.getInstance().getProperty("PAGE_EXOTERIKA_HOME"));
-//                sessionBean.setPageName(MessageBundleLoader.getMessage("homePage"));
-//                return "exoterika/home?faces-redirect=true";
-//            } 
-//            
-//            //CLINIC APPLICATION
-//            else if (temp.getRole().getRoleid().intValue() == 1 || temp.getRole().getRoleid().intValue() == 2 || temp.getRole().getRoleid().intValue() == 3 || temp.getRole().getRoleid().intValue() == 4) {
-//                
-//                persistenceUtil.audit(temp, new BigDecimal(SystemParameters.getInstance().getProperty("ACT_LOGINUSER")), null, null);
-//
-//                PatientsDAO patientsDAO = new PatientsDAO();
-//                List<Admission> admissions = patientsDAO.fetchAdmittedPatients(temp.getDepartment(), temp.getHospital(), FacesUtils.INSIDE);
-//                sessionBean.setActiveAdmissions(admissions);
-//                sessionBean.setPageCode(SystemParameters.getInstance().getProperty("PAGE_CLINIC_PLAN"));
-//                sessionBean.setPageName(MessageBundleLoader.getMessage("clinicPlan"));
-//                calculateUnProccessedRecipes(null);
-//                return "iatriko/clinicPlan?faces-redirect=true";
-//            }
-            
-            return "loginPage";
+            if (userroles.size()>1)                
+                FacesUtils.callRequestContext("selectRoleDialog.show()");
+            else if (userroles.size()==1) {                
+                temp.setRole(userroles.get(0).getRole());
+                return mainPageForward(temp);
+            }
+            return "";
         } catch (Exception e) {
             e.printStackTrace();
             sessionBean.setErrorMsgKey("errMsg_GeneralError");
@@ -103,17 +73,26 @@ public class AdministrationAction implements Serializable {
     }
 
     
-    
     public String selectRole() {
+        RoleSelectionBean roleSelectionBean = (RoleSelectionBean) FacesUtils.getManagedBean("roleSelectionBean");
+            Userroles selectedRole = roleSelectionBean.getSelectedRole();
+            Users temp = sessionBean.getUsers();
+            temp.setRole(selectedRole.getRole());
+            sessionBean.setUsers(temp);
+            
+            return mainPageForward(temp); 
+    
+    }
+    
+    
+    
+    private String mainPageForward(Users temp) {
         try {
-           
-               //UserBean userBean = (UserBean) FacesUtils.getManagedBean("userBean");
-               Users temp = sessionBean.getUsers();
             
-            
+
             // EXOTERIKA IATREIA APPLICATION
-            if (temp.getRole().getRoleid().intValue() == 6 || temp.getRole().getRoleid().intValue() == 7 || temp.getRole().getRoleid().intValue() == 8) {			
-                
+            if (temp.getRole().getRoleid().intValue() == 6 || temp.getRole().getRoleid().intValue() == 7 || temp.getRole().getRoleid().intValue() == 8) {
+
                 persistenceUtil.audit(temp, new BigDecimal(SystemParameters.getInstance().getProperty("ACT_LOGINUSER")), null, null);
 
                 int year = Calendar.getInstance().get(Calendar.YEAR);
@@ -128,7 +107,7 @@ public class AdministrationAction implements Serializable {
             
             //CLINIC APPLICATION
             else if (temp.getRole().getRoleid().intValue() == 1 || temp.getRole().getRoleid().intValue() == 2 || temp.getRole().getRoleid().intValue() == 3 || temp.getRole().getRoleid().intValue() == 4) {
-                
+
                 persistenceUtil.audit(temp, new BigDecimal(SystemParameters.getInstance().getProperty("ACT_LOGINUSER")), null, null);
 
                 PatientsDAO patientsDAO = new PatientsDAO();
@@ -139,7 +118,7 @@ public class AdministrationAction implements Serializable {
                 calculateUnProccessedRecipes(null);
                 return "iatriko/clinicPlan?faces-redirect=true";
             }
-            
+
             return "";
         } catch (Exception e) {
             e.printStackTrace();
@@ -149,8 +128,6 @@ public class AdministrationAction implements Serializable {
         }
     }
 
-    
-    
     private void calculateUnProccessedRecipes(java.util.Date date) {
         try {
             if (date == null) {

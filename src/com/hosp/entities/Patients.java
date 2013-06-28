@@ -9,13 +9,10 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -148,7 +145,7 @@ public class Patients implements java.io.Serializable {
         this.patientid = patientid;
     }
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY) //UPDATED!!!!!!!!!!!!!!
     @JoinColumn(name = "RELEGIONID")
     public Relegion getRelegion() {
         return this.relegion;
@@ -158,7 +155,7 @@ public class Patients implements java.io.Serializable {
         this.relegion = relegion;
     }
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY) //UPDATED!!!!!!!!!!!!!!
     @JoinColumn(name = "PROFFESIONID")
     public Proffesion getProffesion() {
         return this.proffesion;
@@ -168,7 +165,7 @@ public class Patients implements java.io.Serializable {
         this.proffesion = proffesion;
     }
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY) //UPDATED!!!!!!!!!!!!!!
     @JoinColumn(name = "COUNTRYID")
     public Country getCountry() {
         return this.country;
@@ -178,7 +175,7 @@ public class Patients implements java.io.Serializable {
         this.country = country;
     }
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY) //UPDATED!!!!!!!!!!!!!!
     @JoinColumn(name = "INSURANCEID", nullable = false)
     public Insurance getInsurance() {
         return this.insurance;
@@ -188,7 +185,7 @@ public class Patients implements java.io.Serializable {
         this.insurance = insurance;
     }
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY) //UPDATED!!!!!!!!!!!!!!
     @JoinColumn(name = "RACEID")
     public Race getRace() {
         return this.race;
@@ -198,7 +195,7 @@ public class Patients implements java.io.Serializable {
         this.race = race;
     }
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY) //UPDATED!!!!!!!!!!!!!!
     @JoinColumn(name = "NATIONALITYID")
     public Nationality getNationality() {
         return this.nationality;
@@ -208,7 +205,7 @@ public class Patients implements java.io.Serializable {
         this.nationality = nationality;
     }
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY) //UPDATED!!!!!!!!!!!!!!
     @JoinColumn(name = "MARITASSTATUSID")
     public Maritalstatus getMaritalstatus() {
         return this.maritalstatus;
@@ -218,7 +215,7 @@ public class Patients implements java.io.Serializable {
         this.maritalstatus = maritalstatus;
     }
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY) //UPDATED!!!!!!!!!!!!!!
     @JoinColumn(name = "SEXID")
     public Sex getSex() {
         return this.sex;
@@ -228,7 +225,7 @@ public class Patients implements java.io.Serializable {
         this.sex = sex;
     }
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY) //UPDATED!!!!!!!!!!!!!!
     @JoinColumn(name = "BLOODTYPEID")
     public Bloodtype getBloodtype() {
         return this.bloodtype;
@@ -238,7 +235,7 @@ public class Patients implements java.io.Serializable {
         this.bloodtype = bloodtype;
     }
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY) //UPDATED!!!!!!!!!!!!!!
     @JoinColumn(name = "CITYID")
     public City getCity() {
         return this.city;
@@ -248,7 +245,7 @@ public class Patients implements java.io.Serializable {
         this.city = city;
     }
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY) //UPDATED!!!!!!!!!!!!!!
     @JoinColumn(name = "PREFECTUREID")
     public Prefecture getPrefecture() {
         return this.prefecture;
@@ -420,8 +417,7 @@ public class Patients implements java.io.Serializable {
     public void setEnable(BigDecimal enable) {
         this.enable = enable;
     }
-    
-    
+
     @Column(name = "DIRECT", precision = 0)
     public Integer getDirect() {
         return this.direct;
@@ -430,7 +426,6 @@ public class Patients implements java.io.Serializable {
     public void setDirect(Integer direct) {
         this.direct = direct;
     }
-    
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "patients")
     public Set<Surgery> getSurgeries() {

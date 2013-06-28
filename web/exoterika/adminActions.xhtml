@@ -64,13 +64,37 @@
             <h:form id="assertionSearchForm">
 
                 <p:fieldset legend="#{bundle.assertionAdmin}" toggleable="false" toggleSpeed="500" styleClass="" style="padding:14px;"  >			
-
                     
-                     <p:selectOneMenu value="#{assertionBean.searchByOpen}"  >						 
-                          <f:selectItem itemLabel="#{bundle.all}" itemValue=""  />
-                          <f:selectItem itemLabel="#{bundle.open}" itemValue="1"  />
-                          <f:selectItem itemLabel="#{bundle.close}" itemValue="0"  />
-                     </p:selectOneMenu>
+                    
+                    <table>
+                        <tr>
+                            <td>
+                              <h:outputLabel value="#{bundle.showOptions}:" style="font-weight: bolder; font-size: 11px "/>
+                            </td>
+                            <td> 
+                                <p:selectOneMenu value="#{assertionBean.searchByOpen}"  >						 
+                                   <f:selectItem itemLabel="#{bundle.all}" itemValue=""  />
+                                   <f:selectItem itemLabel="#{bundle.openAssertions}" itemValue="1"  />
+                                   <f:selectItem itemLabel="#{bundle.closeAssertions}" itemValue="0"  />
+                                   <p:ajax listener="#{dapyAction.refreshViewActions()}" update="assertionSearchForm" />
+                              </p:selectOneMenu>
+                                <p:spacer width="20" />  
+                            </td>
+                       
+                            <td>
+                                <h:outputLabel value="#{bundle.showDeletedAssertions}:" style="font-weight: bolder; font-size: 11px "/>
+                            </td>
+                            <td>
+                                <p:selectOneMenu value="#{assertionBean.showDeleted}"  >						 
+                                    <f:selectItem itemLabel="#{bundle.no}" itemValue="0"  />
+                                    <f:selectItem itemLabel="#{bundle.yes}" itemValue="1"  />
+                                    <p:ajax listener="#{dapyAction.refreshViewActions()}" update="assertionSearchForm"/>
+                               </p:selectOneMenu>    
+                            </td>                            
+                        </tr>                        
+                    </table>
+                    
+                    
 
                         <!-- <p:dataTable var="result" value="#{assertionBean.lazyModel}" paginator="true" rows="5"  rowKey="#{result.assertion}"
                         paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}" emptyMessage="#{bundle.noRecordsFound}"  
@@ -78,7 +102,7 @@
                         --> 
                     
                                        
-                   <p:dataTable var="result" value="#{assertionBean.assertionSearchResultBeanList}" paginator="true" rows="15"  rowKey="#{result.assertion}"                 
+                   <p:dataTable var="result" value="#{assertionBean.assertionSearchResultBeanList}" paginator="true" rows="8"  rowKey="#{result.assertion}"                 
                                  emptyMessage="#{bundle.noRecordsFound}"   selection="#{assertionBean.selectedResult}" id="assertionTable"  > 
                         <p:ajax event="rowSelectRadio" update=":assertionSearchForm"  />			 
 
@@ -116,6 +140,11 @@
                         
                         <p:column headerText="#{bundle.status}" sortBy="#{result.assertion.opened}" style="width: 10px; white-space: normal;">  
                             <h:outputText value="#{result.assertion.opened==1?bundle.opened : bundle.closed}"  />  
+                        </p:column> 
+                        
+                        <p:column headerText="#{bundle.active}" sortBy="#{result.assertion.enabled}" style="width: 10px; white-space: normal;">  
+                            <h:graphicImage rendered="#{result.assertion.enabled==1}" url="../images/success.jpg" width="14px" height="14px" />
+                            <h:graphicImage rendered="#{result.assertion.enabled==0}" url="../images/close.gif" width="14px" height="14px" /> 
                         </p:column> 
                         
 
@@ -169,39 +198,42 @@
                     <table>
 
                         <tr>
-                            <td><h:outputLabel value="#{bundle.contract}:*"/></td>
+                            <td><h:outputLabel value="#{bundle.contract}:*"  style="font-weight: bold" /></td>
                             <td>    
-                                <p:selectOneMenu value="#{assertionBean.updateAssertion.exContract}" converter="ContractConverter" >									 
-                                    <f:selectItems value="#{contractBean.contracts}" var="contract" itemLabel="#{contract.name}" itemValue="#{contract}"   /> 
-                                </p:selectOneMenu>		   		     	
+                                <!--<p:selectOneMenu value="{assertionBean.updateAssertion.exContract}" converter="ContractConverter" >									 
+                                    <f:selectItems value="{contractBean.contracts}" var="contract" itemLabel="{contract.name}" itemValue="{contract}"   /> 
+                                </p:selectOneMenu> -->
+                                <h:outputText value="#{assertionBean.updateAssertion.exContract.name}"  />
                             </td>
                         </tr>
                         <tr>
-                            <td><h:outputLabel value="#{bundle.assertionType}:*"/></td>
+                            <td><h:outputLabel value="#{bundle.assertionType}:*" style="font-weight: bold" /></td>
                             <td>    
                                 <p:selectOneMenu value="#{assertionBean.updateAssertion.exAssertionType}" converter="AssertionTypeConverter" >									 
                                     <f:selectItems value="#{applicationListBean.assertionTypes}" var="asstype" itemLabel="#{asstype.name}" itemValue="#{asstype}"   /> 
                                 </p:selectOneMenu>		   		     	
                             </td>
                         </tr>
-                        <tr>
-                            <td><h:outputLabel value="#{bundle.submissionType}:*"/></td>
+                        <!--<tr>
+                            <td><h:outputLabel value="{bundle.submissionType}:*"/></td>
                             <td>
-                                <p:selectOneMenu value="#{assertionBean.updateAssertion.submission}" >									 
-                                    <f:selectItems value="#{assertionBean.submissions}"   /> 
+                                <p:selectOneMenu value="{assertionBean.updateAssertion.submission}" >									 
+                                    <f:selectItems value="{assertionBean.submissions}"   /> 
                                 </p:selectOneMenu>		   		     	
                             </td>
-                        </tr>  
+                        </tr>  -->
                         <tr>
-                            <td><h:outputLabel value="#{bundle.assertionPeriod}:"/>  </td>
+                            <td><h:outputLabel value="#{bundle.assertionPeriod}:" style="font-weight: bold"  />  </td>
                             <td>
-                                <p:selectOneMenu value="#{assertionBean.updateAssertion.exPeriod}" converter="pc" >									 
+                                <!--<p:selectOneMenu value="#{assertionBean.updateAssertion.exPeriod}" converter="pc" >									 
                                     <f:selectItems value="#{assertionBean.periods}" var="per" itemLabel="#{per.name}" itemValue="#{per}"   /> 
-                                </p:selectOneMenu>	<br/>	   		     			   		     	    		   		     	    
+                                </p:selectOneMenu>-->	
+                                <h:outputText value="#{assertionBean.updateAssertion.exPeriod.name}"  />
+                                <br/>	   		     			   		     	    		   		     	    
                             </td>   
                         </tr>
                         <tr>
-                            <td><h:outputLabel value="#{bundle.status}:"/>  </td>
+                            <td><h:outputLabel value="#{bundle.status}:" style="font-weight: bold" />  </td>
                             <td>
                                 <p:selectOneRadio id="options" value="#{assertionBean.updateAssertion.opened}">  
                                     <f:selectItem itemLabel="#{bundle.opened}" itemValue="1" />  
@@ -353,7 +385,7 @@
 
 
 
-        <script>
+     <!--   <script>
         $( "#contractDialogID" ).position({ 
             my: "left",
             at: "left"
@@ -379,7 +411,7 @@
         });  
         
         
-      </script>
+      </script> -->
 
 
 
@@ -440,14 +472,14 @@
                                 </p:selectOneMenu>		   		     	
                             </td>
                         </tr>
-                        <tr>
-                            <td><h:outputLabel value="#{bundle.submissionType}*"/></td>
+                        <!--<tr>
+                            <td><h:outputLabel value="{bundle.submissionType}*"/></td>
                             <td>
-                                <p:selectOneMenu value="#{assertionBean.selectedSubmissionType}" effect="fade"  >									 
-                                    <f:selectItems value="#{assertionBean.submissions}"   /> 
+                                <p:selectOneMenu value="{assertionBean.selectedSubmissionType}" effect="fade"  >									 
+                                    <f:selectItems value="{assertionBean.submissions}"   /> 
                                 </p:selectOneMenu>		   		     	
                             </td>
-                        </tr>  
+                        </tr> -->  
                         <tr>
                             <td><h:outputLabel value="#{bundle.assertionPeriod}"/>  </td>
                             <td>

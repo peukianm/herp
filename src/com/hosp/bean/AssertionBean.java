@@ -66,15 +66,15 @@ public class AssertionBean implements Serializable {
             showDeleted = "0" ;
             
             ExAssertionDAO dao = new ExAssertionDAO();
-            setAssertionSearchResultBeanList(dao.assertionSearchResults(sessionBean.getUsers().getHospital(), null));
+            setAssertionSearchResultBeanList(dao.assertionSearchResults(sessionBean.getUsers().getHospital(), searchByOpen, showDeleted,  null));
 
             ExPeriodDAO dao2 = new ExPeriodDAO();
             sessionBean = (SessionBean) FacesUtils.getManagedBean("sessionBean");
             periods = dao2.fetchPeriods(sessionBean.getUsers().getHospital(), true);
 
-            submissions = new SelectItem[2];
-            submissions[0] = new SelectItem(MessageBundleLoader.getMessage("importData"), MessageBundleLoader.getMessage("importData"));
-            submissions[1] = new SelectItem(MessageBundleLoader.getMessage("archive"), MessageBundleLoader.getMessage("archive"));
+//            submissions = new SelectItem[2];
+//            submissions[0] = new SelectItem(MessageBundleLoader.getMessage("importData"), MessageBundleLoader.getMessage("importData"));
+//            submissions[1] = new SelectItem(MessageBundleLoader.getMessage("archive"), MessageBundleLoader.getMessage("archive"));
         } catch (RuntimeException e) {
             e.printStackTrace();
             throw e;
@@ -116,6 +116,15 @@ public class AssertionBean implements Serializable {
 //	}
     
     
+    
+    
+     public String getShowDeleted() {
+        return showDeleted;
+    }
+
+    public void setShowDeleted(String showDeleted) {
+        this.showDeleted = showDeleted;
+    }
     
     public String getSearchByOpen() {
         return searchByOpen;

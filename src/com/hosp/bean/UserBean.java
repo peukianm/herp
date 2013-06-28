@@ -17,8 +17,7 @@ public class UserBean {
     private java.lang.String username;
     private java.lang.String password;
     private ExTameio tameio;   
-    private List<Userroles> Userroles;
-    private Role selectedRole; 
+    
 
        
 
@@ -27,20 +26,11 @@ public class UserBean {
 
     public void reset() {
         username = null;
-        password = null;
-        Userroles = null;
-        selectedRole = null;
+        password = null;       
     }
 
     
-    public Role getSelectedRole() {
-        return selectedRole;
-    }
-
-    public void setSelectedRole(Role selectedRole) {
-        this.selectedRole = selectedRole;
-    }
-    
+      
     
     
     public java.lang.String getUsername() {
@@ -65,12 +55,5 @@ public class UserBean {
 
     public void setTameio(ExTameio tameio) {
         this.tameio = tameio;
-    }
-     public List<Userroles> getUserroles() {
-        return Userroles;
-    }
-
-    public void setUserroles(List<Userroles> Userroles) {
-        this.Userroles = Userroles;
     }
 }

@@ -74,7 +74,7 @@ public class ExTimol implements java.io.Serializable {
 		this.timolid = timolid;
 	}
 
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)  //UPDATED !!!!!!!!!!!!!!!!!
 	@JoinColumn(name = "HOSPITALID", nullable = false)
 	public Hospital getHospital() {
 		return this.hospital;
@@ -84,7 +84,7 @@ public class ExTimol implements java.io.Serializable {
 		this.hospital = hospital;
 	}
 
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)  //UPDATED !!!!!!!!!!!!!!!!!
 	@JoinColumn(name = "ASSERTIONID")
 	public ExAssertion getExAssertion() {
 		//exAssertion.toString();

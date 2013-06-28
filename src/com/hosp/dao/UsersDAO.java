@@ -370,7 +370,7 @@ public class UsersDAO {
             EntityManager em = getEntityManager();
             String queryString = "Select ur from Userroles ur"
                     + " where ur.users=:user "                    
-                    + " order by ur.role.roleid ";
+                    + " order by ur.role.ordered ASC ";
 
             Query query = em.createQuery(queryString);          
             query.setParameter("user", user);                      

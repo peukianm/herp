@@ -57,30 +57,51 @@
 
                             </h:panelGrid>  
 
-                            <p:commandButton id="btn" value="#{bundle.entrance}" update="panel" action="#{administrationAction.loginAction}" /> 
+                            <p:commandButton id="btn" value="#{bundle.entrance}" update="panel, :selectRolePanel"  action="#{administrationAction.loginAction}" /> 
                         </p:panel>					
 
                     </div>
-                    
-                    <p:dialog id="selectRoleDialogID" header="#{bundle.selectRole}" widgetVar="selectRoleDialog"  
-                              modal="true" resizable="false">  
 
-                        <p:panel id="selectRoledPanel" style="padding:0px ! important;" > 
-                            <h:form id="selectRoleForm">  
-                                <table>
-                                    <tr>
-                                        <td>
-                                            <p:selectOneMenu value="#{userBean.selectedRole}" converter="UserrolesConverter" >									 
-                                                <f:selectItems value="#{sessionBean.users.userroles}" var="role" itemLabel="#{role.description}" itemValue="#{role}"   /> 
-                                            </p:selectOneMenu>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </h:form>
-                        </p:panel>
-                    </p:dialog> 
-                
+
                 </h:form>
+
+
+
+                <p:dialog id="selectRoleDialogID" header="#{bundle.selectRole}" widgetVar="selectRoleDialog" visible="false"  
+                          modal="true" resizable="false" position="center" parent="" >  
+
+
+                    <p:panel id="selectRolePanel" style="padding:0px ! important;" > 
+                        <h:form id="selectRoleForm"> 
+
+                            <table>
+                                <tr>
+                                    <td>
+                                   
+                                <p:selectOneMenu value="#{roleSelectionBean.selectedRole}" converter="UserrolesConverter"  onchange="" >									 
+                                    <f:selectItem itemLabel="#{bundle.selectRole}" itemValue=""  />
+                                    <f:selectItems value="#{roleSelectionBean.userroles}" var="userrole" itemLabel="#{userrole.role.description}" itemValue="#{userrole}"   />
+                                     <p:ajax update="@form" /> 
+                                </p:selectOneMenu>
+                                </td>
+                                </tr>
+
+                                <tr>                                    
+                                    <td>
+                                <p:commandButton update=":selectRolePanel" disabled="#{roleSelectionBean.selectedRole==null}" value="#{bundle.select}" oncomplete="selectRoleDialog.hide()" action="#{administrationAction.selectRole}"  />
+                                <p:commandButton value="#{bundle.cancel}" onclick="selectRoleDialog.hide()"  />
+
+                                </td>
+                                </tr>
+                            </table>
+
+                        </h:form>
+                    </p:panel>
+                </p:dialog> 
+
+
+
+
 
                 <div id="footer" class="ui-widget ui-widget-header ui-corner-all">
                     <ui:include src="templates/footerPara.xhtml" />				

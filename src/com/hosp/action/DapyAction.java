@@ -105,6 +105,25 @@ public class DapyAction implements Serializable {
             return "";
         }
     }
+    
+    public String refreshViewActions() {
+
+        try {            
+            AssertionBean assertionBean = (AssertionBean) FacesUtils.getManagedBean("assertionBean");
+            assertionBean.setSelectedResult(null);
+            ExAssertionDAO dao = new ExAssertionDAO();
+            assertionBean.setAssertionSearchResultBeanList(dao.assertionSearchResults(sessionBean.getUsers().getHospital(), assertionBean.getSearchByOpen(), assertionBean.getShowDeleted(),  null));
+
+            return "";
+        } catch (Exception e) {
+            e.printStackTrace();
+            sessionBean.setErrorMsgKey("errMsg_GeneralError");
+            goError(e);
+            return "";
+        }
+    }
+    
+    
 
     public void openSelectContractDialog() {
         try {
@@ -229,7 +248,7 @@ public class DapyAction implements Serializable {
             newAssertion.setExYear(assertionBean.getPeriod().getExYear());
             newAssertion.setExMonth(assertionBean.getPeriod().getExMonth());
             newAssertion.setEnabled(new BigDecimal(1));
-            newAssertion.setSubmission(assertionBean.getSelectedSubmissionType());
+            //newAssertion.setSubmission(assertionBean.getSelectedSubmissionType());
             newAssertion.setCode("Δ." + assertionBean.getPeriod().getName() + "."
                     + (assertionBean.getSelectedAssertionType().getAssertiontypeid().intValue() == 1 ? "K" : "Σ")
                     + "." + contractBean.getSelectedContract().getContractnumber());
@@ -800,8 +819,7 @@ public class DapyAction implements Serializable {
     }
 
     public List<Patients> completeSurnamePatient(String surname) {       
-        try {
-            System.out.println("AUTOCOMPLETE surname length="+surname.length());
+        try {            
             if (surname != null && !surname.trim().isEmpty() && surname.trim().length()>2) {
                 surname = surname.trim();
                 PatientsDAO patientDAO = new PatientsDAO();
@@ -1077,11 +1095,6 @@ public class DapyAction implements Serializable {
                     persistenceUtil.audit(sessionBean.getUsers(), new BigDecimal(SystemParameters.getInstance().getProperty("ACT_INSERTPATIENT")), null, null);
                     paraBean.setSelectedPatient(new PatientsDAO().fetchPatientFromDB(paraBean.getSelectedPatient()));
                     paraBean.getNewPara().setPatients(paraBean.getSelectedPatient());
-
-                    //paraBean.setSelectedPatient(persistenceHelper.editPersist(paraBean.getSelectedPatient()));
-                    //System.out.println("PAtients="+paraBean.getSelectedPatient());
-
-
 
                     FacesUtils.callRequestContext("selectPatient.hide();");
                 } else {

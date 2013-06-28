@@ -251,7 +251,7 @@ public class ExParaDAO {
         }
     }
 
-    public List<ExPara> getSearchParaResultSet(Hospital hospital, ExAssertion assertion, ExPeriod period, ExType type, Date fromExecutionDate,
+    public List<ExPara> getSearchParaResultSet(Hospital hospital, ExAssertion assertion, ExAssertionType assertionType, ExPeriod period, ExType type, Date fromExecutionDate,
             Date toExecutionDate, Date fromIssueDate, Date toIssueDate, String paraCode, Patients patient, String orderBy, final int... rowStartIdxAndCount) {
 
         try {
@@ -259,6 +259,7 @@ public class ExParaDAO {
             final String queryString = "select para from ExPara para where "
                     + " para.hospital= :hospital "
                     + (assertion != null ? " and para.exAssertion=:assertion " : " ")
+                    + (assertionType != null ? " and para.exAssertion.exAssertionType=:assertionType " : " ")
                     + (period != null ? " and para.exAssertion.exPeriod=:period " : " ")
                     + (type != null ? " and para.exType=:type " : " ")
                     + (fromExecutionDate != null ? " and para.executiondate>= :fromExecutionDate " : " ")
@@ -275,6 +276,9 @@ public class ExParaDAO {
             query.setParameter("hospital", hospital);
             if (assertion != null) {
                 query.setParameter("assertion", assertion);
+            }
+             if (assertionType != null) {
+                query.setParameter("assertionType", assertionType);
             }
             if (period != null) {
                 query.setParameter("period", period);
@@ -323,7 +327,7 @@ public class ExParaDAO {
         }
     }
 
-    public Long getSearchParaResultSet(Hospital hospital, ExAssertion assertion, ExPeriod period, ExType type, Date fromExecutionDate,
+    public Long getSearchParaResultSet(Hospital hospital, ExAssertion assertion, ExAssertionType assertionType, ExPeriod period, ExType type, Date fromExecutionDate,
             Date toExecutionDate, Date fromIssueDate, Date toIssueDate, String paraCode, Patients patient) {
 
         try {
@@ -331,6 +335,7 @@ public class ExParaDAO {
             final String queryString = "select count(para) from ExPara para where "
                     + " para.hospital= :hospital "
                     + (assertion != null ? " and para.exAssertion=:assertion " : " ")
+                    + (assertionType != null ? " and para.exAssertion.exAssertionType=:assertionType " : " ")
                     + (period != null ? " and para.exAssertion.exPeriod=:period " : " ")
                     + (type != null ? " and para.exType=:type " : " ")
                     + (fromExecutionDate != null ? " and para.executiondate>= :fromExecutionDate " : " ")
@@ -349,6 +354,9 @@ public class ExParaDAO {
             query.setParameter("hospital", hospital);
             if (assertion != null) {
                 query.setParameter("assertion", assertion);
+            }
+             if (assertionType != null) {
+                query.setParameter("assertionType", assertionType);
             }
             if (period != null) {
                 query.setParameter("period", period);
@@ -481,7 +489,7 @@ public class ExParaDAO {
 
     }
 
-    public List<StatisticsParaResultBean> statisticsPara(Hospital hospital, ExAssertion assertion, ExPeriod period, ExType type, Date fromExecutionDate,
+    public List<StatisticsParaResultBean> statisticsPara(Hospital hospital, ExAssertion assertion, ExAssertionType assertionType, ExPeriod period, ExType type, Date fromExecutionDate,
             Date toExecutionDate, ExExam exam) {
         try {
 //            System.out.println(assertion + " " + period + " " + type + " " + fromExecutionDate + " " + toExecutionDate + " " + toExecutionDate + " " + exam);
@@ -491,6 +499,7 @@ public class ExParaDAO {
                     + " from ExPara p LEFT OUTER JOIN p.exParaExamses pe  "
                     + " where p.hospital= :hospital " 
                     + (assertion != null ? " and p.exAssertion= :assertion " : " ") 
+                    + (assertionType != null ? " and p.exAssertion.exAssertionType= :assertionType " : " ") 
                     + (period != null ? " and p.exAssertion.exPeriod= :period " : " ")
                     + (type != null ? " and p.exType=:type " : " ")
                     + (fromExecutionDate != null ? " and p.executiondate>= :fromExecutionDate " : " ")
@@ -504,6 +513,10 @@ public class ExParaDAO {
             query.setParameter("hospital", hospital);
             if (assertion != null) {
                 query.setParameter("assertion", assertion);
+            }
+            
+            if (assertionType != null) {
+                query.setParameter("assertionType", assertionType);
             }
             if (period != null) {
                 query.setParameter("period", period);

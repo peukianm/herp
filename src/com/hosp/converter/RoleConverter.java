@@ -8,14 +8,12 @@ import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.ConverterException;
 
-import com.hosp.entities.Race;
-import com.hosp.entities.Relegion;
 import com.hosp.entities.Role;
 import com.hosp.util.EJBUtil;
 import com.hosp.util.PersistenceHelper;
 
 public class RoleConverter implements Converter {
-    
+
     private PersistenceHelper persistenceHelper = EJBUtil.lookupPersistenceHelperBean();
 
     public Object getAsObject(FacesContext facesContext, UIComponent component, String submittedValue) {

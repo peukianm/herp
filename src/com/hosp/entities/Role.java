@@ -24,6 +24,7 @@ public class Role implements java.io.Serializable {
     private BigDecimal roleid;
     private String name;
     private String description;
+    private Integer ordered;
     private Set<Users> userses = new HashSet<Users>(0);
 
     // Constructors
@@ -44,10 +45,11 @@ public class Role implements java.io.Serializable {
     /**
      * full constructor
      */
-    public Role(BigDecimal roleid, String name, String description, Set<Users> userses) {
+    public Role(BigDecimal roleid, String name, String description,Integer ordered, Set<Users> userses) {
         this.roleid = roleid;
         this.name = name;
         this.description = description;
+        this.ordered = ordered;
         this.userses = userses;
     }
 
@@ -89,6 +91,15 @@ public class Role implements java.io.Serializable {
         this.userses = userses;
     }
 
+    @Column(name = "ORDERED")
+    public Integer getOrdered() {
+        return this.ordered;
+    }
+
+    public void setOrdered(Integer ordered) {
+        this.ordered = ordered;
+    }
+    
     @Override
     public boolean equals(Object obj) {
         if (obj == null) {

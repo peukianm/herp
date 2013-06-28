@@ -4,19 +4,17 @@
  */
 package com.hosp.bean;
 
-import com.hosp.dao.ExAssertionDAO;
 import com.hosp.dao.ExPeriodDAO;
 import com.hosp.entities.ExAssertion;
+import com.hosp.entities.ExAssertionType;
 import com.hosp.entities.ExExam;
 import com.hosp.entities.ExPara;
-import com.hosp.entities.ExParaExams;
 import com.hosp.entities.ExPeriod;
 import com.hosp.entities.ExType;
 import com.hosp.entities.Patients;
 import com.hosp.entities.Users;
 import com.hosp.model.LazyParaDataModel;
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -30,6 +28,7 @@ import javax.faces.bean.ViewScoped;
 public class SearchParaBean implements Serializable {
 
     private ExAssertion searchByAssertion;
+    private ExAssertionType searchByAssertionType;  
     private ExType searchByType;
     private ExPeriod searchByPeriod;
     private Patients searchByPatient;
@@ -69,7 +68,7 @@ public class SearchParaBean implements Serializable {
     @PostConstruct
     public void init() {        
         try {
-            assertions = (new ExAssertionDAO()).getAssertions(sessionBean.getUsers().getHospital(), true, false);            
+            //assertions = (new ExAssertionDAO()).getAssertions(sessionBean.getUsers().getHospital(), true, false);            
             periods = (new ExPeriodDAO()).fetchPeriods(sessionBean.getUsers().getHospital(), Boolean.TRUE);
             if (sessionBean.getUsers().getRole().getRoleid().intValue() == 8) {                
                 setSearchFromExecutionDate(new Date());
@@ -87,6 +86,7 @@ public class SearchParaBean implements Serializable {
     @PreDestroy
     public void reset() {        
         searchByAssertion = null;
+        searchByAssertionType = null;
         searchByType = null;
         searchByPeriod = null;
         searchByPatient = null;
@@ -117,6 +117,14 @@ public class SearchParaBean implements Serializable {
     }
 
     
+    
+    public ExAssertionType getSearchByAssertionType() {
+        return searchByAssertionType;
+    }
+
+    public void setSearchByAssertionType(ExAssertionType searchByAssertionType) {
+        this.searchByAssertionType = searchByAssertionType;
+    }
     
     public ExExam getSelectedExamByName() {
         return selectedExamByName;
@@ -186,7 +194,7 @@ public class SearchParaBean implements Serializable {
     public void searchParaAction() {
 
         setProcessSearch(true);
-        paraModel.loadParams(searchByAssertion, searchByType, searchByPeriod, searchByPatient, searchFromExecutionDate,
+        paraModel.loadParams(searchByAssertion, searchByAssertionType, searchByType, searchByPeriod, searchByPatient, searchFromExecutionDate,
                 searchToExecutionDate, searchFromIssueDate, searchToIssueDate, searchByUser, serachByParaCode, sessionBean.getUsers().getHospital(), processSearch);
 
 

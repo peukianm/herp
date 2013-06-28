@@ -75,7 +75,7 @@ public class ExPeriod implements java.io.Serializable {
 		this.periodid = periodid;
 	}
 
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)  //UPDATED!!!!!!!!!!!!!!!!!!!
 	@JoinColumn(name = "HOSPITALID")
 	public Hospital getHospital() {
 		return this.hospital;
@@ -85,7 +85,7 @@ public class ExPeriod implements java.io.Serializable {
 		this.hospital = hospital;
 	}
 
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)  //UPDATED!!!!!!!!!!!!!!!!!!!
 	@JoinColumn(name = "YEARID", nullable = false)
 	public ExYear getExYear() {
 		return this.exYear;
@@ -95,7 +95,7 @@ public class ExPeriod implements java.io.Serializable {
 		this.exYear = exYear;
 	}
 
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY) //UPDATED!!!!!!!!!!!!!!!!!!!
 	@JoinColumn(name = "MONTHID", nullable = false)
 	public ExMonth getExMonth() {
 		return this.exMonth;
@@ -141,7 +141,7 @@ public class ExPeriod implements java.io.Serializable {
 		this.exParas = exParas;
 	}
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "exPeriod")
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "exPeriod")   //UPDATED !!!!!!!!!!!!!!!!!
 	public Set<ExAssertion> getExAssertions() {
 		return this.exAssertions;
 	}

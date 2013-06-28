@@ -158,7 +158,7 @@ public class ParaAction implements Serializable {
             dataTable.reset();
         }    
 
-        searchParaBean.getParaModel().loadParams(searchParaBean.getSearchByAssertion(), searchParaBean.getSearchByType(), searchParaBean.getSearchByPeriod(),
+        searchParaBean.getParaModel().loadParams(searchParaBean.getSearchByAssertion(), searchParaBean.getSearchByAssertionType(), searchParaBean.getSearchByType(), searchParaBean.getSearchByPeriod(),
                 searchParaBean.getSearchByPatient(), searchParaBean.getSearchFromExecutionDate(), searchParaBean.getSearchToExecutionDate(),
                 searchParaBean.getSearchFromIssueDate(), searchParaBean.getSearchToIssueDate(), searchParaBean.getSearchByUser(), searchParaBean.getSerachByParaCode(),
                 sessionBean.getUsers().getHospital(), true);
@@ -169,7 +169,7 @@ public class ParaAction implements Serializable {
         try {
             
             ExParaDAO dao = new ExParaDAO();
-            List<StatisticsParaResultBean> data = dao.statisticsPara(sessionBean.getUsers().getHospital(), searchParaBean.getSearchByAssertion(), searchParaBean.getSearchByPeriod(), searchParaBean.getSearchByType(),
+            List<StatisticsParaResultBean> data = dao.statisticsPara(sessionBean.getUsers().getHospital(), searchParaBean.getSearchByAssertion(), searchParaBean.getSearchByAssertionType(), searchParaBean.getSearchByPeriod(), searchParaBean.getSearchByType(),
                     searchParaBean.getSearchFromExecutionDate(), searchParaBean.getSearchToExecutionDate(), searchParaBean.getSearchByExam());
             
             searchParaBean.setStatisticsData(data);

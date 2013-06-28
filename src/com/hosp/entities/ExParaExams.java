@@ -78,7 +78,7 @@ public class ExParaExams implements java.io.Serializable {
         this.paraexamid = paraexamid;
     }
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)  //UPDATED !!!!!!!!!!!!!!!!!
     @JoinColumn(name = "EXAMID", nullable = false)
     public ExExam getExExam() {
         return this.exExam;

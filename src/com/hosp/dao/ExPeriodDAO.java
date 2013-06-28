@@ -222,6 +222,7 @@ public class ExPeriodDAO {
                     + " order by model.exYear.yearid DESC, model.exMonth.monthid DESC";
 
             Query query = getEntityManager().createQuery(queryString);
+            query.setMaxResults(48);
             query.setParameter("hospital", hospital);
 //			query.setHint("eclipselink.cache-usage", "CheckCacheThenDatabase");
             return query.getResultList();
