@@ -51,8 +51,8 @@ public class SystemParameters {
     public static String appRoot = "";
     
     //Testing purposes
-    private static int staticCounter = 0;
-    private int counter = 0;    
+//    private static int staticCounter = 0;
+//    private int counter = 0;    
 	 
 	private SystemParameters(){          
         super() ;         
@@ -64,8 +64,8 @@ public class SystemParameters {
 	        try
 	        {
 	            this.appRoot = appRoot;
-	        	staticCounter++;
-	            counter++;        
+//	           staticCounter++;
+//	            counter++;        
             
 	            // read the parameters
 	            FileInputStream in = new FileInputStream(parametersFile) ;

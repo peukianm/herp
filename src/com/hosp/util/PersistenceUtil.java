@@ -6,6 +6,8 @@ import com.hosp.entities.Patients;
 import com.hosp.entities.Users;
 import com.hosp.exception.HerpRollbackException;
 import java.math.BigDecimal;
+import java.sql.Connection;
+import java.sql.DriverManager;
 import java.util.Date;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -40,6 +42,138 @@ public class PersistenceUtil {
             throw e;
         }
 
+    }
+
+    public String getReportDataSQL1(String katastasiID) {
+        String sql =
+                "SELECT   A.*, "
+                + "B.ADMISSION_NUMBER, "
+                + "TRUNC (B.DISCHARGED_ON) \"DISCHARGED_ON\", "
+                + "TRUNC (B.ADMISSION_ON) \"ADMISSION_ON\", "
+                + "B.ADMISSION_ON, "
+                + "B.DISCHARGED_ON, "
+                + "B.INSERTED_ON, "
+                + "B.ADMISSION_NOTES, "
+                + "--R.INSERTED_ON "
+                + "1 \"REGISTRY_INSERTED_ON\", "
+                + "2 \"DESCRIPTION\", "
+                + "--E.DESCRIPTION, "
+                + "P.FATHER_NAME, "
+                + "R.DESCRIPTION \"BATHMOS\", "
+                + "L.DESCRIPTION \"SXESH\", "
+                + "IH.INSURANCE_STATUS, "
+                + "P.HOME_PHONE, "
+                + "P.ID, "
+                + "P.BIRTH_DATE, "
+                + "PT.EXPIRATIONDATE, "
+                + "PT.OGA_AM, "
+                + "PT.OGA_AM_CODE, "
+                + "P.AMKA,T.DESCRIPTION AS PERISTATIKO, "
+                + "reg.get_formated_am (A.ADMISSION_ID) \"AR.MHTR\", "
+                + "(select ken.code from ken where ken.service_id = A.SERVICE_ID) AS KEN, "
+                + " N.CLINIC_DESC, "
+                + " DECODE(A.SERVICE_ID,NULL,0,1)AS SERVICE_FLAG, "
+                + " PT.INSURANCEBOOK_ID, "
+                + "              ( "
+                + "    trunc(B.discharged_on) "
+                + "    - "
+                + "   (trunc(B.admission_on) + "
+                + " ( select sum(ken_pak.kenDays(ken_id, trunc(B.discharged_on))) from ken_admission where admission_id = B.admission_sn ) "
+                + " ) "
+                + " )AS HMERES_PERA_KEN "
+                + "   FROM   INS_TEMP A, "
+                + "          ADMISSIONS B, "
+                + "          INS_KATASTASI_HEADER IH, "
+                + "          PATIENTS P, "
+                + "          ARMY_BATHMOI R, "
+                + "          ARMY_INFO RI, "
+                + "          ARMY_RELATION L,"
+                + "          INSURANCE_TRANS IT, "
+                + "          PAT_TRANS_INS PT, "
+                + "          PERISTATIKA T, "
+                + "          BCLINICS N "
+                + "  WHERE   A.ADMISSION_ID = B.ADMISSION_SN AND B.PATIENT_ID = P.PATIENT_SN "
+                + "          AND IT.INSURE_SN = "
+                + "                (SELECT   MAX (Q.INSURE_SN) "
+                + "                   FROM   INSURANCE_TRANS Q "
+                + "                  WHERE   Q.FIRST = 1 AND Q.ADMISSION_ID = B.ADMISSION_SN) "
+                + "          AND RI.ADMISSION_ID(+) = b.ADMISSION_SN "
+                + "          AND RI.BATHMOS = R.SN(+) "
+                + "          AND RI.RELATION = L.SN(+) "
+                + "          AND A.KATASTASI_ID = IH.KATASTASI_ID "
+                + "          AND IT.PAT_TRANS_INS_ID = PT.PAT_TRANS_INS_SN "
+                + "          AND B.PERISTATIKO=T.PERISTATIKO_SN(+) "
+                + "          AND IT.CLINIC_ID=N.BCLINIC_ID(+) "
+                + "          AND A.KATASTASI_ID=" + katastasiID
+                + "          --and B.DISCHARGED_ON>='01/07/2013' AND B.DISCHARGED_ON <='01/07/2013' "
+                + "          ORDER BY A.A_A,A.SN,A.ADMISSION_ID ";
+
+
+        return sql;
+
+    }
+
+    public String getReportDataSQL2(String katastasiID) {
+        String sql =
+                "  select   "
+                //+ "      --ADM.ADMISSION_SN,  "
+                + "      P.PATIENT_SN,      P.FIRST_NAME,           P.LAST_NAME,         P.FATHER_NAME,    P.BIRTH_DATE,         P.AMKA,               P.SEX,                P.ID,               P.STREET,               C.CITY,  "
+                + "      P.COUNTRY,         P.POSTAL_CODE,         INS.EDAPY_CODE,       P.HOME_PHONE,     PT.insure_type_id,    PT.INSURE_STATUS_ID,  PT.INSURANCEBOOK_ID,  PT.OGA_AM,          PT.OGABOOKID,           PT.EXPIRATIONDATE,  "
+                + "      ADM.ADMISSION_SN, ADM.ADMISSION_NUMBER,   ADM.ADMISSION_NOTES, ADM.ADMISSION_ON,  ADM.DISCHARGED_ON,    EKV.EDAPY_CODE,       DIAG.DIAG_CODE,       DIAG.DESCRIPTION,   S1.EDAPY_CODE as seat,  PT.INSURE_TYPE_ID AS DIRECT,  "
+                + "      B.SERVICE_ID,      B.DATE_FROM,            B.DATE_TO,          B.REASON,          B.quantity,           B.FINAL_PRICE,        B.FPA_AMOUNT,         B.UNIT_PRICE,       B.TOTAL,                B.CLINIC_ID,   "
+                + "      CLI.CLINIC_DESC,    CLI.SECTOR,            B.SEAT_ID,          doct.doc_lname,    doct.doc_fname,       doct.amka,            PT.INSURANCE_ID,      pref.prefecture, "
+                + "      reg.get_formated_am (B.ADMISSION_ID) \"AR.MHTR\",  "
+                + "      (select ken.code from ken where ken.service_id = B.SERVICE_ID) AS KEN,  "
+                + "      ( trunc(adm.discharged_on) -(trunc(adm.admission_on) +( select sum(ken_pak.kenDays(ken_id, trunc(adm.discharged_on))) from ken_admission where admission_id = adm.admission_sn ) ) )AS HMERES_PERA_KEN  "
+                + " from  "
+                + "     bills b, admissions adm, patients p, INSURANCE_TRANS IT, PAT_TRANS_INS PT,  PERISTATIKA T,  BCLINICS N, INSURANCE INS,  "
+                + "     cities c,  "
+                + "     DIAGNOSIS diag,  "
+                + "     seats s1,  "
+                + "     EKVASI_NOSILIAS ekv,  "
+                + "     bclinics cli,  "
+                + "     docsperadmission da,  "
+                + "     doctors doct,  "
+                + "     prefectures pref  "
+                + " where  "
+                + "   B.ADMISSION_ID IN (select  unique A.ADMISSION_ID from INS_TEMP A  where A.KATASTASI_ID =" + katastasiID + ")  "
+                + "   and total!=0  "
+                + "   and B.ADMISSION_ID = ADM.ADMISSION_SN  "
+                + "   and P.PATIENT_SN = ADM.PATIENT_ID  "
+                + "   and PT.INSURANCE_ID = INS.INSURANCE_SN  "
+                + "   and P.CITY = C.CITY_SN(+)  "
+                + "   and EKV.EKVASI_SN = ADM.EKVASI_ID  "
+                + "   and ADM.DIAGNOSIS_OUT_ID=DIAG.DIAGNOSI_SN(+)  "
+                + "   and  B.SEAT_ID=S1.SEAT_SN(+)   "
+                + "   and B.ADMISSION_ID = da.admission_id(+)  "
+                + "   and da.doctor_ID = doct.doctor_sn(+)  "
+                + "   and B.CLINIC_ID = CLI.BCLINIC_ID(+)  "
+                + "   and P.PREFECTURE = pref.prefecture_SN(+)  "
+                + "   and IT.INSURE_SN =  "
+                + "                     (SELECT   MAX (Q.INSURE_SN)  "
+                + "                        FROM   INSURANCE_TRANS Q  "
+                + "                       WHERE   Q.FIRST = 1 AND Q.ADMISSION_ID = adm.ADMISSION_SN)         "
+                + "   and IT.PAT_TRANS_INS_ID = PT.PAT_TRANS_INS_SN  "
+                + "   and adm.PERISTATIKO=T.PERISTATIKO_SN(+)  "
+                + "   and IT.CLINIC_ID=N.BCLINIC_ID(+)  "
+                + " order by b.admission_id asc, KEN desc NULLS LAST  ";
+
+
+        return sql;
+    }
+
+    public Connection getConnection() {//throws Exception {    	
+        try {
+            Class.forName("oracle.jdbc.driver.OracleDriver");
+            Connection conn = DriverManager.getConnection("jdbc:oracle:thin:@" + SystemParameters.getInstance().getProperty("cteamip") + ":"
+                    + SystemParameters.getInstance().getProperty("cteamport") + ":" + SystemParameters.getInstance().getProperty("cteamsid"),
+                    SystemParameters.getInstance().getProperty("cteamusername"),
+                    SystemParameters.getInstance().getProperty("cteampassword"));
+            return conn;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
     /*	public static Double getUniqueOrderID(){
      try {

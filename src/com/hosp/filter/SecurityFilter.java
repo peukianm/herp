@@ -43,21 +43,21 @@ public class SecurityFilter implements Filter {
         HttpServletRequest hreq = (HttpServletRequest) request;
         HttpServletResponse hres = (HttpServletResponse) response;
         HttpSession session = hreq.getSession();
-        Enumeration<String> en = session.getAttributeNames();
+//        Enumeration<String> en = session.getAttributeNames();
 
 
         String checkforloginpage = hreq.getServletPath();
 
-        try {
-//            System.out.println("+++++++++++++++++++++");
-            //System.out.println("CHECKING FOR PAGE=" + checkforloginpage);
-//            System.out.println("SESSION=" + session);
-//            System.out.println("SESSIONBEAN=" + session.getAttribute("sessionBean"));
-//            System.out.println("USER=" + ((SessionBean) session.getAttribute("sessionBean")).getUsers());
-//            System.out.println("++++++++++++++++");
-        } catch (Exception e) {
-            // TODO: handle exception
-        }
+//        try {
+////            System.out.println("+++++++++++++++++++++");
+//            //System.out.println("CHECKING FOR PAGE=" + checkforloginpage);
+////            System.out.println("SESSION=" + session);
+////            System.out.println("SESSIONBEAN=" + session.getAttribute("sessionBean"));
+////            System.out.println("USER=" + ((SessionBean) session.getAttribute("sessionBean")).getUsers());
+////            System.out.println("++++++++++++++++");
+//        } catch (Exception e) {
+//            // TODO: handle exception
+//        }
         //String checkforloginpage = hreq.getPathTranslated();
         if (checkforloginpage == null) {
             checkforloginpage = "";
@@ -66,8 +66,7 @@ public class SecurityFilter implements Filter {
 
         //System.out.println("Checking for="+checkforloginpage);
         if ((request.getAttribute(FILTER_APPLIED) == null)
-                && (!checkforloginpage.endsWith("index.jsp"))
-                //&&(!checkforloginpage.endsWith("test.jsf")) 
+                && (!checkforloginpage.endsWith("index.jsp"))                
                 && (!checkforloginpage.endsWith("loginPage.jsf"))
                 && (!checkforloginpage.endsWith("error.jsf"))
                 && (checkforloginpage.contains("exoterika") || checkforloginpage.contains("templates"))) {
@@ -100,11 +99,11 @@ public class SecurityFilter implements Filter {
         //deliver request to next filter
 
 
-        if (!hreq.getRequestURI().startsWith(hreq.getContextPath() + ResourceHandler.RESOURCE_IDENTIFIER)) { // Skip JSF resources (CSS/JS/Images/etc)
-            hres.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1.
-            hres.setHeader("Pragma", "no-cache"); // HTTP 1.0.
-            hres.setDateHeader("Expires", 0); // Proxies.
-        }
+//        if (!hreq.getRequestURI().startsWith(hreq.getContextPath() + ResourceHandler.RESOURCE_IDENTIFIER)) { // Skip JSF resources (CSS/JS/Images/etc)
+//            hres.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1.
+//            hres.setHeader("Pragma", "no-cache"); // HTTP 1.0.
+//            hres.setDateHeader("Expires", 0); // Proxies.
+//        }
         chain.doFilter(request, response);
     }
 }

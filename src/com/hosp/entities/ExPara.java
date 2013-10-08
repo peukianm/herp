@@ -63,6 +63,7 @@ public class ExPara implements java.io.Serializable {
     private Timestamp createdTimestamp;
     private List<ExParaExams> exParaExamses = new ArrayList<ExParaExams>(0);
     private BigDecimal totalAmount;
+    private String barcode;
     
 
     // Constructors
@@ -97,7 +98,7 @@ public class ExPara implements java.io.Serializable {
             Patients patients, ExAssertion exAssertion, ExPeriod exPeriod, Users users, ExParaType exParaType, Date issuedate, Date approvaldate,
             Date executiondate, String doctorcode, String doctorname, String doctorsurname, String codctorcode, String cdoctorname, String cdoctorsurname,
             String receiptnumber, Date receiptdate, BigDecimal enabled, String codehealthunit, BigDecimal paranumber, Timestamp createdTimestamp,
-            List<ExParaExams> exParaExamses) {
+            List<ExParaExams> exParaExamses, String barcode) {
         this.parpapemptikoid = parpapemptikoid;
         this.exContract = exContract;
         this.hospital = hospital;
@@ -126,6 +127,7 @@ public class ExPara implements java.io.Serializable {
         this.createdTimestamp = createdTimestamp;
         this.exParaExamses = exParaExamses;
         this.exType = exType;
+        this.barcode = barcode;
     }
 
     // Property accessors
@@ -378,6 +380,16 @@ public class ExPara implements java.io.Serializable {
 
     public void setParacode(String paracode) {
         this.paracode = paracode;
+    }
+    
+    
+    @Column(name = "BARCODE", length = 60)
+    public String getBarcode() {
+        return barcode;
+    }
+
+    public void setBarcode(String barcode) {
+        this.barcode = barcode;
     }
 
     @Column(name = "PARANUMBER", nullable = false, precision = 22, scale = 0)

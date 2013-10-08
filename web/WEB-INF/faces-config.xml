@@ -246,6 +246,11 @@
   <managed-bean-class>com.hosp.action.PatientAction</managed-bean-class>
   <managed-bean-scope>request</managed-bean-scope>
  </managed-bean>
+  <managed-bean>
+  <managed-bean-name>kinisisAction</managed-bean-name>
+  <managed-bean-class>com.hosp.action.KinisisAction</managed-bean-class>
+  <managed-bean-scope>request</managed-bean-scope>
+ </managed-bean>
  
  <!-- 
  <navigation-rule>

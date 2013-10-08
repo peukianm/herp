@@ -22,6 +22,7 @@ import com.hosp.dao.ExAssertionDAO;
 import com.hosp.dao.ExParaExamsDAO;
 import com.hosp.dao.ExPeriodDAO;
 import com.hosp.dao.PatientsDAO;
+import com.hosp.dao.UsersDAO;
 import com.hosp.entities.Country;
 import com.hosp.entities.ExAssertion;
 import com.hosp.entities.ExExam;
@@ -46,6 +47,10 @@ import com.hosp.util.MessageBundleLoader;
 import com.hosp.util.PersistenceHelper;
 import com.hosp.util.PersistenceUtil;
 import com.hosp.util.SystemParameters;
+import com.hosp.util.WSUtil;
+import com.hosp.ws.ExamPrescription;
+import com.hosp.ws.Examination;
+import com.hosp.ws.GetExamPrescriptionResponse;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.math.RoundingMode;
@@ -1207,6 +1212,111 @@ public class DapyAction implements Serializable {
             sessionBean.setErrorMsgKey("errMsg_GeneralError");
             goError(e);
             return "";
+        }
+    }
+    
+    
+    public void getParaDataFromBarcode() {
+        try {    
+                        
+            ParaBean paraBean = (ParaBean) FacesUtils.getManagedBean("paraBean");
+            
+            if (paraBean.getNewPara().getBarcode()==null)
+                return;
+            
+            
+            GetExamPrescriptionResponse examPrescriptionResponse  = WSUtil.getParaFromEOPYY(paraBean.getNewPara().getBarcode(), sessionBean.getUsers().getHospital());
+            System.out.println("BARCODE="+paraBean.getNewPara().getBarcode());
+            System.out.println("examPrescriptionResponse="+examPrescriptionResponse);
+            System.out.println("examPrescriptionResponse.getExamPrescription()="+ examPrescriptionResponse.getExamPrescription());            
+            System.out.println("getExamPrescriptionResponse.getResponse()="+examPrescriptionResponse.getResponse());
+            
+            
+            if (examPrescriptionResponse==null || examPrescriptionResponse.getExamPrescription()==null ) {
+                FacesUtils.addInfoMessage(MessageBundleLoader.getMessage("noExamPrescriptionResponse"));
+                return;
+            }
+            
+            ExamPrescription examPrescription = examPrescriptionResponse.getExamPrescription();
+            
+            
+            System.out.println("examPrescription.getPatientMemberTypeId()="+examPrescription.getPatientMemberTypeId());
+            System.out.println("examPrescription.getPatientSocInsName()="+examPrescription.getPatientSocInsName());
+            System.out.println("examPrescription.getPatientSocialInsuranceId()="+examPrescription.getPatientSocialInsuranceId());                     
+            System.out.println("examPrescription.getPatientSocInsShortName()="+examPrescription.getPatientSocInsShortName());
+            System.out.println("examPrescription.getStatus()="+ examPrescription.getStatus());
+            
+            
+            //CHECKING PATIENT ENTRY
+            PatientsDAO patientsDAO = new PatientsDAO();
+            String amka = examPrescription.getPatientAMKA();
+            System.out.println("CHECKING AMKA");
+            if (amka!=null && CheckUtil.checkAmka(amka)) {
+                 List<Patients> patients = patientsDAO.findByAmka(examPrescription.getPatientAMKA());
+                 if (!patients.isEmpty()) {                     
+                     Patients patient = patients.get(0);
+                     paraBean.setExamPrescription(examPrescription);
+                     patient.setAddress(examPrescription.getPatientAddress());
+                     patient.setPhone(examPrescription.getPatientTelephone());
+                     patient.setName(examPrescription.getPatientFirstName());
+                     patient.setSurname(examPrescription.getPatientLastName());
+                     patient.setInsurancenumber(examPrescription.getPatientAMA());                     
+                     patient.setDateofbirth(examPrescription.getPatientBirthDate().getTime());
+                     System.out.println("examPrescription.getPatientMemberTypeId()="+examPrescription.getPatientMemberTypeId());
+                     System.out.println("examPrescription.getPatientSocInsName()="+examPrescription.getPatientSocInsName());
+                     System.out.println("examPrescription.getPatientSocialInsuranceId()="+examPrescription.getPatientSocialInsuranceId());                     
+                     System.out.println("examPrescription.getPatientSocInsShortName()="+examPrescription.getPatientSocInsShortName());
+                     System.out.println("examPrescription.getStatus()="+ examPrescription.getStatus());
+                                         
+                     
+                     patient = persistenceHelper.editPersist(patient);
+                     paraBean.getNewPara().setPatients(patient);                     
+                     //patient.setDirect(examPrescription.getPatientMemberTypeId())
+                     //patient.setInsurance(null);                     
+                 }            
+            }
+            
+            paraBean.getNewPara().setDoctorname(examPrescription.getDoctorFirstName());
+            paraBean.getNewPara().setDoctorsurname(examPrescription.getDoctorLastName());
+            //paraBean.getNewPara().setDoctorcode(examPrescription.getDoctorAMKA());
+            
+            paraBean.getNewPara().setIssuedate(examPrescription.getIssueDate().getTime());
+            paraBean.getNewPara().setApprovaldate(examPrescription.getIssueDate().getTime());
+            
+            Examination[] examinations = examPrescription.getExaminations();
+            
+            //List<ExParaExams> exams = new ArrayList<ExParaExams>();
+            //paraBean.setParaExams(new ArrayList<ExParaExams>());
+            
+            int size = paraBean.getParaExams().size();
+            for (int index=size-1; index>=0; index--) {
+                System.out.println("REMOVING INDEX="+index);
+                paraBean.getParaExams().remove(index);
+            }
+            
+            
+            
+            System.out.println("paraBean.getParExams="+paraBean.getParaExams());
+            System.out.println("paraBean.getParaExams().size="+paraBean.getParaExams().size());
+            
+            for (int g=0; g<examinations.length; g++) {
+                Examination examination = examinations[g];
+                String code = examination.getEDapiCode();
+                System.out.println("COde="+code);
+                ExParaExams paraExam = (new ExParaExamsDAO()).fetchParaExamFromExamCode(code, paraBean.getNewPara());        
+                //exams.add(paraExam);
+                paraBean.getParaExams().add(paraExam);            
+            }
+            
+            System.out.println("paraBean.getParaExams().size="+paraBean.getParaExams().size());
+            //paraBean.setParaExams(exams);                        
+            FacesUtils.addInfoMessage(MessageBundleLoader.getMessage("prescriptionDataInserted"));
+            
+                     
+        } catch (Exception e) {           
+            e.printStackTrace();
+            sessionBean.setErrorMsgKey("errMsg_GeneralError");
+            goError(e);            
         }
     }
 

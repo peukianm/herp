@@ -15,9 +15,9 @@ import com.hosp.util.SystemParameters;
 
 public class BootstrapServlet extends HttpServlet 
 {
-    private static final String CONTENT_TYPE = "text/html; charset=UTF-8"; 
+    //private static final String CONTENT_TYPE = "text/html; charset=UTF-8"; 
     private static String SYSTEM_PROPERTIES_FILE = new String() ; 
-    private static String MESSAGES_FILE = new String() ;     
+    //private static String MESSAGES_FILE = new String() ;     
     
     public void init(ServletConfig config) throws ServletException
     {

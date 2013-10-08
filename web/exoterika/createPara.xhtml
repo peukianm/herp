@@ -29,20 +29,26 @@
     <ui:define name="content">
 
 
-        <!--<h1 class="title ui-widget-header ui-corner-all">#{paraBean.newPara.parpapemptikoid!=null ? bundle.updatePara : bundle.insertPara } 
-        #{paraBean.newPara.parpapemptikoid!=null ?   '-' : ''}     #{paraBean.newPara.parpapemptikoid!=null ?   paraBean.newPara.paracode : ''}  </h1> -->
+        <!--<h1 class="title ui-widget-header ui-corner-all">{paraBean.newPara.parpapemptikoid!=null ? bundle.updatePara : bundle.insertPara } 
+        {paraBean.newPara.parpapemptikoid!=null ?   '-' : ''}     {paraBean.newPara.parpapemptikoid!=null ?   paraBean.newPara.paracode : ''}  </h1> -->
 
         <div class="entry" style="line-height:100%;" >
 
             <h:form id="createParaForm">
 
                 <!--<p:growl id="growlMsg" life="5000"   />  -->
-                <p:messages id="updateAssertionMsg" autoUpdate="true" severity="error,info"  />	         		   
+                <p:messages id="updateAssertionMsg" autoUpdate="true" severity="error,info"  />	
+                
+                <p:focus  for="barcode" />
+                <h:outputLabel value="barcode:" style="font-weight: bold" /><p:inputText required="false" size="20"  value="#{paraBean.newPara.barcode}" id="barcode" rendered="#{paraBean.newPara.parpapemptikoid==null}"/>
+                <p:spacer width="20" />
+                <p:commandButton id="barcodeAction"  value="#{bundle.getEOPYYParaData}" process="barcode,@this" action="#{dapyAction.getParaDataFromBarcode()}"  update="@form" rendered="#{paraBean.newPara.parpapemptikoid==null}" />                 
                 <p:panel id="createParaPanel" header="#{paraBean.newPara.parpapemptikoid!=null ? bundle.updateParaData  : bundle.insertParaData } #{paraBean.newPara.parpapemptikoid!=null ?   paraBean.newPara.paracode : ''}" 
                          toggleable="false" style="padding:0px ! important; width:100%;margin-bottom: 10px;" > 
+                    
+                     
+                    
                     <table  cellpadding="2" class="content1" >  
-
-
                         <tr>
                             <td><h:outputLabel value="#{bundle.assertionPeriod}:*" /></td>
                             <td colspan="2"> 
@@ -166,7 +172,7 @@
                         <tr>
                             <td><h:outputLabel value="#{bundle.searchByCode}:"/></td>
                             <td>   
-                                <p:focus  for="codeComplete" />
+                                
                                 <p:autoComplete   queryDelay="400" id="codeComplete" value="#{paraBean.selectedParaExamByCode}" completeMethod="#{dapyAction.completeCodeParaExam}" size="90"  
                                                   var="paraExam" itemLabel="#{paraExam.exExam.name} #{paraExam.exExam.code}" itemValue="#{paraExam}" 
                                                   converter="ParaExamConverter" forceSelection="true">  

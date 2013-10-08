@@ -300,6 +300,14 @@ public class FormatUtils {
      * Returns a string from the input timestamp in the designated format. Formats can be of the following types : <ul> <li> DD/MM/YYYY HH24:MI:SS <li>
      * DD/MM/YYYY <li> MM/DD/YYYY HH24:MI:SS <li> MM/DD/YYYY </ul?
      *
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     *
 
      *
      * @param timestamp is the epoc number to be used
@@ -506,5 +514,166 @@ public class FormatUtils {
         }
 
         return ((new DecimalFormat(help)).format(a));
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    private static boolean isWindowsOS() {
+        String osName = System.getProperty("os.name").toLowerCase();
+        return osName.startsWith("windows");
+    }
+
+    public static boolean isDateCorrect(String dateStr) {
+        boolean dateIsCorrect = true;
+        int day = (new Integer(dateStr.substring(0, 2))).intValue();
+        int month = (new Integer(dateStr.substring(3, 5))).intValue();
+        int year = (new Integer(dateStr.substring(6))).intValue();
+        if (year > 999) {
+            GregorianCalendar gc = new GregorianCalendar();
+            boolean leapYear = gc.isLeapYear(year);
+            if (month < 1 || month > 12) {
+                dateIsCorrect = false;
+            } else if (month == 1 || month == 3 || month == 5 || month == 7 || month == 8 || month == 10 || month == 12) {
+                if (day < 1 || day > 31) {
+                    dateIsCorrect = false;
+                }
+            } else if (day < 1 || day > 30) {
+                dateIsCorrect = false;
+            } else if (month == 2) {
+                if (leapYear && day > 29) {
+                    dateIsCorrect = false;
+                }
+                if (!leapYear && day > 28) {
+                    dateIsCorrect = false;
+                }
+            }
+        } else {
+            dateIsCorrect = false;
+        }
+        return dateIsCorrect;
+    }
+
+    public static String giveLeadingZeroes(String realVal, int fieldSize) {
+        String leadingZeroes = "";
+        for (int i = 0; i < fieldSize - realVal.length(); i++) {
+            leadingZeroes = (new StringBuilder()).append(leadingZeroes).append("0").toString();
+        }
+
+        return leadingZeroes;
+    }
+
+    public static String constructDateFieldForHL7(String realVal) {
+        String retField = "";
+        if (!"".equals(realVal)) {
+            String dateParts[] = realVal.split("/");
+            retField = (new StringBuilder()).append(retField).append(dateParts[2]).append(dateParts[1]).append(dateParts[0]).toString();
+        }
+        return retField;
+    }
+
+    public static String constructFloatFieldForHL7(String realVal) {
+        String retField = "";
+        if (-1 != realVal.indexOf(".")) {
+            String parts[] = realVal.split("\\.");
+            if (parts[1].length() == 1) {
+                retField = (new StringBuilder()).append(parts[0]).append(".").append(parts[1]).append("0").toString();
+            } else {
+                retField = (new StringBuilder()).append(parts[0]).append(".").append(parts[1]).toString();
+            }
+        } else if (-1 != realVal.indexOf(",")) {
+            String parts[] = realVal.split(",");
+            if (parts[1].length() == 1) {
+                retField = (new StringBuilder()).append(parts[0]).append(".").append(parts[1]).append("0").toString();
+            } else {
+                retField = (new StringBuilder()).append(parts[0]).append(".").append(parts[1]).toString();
+            }
+
+        } else {
+            retField = (new StringBuilder()).append(realVal).append(".00").toString();
+        }
+        return retField;
+    }
+
+    public static String makeDateString(boolean withSecs) {
+        String dateStr = "";
+        GregorianCalendar gc = new GregorianCalendar();
+        String yearStr = (new Integer(gc.get(1))).toString();
+        int month = (new Integer(gc.get(2))).intValue() + 1;
+        String monthStr = (new Integer(month)).toString();
+        if (monthStr.length() == 1) {
+            monthStr = (new StringBuilder()).append("0").append(monthStr).toString();
+        }
+        int day = gc.get(5);
+        String dayStr = (new Integer(day)).toString();
+        if (dayStr.length() == 1) {
+            dayStr = (new StringBuilder()).append("0").append(dayStr).toString();
+        }
+        int hour = gc.get(11);
+        String hourStr = (new Integer(hour)).toString();
+        if (hourStr.length() == 1) {
+            hourStr = (new StringBuilder()).append("0").append(hourStr).toString();
+        }
+        int minute = gc.get(12);
+        String minuteStr = (new Integer(minute)).toString();
+        if (minuteStr.length() == 1) {
+            minuteStr = (new StringBuilder()).append("0").append(minuteStr).toString();
+        }
+        if (withSecs) {
+            int second = gc.get(13);
+            String secondStr = (new Integer(second)).toString();
+            if (secondStr.length() == 1) {
+                secondStr = (new StringBuilder()).append("0").append(secondStr).toString();
+            }
+            dateStr = (new StringBuilder()).append(yearStr).append(monthStr).append(dayStr).append(hourStr).append(minuteStr).append(secondStr).toString();
+        } else {
+            dateStr = (new StringBuilder()).append(yearStr).append(monthStr).append(dayStr).append(hourStr).append(minuteStr).toString();
+        }
+        return dateStr;
+    }
+
+    public static String calculateDoubleGinToStr(double doubleVal, int intVal) {
+        String resultStr = (new Double(doubleVal * (double) intVal)).toString();
+        String modifiedStr = "";
+        String akerPart = "";
+        String decPart = "";
+        if (-1 == resultStr.indexOf("E")) {
+            akerPart = resultStr.substring(0, resultStr.indexOf("."));
+            decPart = resultStr.substring(resultStr.indexOf(".") + 1);
+        } else {
+            int indOfE = resultStr.indexOf("E");
+            String last = resultStr.substring(indOfE + 1);
+            int lastInt = (new Integer(last)).intValue();
+            String tempAker = resultStr.substring(0, resultStr.indexOf("."));
+            String tempDecPart = resultStr.substring(resultStr.indexOf(".") + 1, indOfE);
+            String tempDecPart2 = tempDecPart.substring(0, lastInt);
+            akerPart = (new StringBuilder()).append(tempAker).append(tempDecPart2).toString();
+            decPart = tempDecPart.substring(lastInt);
+        }
+        if (decPart.length() > 0 && !"0".equals(decPart)) {
+            if (decPart.length() > 2) {
+                Long aker = new Long(akerPart);
+                Integer first = new Integer(decPart.substring(0, 1));
+                Integer second = new Integer(decPart.substring(1, 2));
+                Integer third = new Integer(decPart.substring(2, 3));
+                if (third.intValue() > 5) {
+                    second = Integer.valueOf(second.intValue() + 1);
+                    if (second.intValue() == 10) {
+                        second = Integer.valueOf(0);
+                        first = Integer.valueOf(first.intValue() + 1);
+                        if (first.intValue() == 10) {
+                            first = Integer.valueOf(0);
+                            aker = Long.valueOf(aker.longValue() + 1L);
+                        }
+                    }
+                }
+                modifiedStr = (new StringBuilder()).append(aker.toString()).append(",").append(first.toString()).append(second.toString()).toString();
+            } else if (decPart.length() == 1) {
+                modifiedStr = (new StringBuilder()).append(akerPart).append(",").append(decPart).append("0").toString();
+            } else {
+                modifiedStr = (new StringBuilder()).append(akerPart).append(",").append(decPart).toString();
+            }
+        } else {
+            modifiedStr = (new StringBuilder()).append(akerPart).append(",00").toString();
+        }
+        return modifiedStr;
     }
 }

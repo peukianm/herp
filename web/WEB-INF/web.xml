@@ -128,7 +128,7 @@
         <mime-type>text/x-component</mime-type>
     </mime-mapping>
     <session-config>
-        <session-timeout>35</session-timeout>
+        <session-timeout>50</session-timeout>
     </session-config>
     <error-page>
         <location>/templates/error.jsf</location>

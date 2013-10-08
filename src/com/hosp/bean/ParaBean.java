@@ -18,6 +18,7 @@ import com.hosp.entities.ExPara;
 import com.hosp.entities.ExParaExams;
 import com.hosp.entities.Patients;
 import com.hosp.util.FacesUtils;
+import com.hosp.ws.ExamPrescription;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -52,9 +53,8 @@ public class ParaBean implements Serializable {
     
     private Map<ExExam, Boolean> selectedExams = new HashMap<ExExam, Boolean>();
     
-     
-    
-
+    private ExamPrescription examPrescription;
+   
     @PostConstruct
     public void init() {        
         try {
@@ -127,8 +127,18 @@ public class ParaBean implements Serializable {
         paraExamsModel = null;
         tempExParaExams = new ArrayList<ExParaExams>();
         selectedExams = new HashMap<ExExam, Boolean>();
+        examPrescription = null;
     }
 
+    
+    
+    public ExamPrescription getExamPrescription() {
+        return examPrescription;
+    }
+
+    public void setExamPrescription(ExamPrescription examPrescription) {
+        this.examPrescription = examPrescription;
+    }
     
     public Map<ExExam, Boolean> getSelectedExams() {
         return selectedExams;
@@ -258,8 +268,8 @@ public class ParaBean implements Serializable {
         this.selectedPatientBySurname = selectedPatientBySurname;
     }
 
-    public DataModel<ExParaExams> getParaExamsModel() {
-        if (paraExamsModel == null) {
+    public DataModel<ExParaExams> getParaExamsModel() {        
+        if (paraExamsModel == null) {            
             paraExamsModel = new ListDataModel<ExParaExams>(paraExams);
         }
         return paraExamsModel;

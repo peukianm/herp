@@ -1,0 +1,475 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="templates/uiKinisis.xhtml"> 
+
+    <ui:define name="head">
+        <style type="text/css">
+            .ui-confirm-dialog-severity {
+                margin: 0 7px 7px 0;
+            }
+        </style>
+    </ui:define>
+
+    <ui:define name="content">
+        <p:messages id="opsnMsg" redisplay="false" autoUpdate="true" severity="error,fatal"  />
+        
+        
+        
+        <table style="width: 100%" >
+              <tr>
+                <td style="width: 4%;vertical-align: top;padding-right: 40px">
+                    <h:form> 
+                     <p:fieldset legend="#{bundle.currentUser}" toggleable="false" toggleSpeed="500" >
+                         
+                         <table>   
+                            <tr> 
+                                <td style="font-weight: bold;width: 31%;text-align: right"><h:outputLabel value="#{bundle.healthUnitAbb}:" /></td>
+                                <td><h:outputText value="#{sessionBean.users.hospital.name}" /></td>
+                            </tr>       
+                            <tr>
+                                <td style="font-weight: bold;width: 31%;text-align: right"><h:outputLabel value="#{bundle.user}:" /></td>
+                                <td><h:outputText value="#{sessionBean.users.username}" /> </td>
+                            </tr>
+                        </table>     
+                         <p:menu > 		                             
+                            <p:menuitem value="#{bundle.disconnect}"  onclick="disconnectDlg.show()" icon="ui-icon-close"  />           	         	
+                        </p:menu> 		
+                    </p:fieldset>
+                    </h:form>     
+                </td>
+                  
+                  <td style="width: 10%;vertical-align: top"> 
+                    <h:form id="opsnForm">          	                     		   		                                          
+                        <p:fieldset legend="#{bundle.reportData}" styleClass="" style="padding:10px;"  >
+                            <table style="">
+                                <tr >
+                                    <td><h:outputLabel value="#{bundle.reportCode}:" style="font-weight: bolder; font-size: 11px "/> </td>
+                                    <td><p:inputText value="#{kinisisAdmissionBean.opsnListNumber}" size="8" required="true" requiredMessage="#{bundle.reportCode}: #{bundle.mandatoryField}"  /> *</td>
+                                </tr>
+                                <tr>
+                                    <td><p:commandButton value="#{bundle.search}" action="#{kinisisAction.fetchOPSNData}" update="opsnForm,:dischargeForm,:errorForm"  />  </td>
+                                </tr>                                    
+                            </table>
+
+                        </p:fieldset>	
+                    </h:form>                
+                </td>
+                                    
+                  
+                <td style="width: 60%;vertical-align: top">      
+                  <h:form id="tableForm">   
+                    <p:fieldset legend="#{bundle.data}" toggleable="false"  toggleSpeed="500" styleClass="" style="padding:10px; width: 70%"  >
+                        <table style="">
+                            <tr >                                
+                                <td><h:outputLabel value="#{bundle.selectYear}*" style="font-weight: bolder; font-size: 11px "/></td>
+                                <td style="padding-right: 20">
+                                    <p:selectOneMenu value="#{kinisisAdmissionBean.year}" converter="YearConverter"  >									 
+                                        <f:selectItems value="#{applicationListBean.years}" var="year" itemLabel="#{year.name}" itemValue="#{year}"   /> 
+                                    </p:selectOneMenu>								     	
+                                </td >
+                                <td><h:outputLabel value="#{bundle.selectMonth}*" style="font-weight: bolder; font-size: 11px "/></td>
+                                <td style="padding-right: 20">    
+                                    <p:selectOneMenu id="monthsss" value="#{kinisisAdmissionBean.month}" converter="MonthConverter" >									 
+                                        <f:selectItems value="#{applicationListBean.months}" var="month" itemLabel="#{month.name}" itemValue="#{month}"   />
+                                    </p:selectOneMenu>	 	   		     	
+                                </td>
+                                <td><h:outputLabel value="#{bundle.reportType}*" style="font-weight: bolder; font-size: 11px "/></td>
+                                <td style="padding-right: 20">
+                                    <p:selectOneMenu value="#{kinisisAdmissionBean.admissionType}" effect="fade"  >									                                         
+                                        <f:selectItems value="#{applicationListBean.assertionTypes}" var="asstype" itemLabel="#{asstype.name}" itemValue="#{asstype}"   /> 
+                                    </p:selectOneMenu>		   		     	
+                                </td>
+                                <td><h:outputLabel value="#{bundle.submissionType}*" style="font-weight: bolder; font-size: 11px "/></td>
+                                <td style="padding-right: 20px">
+                                    <p:selectOneMenu value="#{kinisisAdmissionBean.submissionType}" effect="fade"  >									 
+                                        <f:selectItem itemLabel="#{bundle.manual}" itemValue="0"  />
+                                        <f:selectItem itemLabel="#{bundle.electronic}" itemValue="1"  /> 
+                                    </p:selectOneMenu>
+
+                                </td>                                 
+                            </tr>                           
+                        </table>
+                    </p:fieldset>
+                  </h:form>    
+                </td>
+               
+                <td style="width: 15%;vertical-align: top"> 
+                    <h:form id="errorForm">          	                     		   		                                          
+                        <p:fieldset legend="#{bundle.errors}" styleClass="" style="padding:10px; background-color: red" rendered="#{kinisisAdmissionBean.errors.size() gt 0}"  >
+                            <table style="">
+                                <tr >
+                                    <td>
+                                         <p:commandButton id="errorBtn" value="#{bundle.showErrors}" type="button" /> 
+                                                                                                                                        
+                                    </td>                                    
+                                </tr>                                                                   
+                            </table>
+
+                        </p:fieldset>	
+                    </h:form>                
+                </td>  
+                  
+                  
+            </tr>             
+        </table>
+
+        
+        <p:overlayPanel id="errorPanel" for="errorForm:errorBtn" hideEffect="fade" dynamic="true">  
+            <p:dataTable id="errorTable" var="error" value="#{kinisisAdmissionBean.errors}" rows="20" paginator="true" > 
+
+                <p:column headerText="#{bundle.admission}"  style="width: 5%;" >                         
+                    <h:outputText value="#{error.admissionAM}" /> 
+                </p:column>
+
+                <p:column headerText="#{bundle.code}"  style="width: 5%; " >                         
+                    <h:outputText value="#{error.errorCode}" /> 
+                </p:column>
+
+                <p:column headerText="#{bundle.message}"  style="width: 30%; " >                         
+                    <h:outputText value="#{error.errorMsg}" /> 
+                </p:column>                                                 
+
+           </p:dataTable>  
+        </p:overlayPanel> 
+
+        
+
+        <h:form id="dischargeForm">
+
+                <p:fieldset legend="#{bundle.discharges}" toggleable="false" toggleSpeed="500" styleClass="" style="padding:14px;"  >
+                    <p:dataTable var="result" value="#{kinisisAdmissionBean.admission.discharges}" paginator="true" rows="50"  rowKey="#{result.dischargeNumber}" editable="true"  selectionMode="single"               
+                                 emptyMessage="#{bundle.noRecordsFound}"   selection="#{kinisisAdmissionBean.selectedDischarge}" id="dischargeTable" rowStyleClass="#{result.errorCode.size() gt 0 ?'red' :''}">   > 
+                     
+                       <!-- <p:ajax event="rowEdit" listener="{kinisisAction.editRow}" update=":form" />  -->
+                        
+                        <p:ajax event="rowSelect" listener="#{tableBean.onRowSelect}" update=":dischargeForm" oncomplete="PF('dischargeDialog').show()" />  
+                        <p:column headerText="#{bundle.id}"  sortBy="#{result.dischargeNumber}" style="width: 6px; white-space: normal;" >                         
+                            <h:outputText value="#{result.dischargeNumber}" />   ----- #{result.errorCode.size()}                          
+                        </p:column>
+                        
+                        <p:column headerText="#{bundle.patient}"  sortBy="#{result.patientSurname} " style="width: 30px; white-space: normal;" >  
+                            <h:outputText value="#{result.patientSurname} #{result.patientFirstName}" />  
+                        </p:column>
+                        
+                        <p:column headerText="#{bundle.AMKA}"  sortBy="#{result.patientAMKA}" style="width: 20px; white-space: normal;" >  
+                            <h:outputText value="#{result.patientAMKA}" />  
+                        </p:column>
+                        
+                        <!--<p:column headerText="#{bundle.address}"  sortBy="#{result.patientAddress}" style="width: 20px; white-space: normal;" >  
+                            <h:outputText value="#{result.patientAddress}" />  
+                        </p:column>
+                        
+                        <p:column headerText="#{bundle.phone}"  sortBy="#{result.patientPhone}" style="width: 20px; white-space: normal;" >  
+                            <h:outputText value="#{result.patientPhone}" />  
+                        </p:column> --> 
+                        
+                        
+                        <p:column headerText="#{bundle.admissionDate}"  sortBy="#{result.admissionDate}" style="width: 10px; white-space: normal;" >  
+                            <h:outputText value="#{result.admissionDate}" converter="DateConverter" />  
+                        </p:column>
+                        
+                        <p:column headerText="#{bundle.dischargeDate}"  sortBy="#{result.dischargeDate}" style="width: 10px; white-space: normal;" >  
+                            <h:outputText value="#{result.dischargeDate}" converter="DateConverter"/>  
+                        </p:column>
+                        
+                        <p:column headerText="#{bundle.diagnose}"   style="width: 10px; white-space: normal;" >  
+                            <h:outputText value="#{result.dischargeDiagnoses.get(0).code}" />  
+                        </p:column>
+                        
+                        <p:column headerText="#{bundle.charges}"   style="width: 10px; white-space: normal;" >  
+                           
+                            <p:commandLink immediate="true"  action="viewChargesDialog.show();" 
+                                           update=":viewChargesDialogForm" style="color:blue;text-decoration: underline;font-weight:bold;" >  
+                                <h:outputText value="#{bundle.charges}" />
+                                <f:setPropertyActionListener value="#{result}" target="#{kinisisAdmissionBean.selectedDischarge}" />    
+                            </p:commandLink> 
+                            
+                        </p:column>
+                        
+                       <!-- <p:column headerText="#{bundle.errors}"   style="width: 10px; white-space: normal;" >  
+                            <h:graphicImage rendered="#{result.errorCode.size()>0  || result.charges.errorCode.size()>0}" url="../images/close.jpg" width="14px" height="14px" />
+                            <h:graphicImage rendered="#{result.errorCode.size==0  and  result.charges.errorCode.size()==0}" url="../images/success.gif" width="14px" height="14px" />
+                        </p:column> -->
+                        
+                    </p:dataTable>
+                </p:fieldset>       
+        </h:form>
+
+
+        <h:form id="viewChargesDialogForm">              
+            <p:dialog id="viewChargesDialog" header="#{bundle.charges}" widgetVar="viewChargesDialog"  modal="true" resizable="false" closable="true" >  
+
+                <p:panel id="viewChargesPanel" header="#{bundle.chargesList}- #{kinisisAdmissionBean.selectedDischarge.admissionNumber}" style="padding:0px ! important;" >  		   		  
+
+                    <p:dataTable var="charge" value="#{kinisisAdmissionBean.selectedDischarge.charges}"  paginator="true" rows="15" emptyMessage="#{bundle.noRecordsFound}" 
+                                 selection="#{kinisisAdmissionBean.selectedCharge}" rowKey="#{charge.chargeCode}" id="chatgeTable" > 
+                        
+                        <p:column headerText="#{bundle.chargeType}"  style="width: 6px; white-space: normal;" >  
+                             <h:outputText value="#{charge.chargeType}" />  
+                        </p:column>
+
+                        <p:column headerText="#{bundle.chargeCode}"  style="width: 10px; white-space: normal;" >  
+                             <h:outputText value="#{charge.chargeCode}" />  
+                        </p:column>
+
+                        <p:column headerText="#{bundle.admissionDate}"  style="width: 10px; white-space: normal;" >  
+                             <h:outputText value="#{charge.admissionDate}" />  
+                        </p:column>
+
+                        <p:column headerText="#{bundle.dischargeDate}"  style="width: 10px; white-space: normal;" >  
+                             <h:outputText value="#{charge.dischargeDate}" />  
+                        </p:column>
+
+                        <p:column headerText="#{bundle.chargeAmount}"  style="width: 10px; white-space: normal;" >  
+                             <h:outputText value="#{charge.chargeAmount}" />  
+                        </p:column>
+
+                        <p:column headerText="#{bundle.prescriptionDoctor}"  style="width: 10px; white-space: normal;" >  
+                             <h:outputText value="#{charge.prescriptionDoctor}" />  
+                        </p:column>
+
+                         <p:column headerText="#{bundle.sector}"  style="width: 10px; white-space: normal;" >  
+                             <h:outputText value="#{charge.treatmentSector}" />  
+                        </p:column>
+
+                         <p:column headerText="#{bundle.seat}"  style="width: 10px; white-space: normal;" >  
+                             <h:outputText value="#{charge.treatmentPosition}" />  
+                        </p:column>                                                                          
+                    </p:dataTable>
+                    
+                    <p:commandButton value="#{bundle.return}"  oncomplete="viewChargesDialog.hide()"/>
+                </p:panel>
+            </p:dialog> 
+        </h:form>   
+        
+        
+        
+        
+      
+        
+        
+        
+        
+        
+        
+       
+        
+
+        <p:dialog header="#{bundle.dischargeData}" widgetVar="dischargeDialog" resizable="false"  
+              width="600" showEffect="explode" hideEffect="explode" >  
+  
+            <p:ajax event="close"  listener="#{dialogBean.handleClose}"/> 
+            <h:panelGrid id="display" columns="8" cellpadding="4">  
+  
+            <!--<f:facet name="header">  
+                <p:graphicImage value="/images/cars/#{tableBean.selectedCar.manufacturer}.jpg"/>  
+            </f:facet>  -->
+  
+            <h:outputText value="#{bundle.name}" />  
+            <h:inputText value="#{kinisisAdmissionBean.selectedDischarge.patientName}"/> 
+            
+            <h:outputText value="#{bundle.patientAMKA}" />  
+            <h:inputText value="#{kinisisAdmissionBean.selectedDischarge.patientAMKA}"/> 
+            
+            <h:outputText value="#{bundle.patientAMA}" />  
+            <h:inputText value="#{kinisisAdmissionBean.selectedDischarge.patientAMA}"/>
+            
+            <h:outputText value="#{bundle.patientInsurance}" />  
+            <p:selectOneRadio id="insuranceid" value="{kinisisAdmissionBean.selectedDischarge.patientInsurance}">
+                <f:selectItem itemLabel='' itemValue='' />
+                <f:selectItem itemLabel='ΟΠΑΔ' itemValue='10000' />
+                <f:selectItem itemLabel='ΙΚΑ' itemValue='21001' />
+                <f:selectItem itemLabel='ΑΣΦΑΛΙΣΤΙΚΗ ΕΘΝΙΚΗ' itemValue='21006' />
+                <f:selectItem itemLabel='ΤΑΠ-ΕΤΒΑ' itemValue='21011' />
+                <f:selectItem itemLabel='ΤΑΠ-ΟΤΕ' itemValue='21012' />
+                <f:selectItem itemLabel='ΟΑΕΕ' itemValue='21013' />
+                <f:selectItem itemLabel='ΕΤΑΑ' itemValue='21018' />
+                <f:selectItem itemLabel='ΤΣΑΥ' itemValue='21019' />
+                <f:selectItem itemLabel='ΤΣΜΕΔΕ' itemValue='21020' />
+                <f:selectItem itemLabel='ΤΑΠ-ΔΕΗ' itemValue='21026' />
+                <f:selectItem itemLabel='ΟΓΑ' itemValue='21027' />
+                <f:selectItem itemLabel='ΕΤΑΠ-ΜΜΕ' itemValue='21040' />
+                <f:selectItem itemLabel='ΕΤΑΑ-ΤΑΝ' itemValue='21099' />
+                <f:selectItem itemLabel='ΤΑΣ' itemValue='22022' />
+                <f:selectItem itemLabel='ΤΑΠ-ΗΣΑΠ' itemValue='23004' />
+                <f:selectItem itemLabel='ΤΑΠ-ΗΛΠΑΠ' itemValue='23003' />
+                <f:selectItem itemLabel='ΤΥΔΚΥ' itemValue='23005' />
+                <f:selectItem itemLabel='ΤΑΠ-ΕΤΕ' itemValue='23006' />
+                <f:selectItem itemLabel='ΤΥΔΕ-ΤΠΔΕ' itemValue='23008' />
+                <f:selectItem itemLabel='ΤΠΔΑ' itemValue='23011' />
+                <f:selectItem itemLabel='ΤΥΔΠ' itemValue='23012' />
+                <f:selectItem itemLabel='ΤΠΔΘ' itemValue='23013' />
+                <f:selectItem itemLabel='ΤΑΠΤΠΓΑΕ' itemValue='23014' />
+                <f:selectItem itemLabel='ΟΙΚΟΣ ΝΑΥΤΟΥ' itemValue='33002' />
+                <f:selectItem itemLabel='ΟΓΑ ΥΠΑΛΛΗΛΟΙ' itemValue='21127' />
+                <f:selectItem itemLabel='ΤΥΠΑΤΕ' itemValue='23016' />
+                <f:selectItem itemLabel='ΤΑΥΤΕΚΩ' itemValue='22080' />
+            </p:selectOneRadio>
+            
+            
+            
+            
+            <h:outputText value="#{bundle.typeInsurance}" /> 
+            <p:selectOneRadio id="insuranceType" value="{kinisisAdmissionBean.selectedDischarge.patientDirectInsurance}">  
+                <f:selectItem itemLabel="" itemValue="" />  
+                <f:selectItem itemLabel="Άμεσα" itemValue="1" />  
+                <f:selectItem itemLabel="Έμεσα" itemValue="2" />                                                                
+            </p:selectOneRadio>
+            
+            <h:outputText value="#{bundle.patientAddress}" />  
+            <h:inputText value="#{kinisisAdmissionBean.selectedDischarge.patientAddress}"/> 
+            
+            <h:outputText value="#{bundle.dateOfBirth}" />  
+            <h:inputText value="#{kinisisAdmissionBean.selectedDischarge.patientDateOfBirth}"/> 
+            
+            <h:outputText value="#{bundle.phone}" />  
+            <h:inputText value="#{kinisisAdmissionBean.selectedDischarge.patientPhone}"/> 
+            
+            
+            
+            
+            
+            <h:outputText value="#{bundle.admissionDate}" />  
+             <h:inputText value="#{kinisisAdmissionBean.selectedDischarge.admissionDate}"/>
+             
+            <h:outputText value="#{bundle.dischargeDate}" />  
+            <h:inputText value="#{kinisisAdmissionBean.selectedDischarge.dischargeDate}"/>
+
+            <h:outputText value="#{bundle.treatmentDoctor}" />  
+            <h:inputText value="#{kinisisAdmissionBean.selectedDischarge.treamentDoctor}"/>
+
+            <h:outputText value="#{bundle.diagnoseCode}" />  
+            <h:inputText value="#{kinisisAdmissionBean.selectedDischarge.dischargeDiagnoses.get(0).code}"/>
+            
+            <h:outputText value="#{bundle.diagnoseDescription}" />  
+            <h:inputText value="#{kinisisAdmissionBean.selectedDischarge.dischargeDiagnoses.get(0).description}"/>
+            
+            
+            
+           <!-- 
+            
+             <h:outputText value="#{bundle.justifySeat}" />  
+             <h:inputText value="#{kinisisAdmissionBean.selectedDischarge.admissionPossition}"/>
+            
+           --> 
+            
+  
+        </h:panelGrid>  
+      </p:dialog>  
+        
+        
+        
+        
+        <!--
+        
+        <p:selectOneRadio id="seats" value="{}">  
+            <f:selectItem itemLabel="" itemValue="" />  
+            <f:selectItem itemLabel="Γ" itemValue="1" />  
+            <f:selectItem itemLabel="Ββ" itemValue="2" /> 
+            <f:selectItem itemLabel="Βα" itemValue="3" />  
+            <f:selectItem itemLabel="Α" itemValue="4" />
+            <f:selectItem itemLabel="Πολυτελείας" itemValue="5" />                                      
+        </p:selectOneRadio> 
+        
+        <p:selectOneRadio id="sectors" value="{}">  
+            <f:selectItem itemLabel="" itemValue="" />  
+            <f:selectItem itemLabel="Παθολογικός" itemValue="1" />  
+            <f:selectItem itemLabel="Χειρουργικός" itemValue="2" /> 
+            <f:selectItem itemLabel="Ψυχιατρικός" itemValue="3" />                                                    
+        </p:selectOneRadio>
+
+
+        <p:selectOneRadio id="genders" value="{}">  
+            <f:selectItem itemLabel="" itemValue="" />  
+            <f:selectItem itemLabel="Αρρεν" itemValue="1" />  
+            <f:selectItem itemLabel="Θήλυ" itemValue="2" /> 
+            <f:selectItem itemLabel="Άλλο" itemValue="3" />                                                    
+        </p:selectOneRadio>
+        
+        <p:selectOneRadio id="deathSign" value="{}">  
+            <f:selectItem itemLabel="" itemValue="" />  
+            <f:selectItem itemLabel="Οχι Θανατος" itemValue="0" />  
+            <f:selectItem itemLabel="Πριν το Χειρουργείο " itemValue="1" /> 
+            <f:selectItem itemLabel="Κατά τη Διάρκεια του Χειρουργείου" itemValue="2" />                                                    
+            <f:selectItem itemLabel="Μετά το πέρας του Χειρουργείου" itemValue="3" />
+        </p:selectOneRadio>
+        
+         <p:selectOneRadio id="insuranceType" value={}">  
+            <f:selectItem itemLabel="" itemValue="" />  
+            <f:selectItem itemLabel="Άμεσα" itemValue="1" />  
+            <f:selectItem itemLabel="Έμεσα" itemValue="2" />                                                                
+        </p:selectOneRadio>
+        
+        
+        <p:selectOneRadio id="chargeType" value="{}">  
+            <f:selectItem itemLabel="" itemValue="" />  
+            <f:selectItem itemLabel="KEN" itemValue="6" />  
+            <f:selectItem itemLabel="Ημ. Νοσήλιο" itemValue="1" /> 
+            <f:selectItem itemLabel="Φάρμακα" itemValue="2" />  
+            <f:selectItem itemLabel="Ίατρικές Πράξεις" itemValue="3" />
+            <f:selectItem itemLabel="Υλικά" itemValue="9" /> 
+            <f:selectItem itemLabel="Ειδικά Έξοδα" itemValue="5" /> 
+        </p:selectOneRadio> 
+        
+        
+         <p:selectOneRadio id="nosilioType" value="{}">  
+            <f:selectItem itemLabel="" itemValue="" />  
+            <f:selectItem itemLabel="ΜΕΘ 1-3" itemValue="00019" />  
+            <f:selectItem itemLabel="ΜΕΘ 4-15" itemValue="00020" /> 
+            <f:selectItem itemLabel="ΜΕΘ >16" itemValue="00021" /> 
+            <f:selectItem itemLabel="Μον. Αυξ. Φροντίδας" itemValue="00022" /> 
+            <f:selectItem itemLabel="Παθ. Γ" itemValue="00001" />
+            <f:selectItem itemLabel="Παθ. Ββ" itemValue="00002" /> 
+            <f:selectItem itemLabel="Παθ. Βα" itemValue="00003" /> 
+            <f:selectItem itemLabel="Παθ. A" itemValue="00004" />
+            <f:selectItem itemLabel="Παθ. Lux" itemValue="00005" />
+            <f:selectItem itemLabel="Χειρ. Γ" itemValue="00006" />
+            <f:selectItem itemLabel="Χειρ. Ββ" itemValue="00007" /> 
+            <f:selectItem itemLabel="Χειρ. Βα" itemValue="00008" /> 
+            <f:selectItem itemLabel="Χειρ. A" itemValue="00009" />
+            <f:selectItem itemLabel="Χειρ. Lux" itemValue="000010" />
+            <f:selectItem itemLabel="Μονοήμερη Παθ." itemValue="00016" />
+            <f:selectItem itemLabel="Μονοήμερη Χειρ." itemValue="00017" />           
+        </p:selectOneRadio> 
+        
+        <p:selectOneRadio id="insuranceid" value="{}">
+            <f:selectItem itemLabel='ΟΠΑΔ' itemValue='10000'
+            <f:selectItem itemLabel='ΙΚΑ' itemValue='21001'
+            <f:selectItem itemLabel='ΑΣΦΑΛΙΣΤΙΚΗ ΕΘΝΙΚΗ' itemValue='21006'
+            <f:selectItem itemLabel='ΤΑΠ-ΕΤΒΑ' itemValue='21011'
+            <f:selectItem itemLabel='ΤΑΠ-ΟΤΕ' itemValue='21012'
+            <f:selectItem itemLabel='ΟΑΕΕ' itemValue='21013'
+            <f:selectItem itemLabel='ΕΤΑΑ' itemValue='21018'
+            <f:selectItem itemLabel='ΤΣΑΥ' itemValue='21019'
+            <f:selectItem itemLabel='ΤΣΜΕΔΕ' itemValue='21020'
+            <f:selectItem itemLabel='ΤΑΠ-ΔΕΗ' itemValue='21026'
+            <f:selectItem itemLabel='ΟΓΑ' itemValue='21027'
+            <f:selectItem itemLabel='ΕΤΑΠ-ΜΜΕ' itemValue='21040'
+            <f:selectItem itemLabel='ΕΤΑΑ-ΤΑΝ' itemValue='21099'
+            <f:selectItem itemLabel='ΤΑΣ' itemValue='22022'
+            <f:selectItem itemLabel='ΤΑΠ-ΗΣΑΠ' itemValue='23004'
+            <f:selectItem itemLabel='ΤΑΠ-ΗΛΠΑΠ' itemValue='23003'
+            <f:selectItem itemLabel='ΤΥΔΚΥ' itemValue='23005'
+            <f:selectItem itemLabel='ΤΑΠ-ΕΤΕ' itemValue='23006'
+            <f:selectItem itemLabel='ΤΥΔΕ-ΤΠΔΕ' itemValue='23008'
+            <f:selectItem itemLabel='ΤΠΔΑ' itemValue='23011'
+            <f:selectItem itemLabel='ΤΥΔΠ' itemValue='23012'
+            <f:selectItem itemLabel='ΤΠΔΘ' itemValue='23013'
+            <f:selectItem itemLabel='ΤΑΠΤΠΓΑΕ' itemValue='23014'
+            <f:selectItem itemLabel='ΟΙΚΟΣ ΝΑΥΤΟΥ' itemValue='33002'
+            <f:selectItem itemLabel='ΟΓΑ ΥΠΑΛΛΗΛΟΙ' itemValue='21127'
+            <f:selectItem itemLabel='ΤΥΠΑΤΕ' itemValue='23016'
+            <f:selectItem itemLabel='ΤΑΥΤΕΚΩ' itemValue='22080'
+         </p:selectOneRadio>
+        
+        
+        -->
+        
+        
+
+
+    </ui:define>
+</ui:composition>

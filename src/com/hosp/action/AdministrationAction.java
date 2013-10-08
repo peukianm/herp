@@ -105,6 +105,19 @@ public class AdministrationAction implements Serializable {
                 return "exoterika/home?faces-redirect=true";
             } 
             
+            //ΓΡ. ΚΙΝΗΣΗΣ
+            else if (temp.getRole().getRoleid().intValue() == 9 || temp.getRole().getRoleid().intValue() == 10) {
+                persistenceUtil.audit(temp, new BigDecimal(SystemParameters.getInstance().getProperty("ACT_LOGINUSER")), null, null);
+                sessionBean.setPageCode(SystemParameters.getInstance().getProperty("PAGE_KINISIS_HOME"));
+                sessionBean.setPageName(MessageBundleLoader.getMessage("homePageKinisis"));
+                System.out.println("GOING!!!!!!!!!!!!!!!!!!!");
+                return "kinisis/dischargeMgt?faces-redirect=true";
+                
+            } 
+            
+            
+            
+            
             //CLINIC APPLICATION
             else if (temp.getRole().getRoleid().intValue() == 1 || temp.getRole().getRoleid().intValue() == 2 || temp.getRole().getRoleid().intValue() == 3 || temp.getRole().getRoleid().intValue() == 4) {
 
@@ -186,6 +199,23 @@ public class AdministrationAction implements Serializable {
             return "";
         }
     }
+    
+    
+    public String logoutAction(int t) {
+        try {            
+            FacesUtils.resetManagedBeanJSF2("sessionBean");
+            FacesUtils.invalidateSession();
+            //FacesUtils.redirectAJAX(FacesUtils.getContextPath() + "/loginPage.jsf?faces-redirect=true");
+            return "/loginPage?faces-redirect=true";
+        } catch (Exception e) {
+            e.printStackTrace();
+            sessionBean.setErrorMsgKey("errMsg_GeneralError");
+            goError(e);
+            return "";
+        }
+    }
+    
+    
 
     public void closeAlertDlg() {
         sessionBean.setShowGeneralDialog(false);

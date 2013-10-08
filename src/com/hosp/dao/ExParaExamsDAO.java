@@ -282,7 +282,7 @@ public class ExParaExamsDAO {
         }
     }
      
-     @SuppressWarnings("unchecked")
+    @SuppressWarnings("unchecked")
     public ExParaExams fetchParaExamFromExam(ExExam exam, ExPara para) {
         try {
             Query query = getEntityManager().createQuery("Select ce from ExContractExams ce where "
@@ -290,6 +290,26 @@ public class ExParaExamsDAO {
                     + " AND ce.exContract= :contract");                                
             
             query.setParameter("exam", exam);
+            query.setParameter("contract", para.getExAssertion().getExContract());
+            
+            ExContractExams contractExam = (ExContractExams)query.getSingleResult();
+            
+            ExParaExams paraExam = new ExParaExams(contractExam.getExExam(), para, new BigDecimal(contractExam.getPrice()), new BigDecimal(1), new BigDecimal(1),contractExam.getParticipation() );            
+            
+            return paraExam;
+        } catch (RuntimeException re) {
+            throw re;
+        }
+    }
+    
+    @SuppressWarnings("unchecked")
+    public ExParaExams fetchParaExamFromExamCode(String code, ExPara para) {
+        try {
+            Query query = getEntityManager().createQuery("Select ce from ExContractExams ce where "
+                    + " ce.exExam.code= :code "
+                    + " AND ce.exContract= :contract");                                
+            
+            query.setParameter("code", code);
             query.setParameter("contract", para.getExAssertion().getExContract());
             
             ExContractExams contractExam = (ExContractExams)query.getSingleResult();
